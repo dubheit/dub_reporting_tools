@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add Google Drive tab to report form -->
+    <record id="ir_actions_report_view_form_gdrive" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.gdrive</field>
+        <field name="model">ir.actions.report</field>
+        <field name="inherit_id" ref="base.act_report_xml_view"/>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+
+            <!-- Add Google Drive page in notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page name="gdrive" string="Google Drive">
+                    <group>
+                        <!-- When no file selected -->
+                        <group colspan="2" invisible="gdrive_file_id">
+                            <div class="alert alert-info" role="alert">
+                                <i class="fa fa-info-circle me-2"/>
+                                Link this report to a Google Drive template for automatic synchronization.
+                            </div>
+                            <button name="action_select_gdrive_file"
+                                    string="Select from Google Drive"
+                                    type="object"
+                                    icon="fa-google"
+                                    class="btn-primary"/>
+                        </group>
+
+                        <!-- When file is selected -->
+                        <group invisible="not gdrive_file_id">
+                            <field name="gdrive_file_id" invisible="1"/>
+                            <field name="gdrive_file_name" readonly="1"/>
+                            <field name="gdrive_mime_type" readonly="1"/>
+                            <field name="gdrive_attachment_id" readonly="1"/>
+                        </group>
+                        <group invisible="not gdrive_file_id">
+                            <field name="gdrive_sync_status" widget="badge"
+                                   decoration-success="gdrive_sync_status == 'synced'"
+                                   decoration-warning="gdrive_sync_status == 'outdated'"
+                                   decoration-info="gdrive_sync_status == 'not_synced'"
+                                   decoration-danger="gdrive_sync_status == 'error'"/>
+                            <field name="gdrive_last_sync" readonly="1"/>
+                            <field name="gdrive_auto_sync"/>
+                        </group>
+
+                        <!-- Action buttons -->
+                        <group colspan="2" invisible="not gdrive_file_id">
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button name="action_sync_from_gdrive"
+                                        string="Sync from Drive"
+                                        type="object"
+                                        icon="fa-download"
+                                        class="btn-secondary"
+                                        title="Download latest version from Google Drive"/>
+                                <button name="action_save_to_gdrive"
+                                        string="Save to Drive"
+                                        type="object"
+                                        icon="fa-upload"
+                                        class="btn-secondary"
+                                        title="Upload current template to Google Drive"/>
+                                <button name="action_open_gdrive_file"
+                                        string="Open in Drive"
+                                        type="object"
+                                        icon="fa-external-link"
+                                        class="btn-link"/>
+                                <button name="action_select_gdrive_file"
+                                        string="Change File"
+                                        type="object"
+                                        icon="fa-refresh"
+                                        class="btn-link"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

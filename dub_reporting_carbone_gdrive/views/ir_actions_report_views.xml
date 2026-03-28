@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend Carbone view for Google Drive source option -->
+    <record id="ir_actions_report_view_form_carbone_gdrive" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.carbone.gdrive</field>
+        <field name="model">ir.actions.report</field>
+        <field name="inherit_id" ref="dub_reporting_carbone.ir_actions_report_view_form_carbone"/>
+        <field name="arch" type="xml">
+
+            <!-- Add compact Google Drive status after carbone_template_file field -->
+            <xpath expr="//field[@name='carbone_template_file']" position="after">
+                <div invisible="report_type != 'carbone' or carbone_template_source != 'gdrive'" class="mb-2">
+                    <field name="gdrive_attachment_id" invisible="1"/>
+                    <!-- Status badge -->
+                    <span invisible="not gdrive_attachment_id" class="badge text-bg-success me-2">
+                        <i class="fa fa-google me-1" title="Google Drive"/>
+                        <field name="gdrive_file_name" class="oe_inline" readonly="1"/>
+                    </span>
+                    <span invisible="gdrive_attachment_id" class="badge text-bg-warning me-2">
+                        <i class="fa fa-exclamation-triangle me-1"/> No file selected
+                    </span>
+                    <!-- Quick actions -->
+                    <button name="action_select_gdrive_file"
+                            type="object"
+                            string="Select"
+                            class="btn-primary btn-sm"
+                            icon="fa-google"
+                            invisible="gdrive_attachment_id"/>
+                    <button name="action_sync_from_gdrive"
+                            type="object"
+                            string="Sync"
+                            class="btn-secondary btn-sm"
+                            icon="fa-download"
+                            title="Download latest from Drive"
+                            invisible="not gdrive_attachment_id"/>
+                    <span class="text-muted ms-2" invisible="not gdrive_attachment_id">
+                        See Google Drive tab for more options
+                    </span>
+                </div>
+            </xpath>
+
+            <!-- Extend Studio button visibility for Google Drive templates -->
+            <xpath expr="//button[@name='action_open_in_studio']" position="attributes">
+                <attribute name="invisible">report_type != 'carbone' or (not carbone_template_file and not gdrive_attachment_id)</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

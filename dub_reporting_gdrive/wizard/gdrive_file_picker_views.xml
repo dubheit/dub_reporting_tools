@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view for files with Select button -->
+    <record id="gdrive_file_picker_line_view_list" model="ir.ui.view">
+        <field name="name">gdrive.file.picker.line.list</field>
+        <field name="model">gdrive.file.picker.line</field>
+        <field name="arch" type="xml">
+            <list string="Files" create="false" delete="false" edit="false">
+                <field name="name" string="File Name"/>
+                <field name="file_type" string="Type" width="120px"/>
+                <field name="modified_time" string="Modified" width="180px"/>
+                <button name="action_select_this"
+                        string="Select"
+                        type="object"
+                        icon="fa-check"
+                        class="btn-primary btn-sm"/>
+                <field name="file_id" column_invisible="1"/>
+                <field name="mime_type" column_invisible="1"/>
+                <field name="picker_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Main file picker wizard -->
+    <record id="gdrive_file_picker_view_form" model="ir.ui.view">
+        <field name="name">gdrive.file.picker.form</field>
+        <field name="model">gdrive.file.picker</field>
+        <field name="arch" type="xml">
+            <form string="Select Google Drive File">
+                <field name="report_id" invisible="1"/>
+                <field name="page_token" invisible="1"/>
+                <field name="has_more" invisible="1"/>
+
+                <group>
+                    <group>
+                        <div class="d-flex gap-2 align-items-end">
+                            <field name="search_query"
+                                   placeholder="Search files by name..."
+                                   class="flex-grow-1"/>
+                            <button name="action_search"
+                                    string="Search"
+                                    type="object"
+                                    icon="fa-search"
+                                    class="btn-primary"/>
+                        </div>
+                    </group>
+                </group>
+
+                <field name="file_ids" nolabel="1" mode="list"/>
+
+                <div class="text-center mt-3" invisible="not has_more">
+                    <button name="action_load_more"
+                            string="Load More..."
+                            type="object"
+                            class="btn-link"/>
+                </div>
+
+                <footer>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_gdrive_file_picker" model="ir.actions.act_window">
+        <field name="name">Select Google Drive File</field>
+        <field name="res_model">gdrive.file.picker</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="gdrive_file_picker_view_form"/>
+    </record>
+
+</odoo>

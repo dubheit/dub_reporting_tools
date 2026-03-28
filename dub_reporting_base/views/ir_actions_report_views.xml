@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 
+        Base view for ir.actions.report
+        
+        This file serves as a placeholder for common report view modifications.
+        Specific reporting engine modules should inherit this to add their
+        custom fields and views.
+    -->
+</odoo>

@@ -1,0 +1,15 @@
+# Dependencies for dub_reporting_tools modules
+
+# dub_reporting_carbone
+requests>=2.25.0
+
+# dub_reporting_gdrive
+google-api-python-client>=2.0.0
+google-auth>=2.0.0
+google-auth-oauthlib>=1.0.0
+
+# dub_reporting_sharepoint
+msal>=1.20.0
+
+# dub_reporting_ilovepdf
+pylovepdf>=1.3.0

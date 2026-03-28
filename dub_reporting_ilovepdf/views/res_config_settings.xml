@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_ilovepdf" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.ilovepdf</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="dub_reporting_base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add ILovePDF block inside Reporting Tools app -->
+            <xpath expr="//app[@name='reporting_tools']" position="inside">
+                <block title="ILovePDF" name="ilovepdf_settings_block">
+                    <div class="mb-3">
+                        <img src="/dub_reporting_ilovepdf/static/img/ilovepdf.png" alt="ILovePDF" style="max-height: 40px;"/>
+                    </div>
+                    <setting string="API Configuration" id="ilovepdf_api_settings"
+                             help="Configure your ILovePDF API credentials from developer.ilovepdf.com">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="ilovepdf_public_key" string="Public Key" class="col-3 o_light_label"/>
+                                <field name="ilovepdf_public_key" placeholder="project_public_xxxxxxxx"/>
+                            </div>
+                            <div class="row">
+                                <label for="ilovepdf_secret_key" string="Secret Key" class="col-3 o_light_label"/>
+                                <field name="ilovepdf_secret_key" password="True" placeholder="secret_xxxxxxxx"/>
+                            </div>
+                            <div class="row mt-2">
+                                <span class="col-3 o_light_label">Status</span>
+                                <field name="ilovepdf_api_status" class="col-6" nolabel="1"/>
+                                <button name="action_test_ilovepdf_connection" type="object"
+                                        string="Test Connection" class="btn-link" icon="fa-refresh"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="ilovepdf_documents_setting"
+                             string="Odoo Documents Integration"
+                             help="Enable ILovePDF processing directly from the Documents app (requires Odoo Enterprise)">
+                        <field name="module_dub_reporting_ilovepdf_documents"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sharepoint_subscription_system,sharepoint.subscription.system,model_sharepoint_subscription,,1,1,1,1
+access_sharepoint_file_picker_user,sharepoint.file.picker.user,model_sharepoint_file_picker,base.group_user,1,1,1,1
+access_sharepoint_file_picker_line_user,sharepoint.file.picker.line.user,model_sharepoint_file_picker_line,base.group_user,1,1,1,1

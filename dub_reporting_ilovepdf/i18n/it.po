@@ -1,0 +1,531 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dub_reporting_ilovepdf
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20251121\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-16 13:15+0000\n"
+"PO-Revision-Date: 2025-12-16 13:15+0000\n"
+"Last-Translator: \n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__rotation_angle__180
+msgid "180°"
+msgstr "180°"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__rotation_angle__90
+msgid "90° clockwise"
+msgstr "90° orario"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__rotation_angle__270
+msgid "90° counter-clockwise"
+msgstr "90° antiorario"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "<span class=\"col-3 o_light_label\">Status</span>"
+msgstr "<span class=\"col-3 o_light_label\">Stato</span>"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "API Configuration"
+msgstr "Configurazione API"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_res_config_settings__ilovepdf_api_status
+msgid "API Status"
+msgstr "Stato API"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_needaction
+msgid "Action Needed"
+msgstr "Azione Richiesta"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model,name:dub_reporting_ilovepdf.model_ir_attachment
+msgid "Attachment"
+msgstr "Allegato"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_attachment_count
+msgid "Attachment Count"
+msgstr "Numero Allegati"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__attachment_ids
+msgid "Attachments"
+msgstr "Allegati"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__watermark_position__bottom
+msgid "Bottom"
+msgstr "In basso"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__page_number_position__bottom-center
+msgid "Bottom Center"
+msgstr "In basso al centro"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__page_number_position__bottom-left
+msgid "Bottom Left"
+msgstr "In basso a sinistra"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__page_number_position__bottom-right
+msgid "Bottom Right"
+msgstr "In basso a destra"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__watermark_position__center
+msgid "Center"
+msgstr "Centro"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model,name:dub_reporting_ilovepdf.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__compression_level
+msgid "Compression Level"
+msgstr "Livello Compressione"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "Compression Options"
+msgstr "Opzioni Compressione"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model,name:dub_reporting_ilovepdf.model_res_config_settings
+msgid "Config Settings"
+msgstr "Impostazioni"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "Configure your ILovePDF API credentials from developer.ilovepdf.com"
+msgstr "Configura le credenziali API ILovePDF da developer.ilovepdf.com"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/models/res_config_settings.py:0
+msgid "Connection successful! Credentials are valid."
+msgstr "Connessione riuscita! Credenziali valide."
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/models/res_config_settings.py:0
+msgid "Connection to ILovePDF API timed out."
+msgstr "Timeout della connessione all'API ILovePDF."
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/models/res_config_settings.py:0
+msgid ""
+"Could not connect to ILovePDF API. Please check your network connection."
+msgstr ""
+"Impossibile connettersi all'API ILovePDF. Verifica la connessione di rete."
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__tool_description
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__display_name
+msgid "Display Name"
+msgstr "Nome Visualizzato"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_res_config_settings__module_dub_reporting_ilovepdf_documents
+msgid "Enable Documents Integration"
+msgstr "Abilita Integrazione Documenti"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid ""
+"Enable ILovePDF processing directly from the Documents app (requires Odoo "
+"Enterprise)"
+msgstr ""
+"Abilita l'elaborazione ILovePDF direttamente dall'app Documenti (richiede Odoo "
+"Enterprise)"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__compression_level__extreme
+msgid "Extreme (lowest quality)"
+msgstr "Estremo (qualità minima)"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Failed to authenticate with ILovePDF: %s"
+msgstr "Autenticazione ILovePDF fallita: %s"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Failed to download result: %s"
+msgstr "Scaricamento risultato fallito: %s"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Failed to process files: %s"
+msgstr "Elaborazione file fallita: %s"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Failed to start processing task: %s"
+msgstr "Avvio elaborazione fallito: %s"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Failed to upload file: %s"
+msgstr "Caricamento file fallito: %s"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "File \"%(name)s\" is not supported for this operation. Expected: %(types)s"
+msgstr "Il file \"%(name)s\" non è supportato per questa operazione. Formati previsti: %(types)s"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_follower_ids
+msgid "Followers"
+msgstr "Follower"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Follower (Partner)"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__has_message
+msgid "Has Message"
+msgstr "Ha Messaggi"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "ILovePDF"
+msgstr "ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/models/res_config_settings.py:0
+msgid "ILovePDF API"
+msgstr "API ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid ""
+"ILovePDF API credentials not configured. Please go to Settings > Reporting "
+"Tools to configure them."
+msgstr ""
+"Credenziali API ILovePDF non configurate. Vai su Impostazioni > Strumenti "
+"Report per configurarle."
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/models/res_config_settings.py:0
+msgid "ILovePDF API returned HTTP %s"
+msgstr "L'API ILovePDF ha restituito HTTP %s"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "ILovePDF Processing"
+msgstr "Elaborazione ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model,name:dub_reporting_ilovepdf.model_ilovepdf_wizard
+msgid "ILovePDF Processing Wizard"
+msgstr "Procedura Guidata ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_res_company__ilovepdf_public_key
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_res_config_settings__ilovepdf_public_key
+msgid "ILovePDF Public Key"
+msgstr "Chiave Pubblica ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_res_company__ilovepdf_secret_key
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_res_config_settings__ilovepdf_secret_key
+msgid "ILovePDF Secret Key"
+msgstr "Chiave Segreta ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_ir_attachment__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Se selezionato, nuovi messaggi richiedono la tua attenzione."
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_ir_attachment__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Se selezionato, alcuni messaggi hanno un errore di consegna."
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_res_config_settings__module_dub_reporting_ilovepdf_documents
+msgid "Install the ILovePDF integration for Odoo Enterprise Documents module."
+msgstr "Installa l'integrazione ILovePDF per il modulo Documenti di Odoo Enterprise."
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/models/res_config_settings.py:0
+msgid "Invalid API credentials. Please check your Public Key."
+msgstr "Credenziali API non valide. Verifica la Chiave Pubblica."
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Invalid File Type"
+msgstr "Tipo File Non Valido"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Invalid Selection"
+msgstr "Selezione Non Valida"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Invalid operation selected."
+msgstr "Operazione selezionata non valida."
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_is_follower
+msgid "Is Follower"
+msgstr "È Follower"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Ultimo Aggiornamento di"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__write_date
+msgid "Last Updated on"
+msgstr "Ultimo Aggiornamento il"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__compression_level__low
+msgid "Low (best quality)"
+msgstr "Basso (qualità migliore)"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_has_error
+msgid "Message Delivery error"
+msgstr "Errore Consegna Messaggio"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_ids
+msgid "Messages"
+msgstr "Messaggi"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__name
+msgid "Name"
+msgstr "Nome"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Numero di Azioni"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ir_attachment__message_has_error_counter
+msgid "Number of errors"
+msgstr "Numero di errori"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_ir_attachment__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Numero di messaggi che richiedono azione"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_ir_attachment__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Numero di messaggi con errore di consegna"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "Odoo Documents Integration"
+msgstr "Integrazione Documenti Odoo"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__tool
+msgid "Operation"
+msgstr "Operazione"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "Page Number Options"
+msgstr "Opzioni Numerazione Pagine"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__password
+msgid "Password"
+msgstr "Password"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/models/res_config_settings.py:0
+msgid "Please configure the ILovePDF Public Key first."
+msgstr "Configura prima la Chiave Pubblica ILovePDF."
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Please select at least one attachment."
+msgstr "Seleziona almeno un allegato."
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__page_number_position
+msgid "Position"
+msgstr "Posizione"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "Process"
+msgstr "Elabora"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.actions.act_window,name:dub_reporting_ilovepdf.ilovepdf_wizard_action
+msgid "Process with ILovePDF"
+msgstr "Elabora con ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "Protection Options"
+msgstr "Opzioni Protezione"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "Public Key"
+msgstr "Chiave Pubblica"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_res_company__ilovepdf_public_key
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_res_config_settings__ilovepdf_public_key
+msgid "Public key from your ILovePDF developer account"
+msgstr "Chiave pubblica dal tuo account sviluppatore ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__compression_level__recommended
+msgid "Recommended"
+msgstr "Consigliato"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__rotation_angle
+msgid "Rotation"
+msgstr "Rotazione"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "Rotation Options"
+msgstr "Opzioni Rotazione"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "Secret Key"
+msgstr "Chiave Segreta"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_res_company__ilovepdf_secret_key
+#: model:ir.model.fields,help:dub_reporting_ilovepdf.field_res_config_settings__ilovepdf_secret_key
+msgid "Secret key from your ILovePDF developer account"
+msgstr "Chiave segreta dal tuo account sviluppatore ILovePDF"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "Some files are not supported for this operation: %s"
+msgstr "Alcuni file non sono supportati per questa operazione: %s"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "Test Connection"
+msgstr "Test Connessione"
+
+#. module: dub_reporting_ilovepdf
+#. odoo-python
+#: code:addons/dub_reporting_ilovepdf/wizard/ilovepdf_wizard.py:0
+msgid "This operation requires at least %d files."
+msgstr "Questa operazione richiede almeno %d file."
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__watermark_position__top
+msgid "Top"
+msgstr "In alto"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__page_number_position__top-center
+msgid "Top Center"
+msgstr "In alto al centro"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__page_number_position__top-left
+msgid "Top Left"
+msgstr "In alto a sinistra"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields.selection,name:dub_reporting_ilovepdf.selection__ilovepdf_wizard__page_number_position__top-right
+msgid "Top Right"
+msgstr "In alto a destra"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.ilovepdf_wizard_view_form
+msgid "Watermark Options"
+msgstr "Opzioni Filigrana"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__watermark_position
+msgid "Watermark Position"
+msgstr "Posizione Filigrana"
+
+#. module: dub_reporting_ilovepdf
+#: model:ir.model.fields,field_description:dub_reporting_ilovepdf.field_ilovepdf_wizard__watermark_text
+msgid "Watermark Text"
+msgstr "Testo Filigrana"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "project_public_xxxxxxxx"
+msgstr "project_public_xxxxxxxx"
+
+#. module: dub_reporting_ilovepdf
+#: model_terms:ir.ui.view,arch_db:dub_reporting_ilovepdf.res_config_settings_view_form_ilovepdf
+msgid "secret_xxxxxxxx"
+msgstr "secret_xxxxxxxx"

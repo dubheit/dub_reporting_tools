@@ -1,0 +1,1580 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dub_reporting_carbone
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-16 13:11+0000\n"
+"PO-Revision-Date: 2025-12-16 13:11+0000\n"
+"Last-Translator: \n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: dub_reporting_carbone
+#: model:ir.actions.report,print_report_name:dub_reporting_carbone.report_partner_demo
+msgid "'Partner Demo - %s' % (object.name or 'Draft')"
+msgstr "'Demo Partner - %s' % (object.name or 'Bozza')"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "<span class=\"col-3 o_light_label\">Status</span>"
+msgstr "<span class=\"col-3 o_light_label\">Stato</span>"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "API Configuration"
+msgstr "Configurazione API"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_api_status
+msgid "API Status"
+msgstr "Stato API"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "API URL"
+msgstr "URL API"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_company__carbone_access_token
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_config_settings__carbone_access_token
+msgid "API access token from Carbone.io. Get yours at https://account.carbone.io"
+msgstr "Token di accesso API da Carbone.io. Ottienilo su https://account.carbone.io"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Access Token"
+msgstr "Token di Accesso"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_complement_data
+msgid "Additional JSON data accessible via {c.} tags in template"
+msgstr "Dati JSON aggiuntivi accessibili tramite tag {c.} nel template"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Advanced Data"
+msgstr "Dati Avanzati"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_rendering_mode__async
+msgid "Asynchronous (Webhook)"
+msgstr "Asincrono (Webhook)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_template_id
+msgid "Cached Template ID"
+msgstr "ID Template in Cache"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_studio_wizard_view_form
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__report_type__carbone
+msgid "Carbone"
+msgstr "Carbone"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Carbone API"
+msgstr "API Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_company__carbone_api_url
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_api_url
+msgid "Carbone API URL"
+msgstr "URL API Carbone"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Carbone API URL is not configured. Please configure it in Settings > Reporting Tools."
+msgstr "L'URL dell'API Carbone non è configurato. Configuralo in Impostazioni > Strumenti di Reportistica."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Carbone API error: %s"
+msgstr "Errore API Carbone: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Carbone API reported an error: %s"
+msgstr "L'API Carbone ha restituito un errore: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Carbone API returned HTTP %s"
+msgstr "L'API Carbone ha restituito HTTP %s"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_company__carbone_access_token
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_access_token
+msgid "Carbone Access Token"
+msgstr "Token di Accesso Carbone"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Carbone Access Token is not configured. Please configure it in Settings > Reporting Tools."
+msgstr "Il Token di Accesso Carbone non è configurato. Configuralo in Impostazioni > Strumenti di Reportistica."
+
+#. module: dub_reporting_carbone
+#: model:ir.model,name:dub_reporting_carbone.model_carbone_async_render
+msgid "Carbone Async Render Request"
+msgstr "Richiesta di Rendering Asincrono Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_json_data
+msgid "Carbone JSON Data"
+msgstr "Dati JSON Carbone"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Carbone JSON data is not configured for report '%s'."
+msgstr "I dati JSON Carbone non sono configurati per il report '%s'."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Carbone Options"
+msgstr "Opzioni Carbone"
+
+#. module: dub_reporting_carbone
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone/static/src/xml/carbone_studio.xml:0
+msgid "Carbone Studio"
+msgstr "Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Carbone Studio Integration"
+msgstr "Integrazione Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model:ir.model,name:dub_reporting_carbone.model_carbone_studio_wizard
+msgid "Carbone Studio Record Selector"
+msgstr "Selettore Record Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_template_file
+msgid "Carbone Template"
+msgstr "Template Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_template_id
+msgid "Carbone template ID from previous upload (for caching)"
+msgstr "ID del template Carbone dal caricamento precedente (per la cache)"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Carbone template file is not uploaded for report '%s'."
+msgstr "Il file template Carbone non è stato caricato per il report '%s'."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Carbone.io"
+msgstr "Carbone.io"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_company__carbone_api_url
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_config_settings__carbone_api_url
+msgid "Carbone.io API endpoint URL. Use https://api.carbone.io for cloud or your on-premise URL."
+msgstr "URL dell'endpoint API Carbone.io. Usa https://api.carbone.io per il cloud o il tuo URL on-premise."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_converter__chromium
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_converter__chromium
+msgid "Chromium"
+msgstr "Chromium"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/carbone_async_render.py:0
+msgid "Click on the attachment below to download it."
+msgstr "Clicca sull'allegato qui sotto per scaricarlo."
+
+#. module: dub_reporting_carbone
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone/static/src/xml/carbone_studio.xml:0
+msgid "Close"
+msgstr "Chiudi"
+
+#. module: dub_reporting_carbone
+#: model:ir.model,name:dub_reporting_carbone.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_complement_data
+msgid "Complement Data"
+msgstr "Dati Complementari"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__carbone_async_render__state__completed
+msgid "Completed"
+msgstr "Completato"
+
+#. module: dub_reporting_carbone
+#: model:ir.model,name:dub_reporting_carbone.model_res_config_settings
+msgid "Config Settings"
+msgstr "Impostazioni"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Connection successful!"
+msgstr "Connessione riuscita!"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Connection to Carbone API timed out. Please check the URL."
+msgstr "Timeout della connessione all'API Carbone. Verifica l'URL."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_converter
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Converter"
+msgstr "Convertitore"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_converter
+msgid "Converter engine to use for rendering. If not set, uses Carbone default."
+msgstr "Motore di conversione da usare per il rendering. Se non impostato, usa il default di Carbone."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Could not connect to Carbone API. Please check the URL and your network connection."
+msgstr "Impossibile connettersi all'API Carbone. Verifica l'URL e la connessione di rete."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__create_uid
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__create_date
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Data"
+msgstr "Dati"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_company__carbone_default_converter
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_default_converter
+msgid "Default Converter"
+msgstr "Convertitore Predefinito"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_company__carbone_default_lang
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_default_lang
+msgid "Default Language"
+msgstr "Lingua Predefinita"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Default Options"
+msgstr "Opzioni Predefinite"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_company__carbone_default_timezone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_default_timezone
+msgid "Default Timezone"
+msgstr "Fuso Orario Predefinito"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_company__carbone_default_converter
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_config_settings__carbone_default_converter
+msgid "Default converter engine for all Carbone reports"
+msgstr "Motore di conversione predefinito per tutti i report Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_company__carbone_default_lang
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_config_settings__carbone_default_lang
+msgid "Default language code for formatting (numbers, dates, currencies)"
+msgstr "Codice lingua predefinito per la formattazione (numeri, date, valute)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_company__carbone_default_timezone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_config_settings__carbone_default_timezone
+msgid "Default timezone for date/time formatting in reports"
+msgstr "Fuso orario predefinito per la formattazione di data/ora nei report"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Default values for new Carbone reports"
+msgstr "Valori predefiniti per i nuovi report Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__display_name
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__display_name
+msgid "Display Name"
+msgstr "Nome Visualizzato"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Edit in Carbone Studio"
+msgstr "Modifica in Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_company__carbone_studio_enabled
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_studio_enabled
+msgid "Enable Carbone Studio"
+msgstr "Abilita Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_company__carbone_studio_enabled
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_config_settings__carbone_studio_enabled
+msgid "Enable Carbone Studio integration for live template editing"
+msgstr "Abilita l'integrazione Carbone Studio per la modifica live dei template"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Enable live template editing with Carbone Studio"
+msgstr "Abilita la modifica live dei template con Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_lang__en-gb
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_lang__en-gb
+msgid "English (GB)"
+msgstr "Inglese (GB)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_lang__en-us
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_lang__en-us
+msgid "English (US)"
+msgstr "Inglese (US)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_enum_mappings
+msgid "Enum Mappings"
+msgstr "Mappature Enum"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__error_message
+msgid "Error Message"
+msgstr "Messaggio di Errore"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Error generating individual reports: %s"
+msgstr "Errore durante la generazione dei report individuali: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Error preparing report data.\n\nError: %s"
+msgstr "Errore durante la preparazione dei dati del report.\n\nErrore: %s"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__carbone_async_render__state__failed
+msgid "Failed"
+msgstr "Fallito"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Failed to upload template to Carbone API.\n\nError: %s"
+msgstr "Caricamento del template sull'API Carbone fallito.\n\nErrore: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_studio_wizard.py:0
+msgid "Failed to upload template to Carbone API: %s"
+msgstr "Caricamento del template sull'API Carbone fallito: %s"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__result_filename
+msgid "Filename"
+msgstr "Nome File"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_lang__fr-fr
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_lang__fr-fr
+msgid "French"
+msgstr "Francese"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_lang__de-de
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_lang__de-de
+msgid "German"
+msgstr "Tedesco"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Get yours at https://account.carbone.io"
+msgstr "Ottieni il tuo su https://account.carbone.io"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__id
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_use_template_cache
+msgid "If enabled, uploads template only once and reuses the template ID"
+msgstr "Se abilitato, carica il template una sola volta e riutilizza l'ID del template"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Invalid response from Carbone API for record %s"
+msgstr "Risposta non valida dall'API Carbone per il record %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Invalid response from Carbone API: missing renderId"
+msgstr "Risposta non valida dall'API Carbone: renderId mancante"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Invalid response from Carbone API: missing templateId"
+msgstr "Risposta non valida dall'API Carbone: templateId mancante"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Invalidate Cache"
+msgstr "Invalida Cache"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_lang__it-it
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_lang__it-it
+msgid "Italian"
+msgstr "Italiano"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_enum_mappings
+msgid "JSON object with enum mappings for :convEnum() formatter"
+msgstr "Oggetto JSON con mappature enum per il formattatore :convEnum()"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_lang
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Language"
+msgstr "Lingua"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_lang
+msgid "Language code for formatting (numbers, dates, currencies)"
+msgstr "Codice lingua per la formattazione (numeri, date, valute)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__write_uid
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Ultimo Aggiornamento di"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__write_date
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__write_date
+msgid "Last Updated on"
+msgstr "Ultimo Aggiornamento il"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_converter__libreoffice
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_converter__libreoffice
+msgid "LibreOffice"
+msgstr "LibreOffice"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__odt
+msgid "LibreOffice/OpenOffice Document (ODT)"
+msgstr "Documento LibreOffice/OpenOffice (ODT)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__ods
+msgid "LibreOffice/OpenOffice Spreadsheet (ODS)"
+msgstr "Foglio di calcolo LibreOffice/OpenOffice (ODS)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__xlsx
+msgid "Microsoft Excel (XLSX)"
+msgstr "Microsoft Excel (XLSX)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__docx
+msgid "Microsoft Word (DOCX)"
+msgstr "Microsoft Word (DOCX)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__model
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__model_name
+msgid "Model"
+msgstr "Modello"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+#: code:addons/dub_reporting_carbone/wizard/carbone_studio_wizard.py:0
+msgid "No template file uploaded for this report."
+msgstr "Nessun file template caricato per questo report."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_converter__onlyoffice
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_converter__onlyoffice
+msgid "OnlyOffice"
+msgstr "OnlyOffice"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_studio_wizard_view_form
+msgid "Open Carbone Studio"
+msgstr "Apri Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_studio_wizard_view_form
+msgid "Open Studio"
+msgstr "Apri Studio"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+#: model:ir.actions.act_window,name:dub_reporting_carbone.action_carbone_studio_wizard
+msgid "Open in Carbone Studio"
+msgstr "Apri in Carbone Studio"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_report_type
+msgid "Output Format"
+msgstr "Formato di Output"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_report_type
+msgid "Output format for the generated report"
+msgstr "Formato di output per il report generato"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__pdf
+msgid "PDF"
+msgstr "PDF"
+
+#. module: dub_reporting_carbone
+#: model:ir.actions.report,name:dub_reporting_carbone.report_partner_demo
+msgid "Partner Demo Report"
+msgstr "Report Demo Partner"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__carbone_async_render__state__pending
+msgid "Pending"
+msgstr "In Attesa"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Please configure the Carbone API URL first."
+msgstr "Configura prima l'URL dell'API Carbone."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Please configure the Carbone Access Token first."
+msgstr "Configura prima il Token di Accesso Carbone."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "PyPDF2 is required for multi-record reports but not installed. Please install it or contact your administrator."
+msgstr "PyPDF2 è richiesto per i report multi-record ma non è installato. Installalo o contatta l'amministratore."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_json_data
+msgid "Python code to prepare JSON data for Carbone rendering. Use 'object' variable to access the record."
+msgstr "Codice Python per preparare i dati JSON per il rendering Carbone. Usa la variabile 'object' per accedere al record."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__record_ids
+msgid "Record IDs"
+msgstr "ID Record"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__name
+msgid "Render ID"
+msgstr "ID Rendering"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_rendering_mode
+msgid "Rendering Mode"
+msgstr "Modalità di Rendering"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Rendering Options"
+msgstr "Opzioni di Rendering"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Template Cache"
+msgstr "Cache Template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__report_id
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__report_id
+msgid "Report"
+msgstr "Report"
+
+#. module: dub_reporting_carbone
+#: model:ir.model,name:dub_reporting_carbone.model_ir_actions_report
+msgid "Report Action"
+msgstr "Azione Report"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/carbone_async_render.py:0
+msgid "Report Ready: %s"
+msgstr "Report Pronto: %s"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__report_type
+msgid "Report Type"
+msgstr "Tipo Report"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/controllers/report.py:0
+msgid "Report in Background"
+msgstr "Report in Background"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Report rendering timeout. For large reports, consider using asynchronous mode."
+msgstr "Timeout del rendering del report. Per report di grandi dimensioni, considera l'uso della modalità asincrona."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__request_id
+msgid "Request ID"
+msgstr "ID Richiesta"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__result_file
+msgid "Result File"
+msgstr "File Risultato"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__record_id
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_studio_wizard_view_form
+msgid "Sample Record"
+msgstr "Record di Esempio"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_studio_wizard_view_form
+msgid "Select a record for preview data..."
+msgstr "Seleziona un record per i dati di anteprima..."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_carbone_studio_wizard__record_id
+msgid "Select a record to use as sample data for the template preview"
+msgstr "Seleziona un record da usare come dati di esempio per l'anteprima del template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_lang__es-es
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__res_company__carbone_default_lang__es-es
+msgid "Spanish"
+msgstr "Spagnolo"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__state
+msgid "State"
+msgstr "Stato"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_rendering_mode
+msgid "Sync: blocks UI until report is ready (max 60s). Async: uses webhook for long reports (max 5 min), allows user to continue working."
+msgstr "Sincrono: blocca l'interfaccia fino a quando il report è pronto (max 60s). Asincrono: usa webhook per report lunghi (max 5 min), permette all'utente di continuare a lavorare."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_rendering_mode__sync
+msgid "Synchronous"
+msgstr "Sincrono"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Template upload timeout. Please check your connection and try again."
+msgstr "Timeout del caricamento del template. Verifica la connessione e riprova."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Test Connection"
+msgstr "Test Connessione"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__report_type
+msgid "The type of the report that will be rendered, each one having its own rendering method. HTML means the report will be opened directly in your browser PDF means the report will be rendered using Wkhtmltopdf and downloaded by the user."
+msgstr "Il tipo di report che verrà renderizzato, ognuno con il proprio metodo di rendering. HTML significa che il report verrà aperto direttamente nel browser. PDF significa che il report verrà renderizzato usando Wkhtmltopdf e scaricato dall'utente."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_webhook_timeout
+msgid "Timeout in seconds for async rendering (default: 300s = 5 minutes)"
+msgstr "Timeout in secondi per il rendering asincrono (predefinito: 300s = 5 minuti)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_timezone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Timezone"
+msgstr "Fuso Orario"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_timezone
+msgid "Timezone for date/time formatting in the report"
+msgstr "Fuso orario per la formattazione di data/ora nel report"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Unexpected error during async report setup.\n\nError: %s"
+msgstr "Errore imprevisto durante la configurazione del report asincrono.\n\nErrore: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Unexpected error during report generation.\n\nError: %s"
+msgstr "Errore imprevisto durante la generazione del report.\n\nErrore: %s"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_template_file
+msgid "Upload the Carbone template file (DOCX, XLSX, ODT, ODS, etc.)"
+msgstr "Carica il file template Carbone (DOCX, XLSX, ODT, ODS, ecc.)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_use_template_cache
+msgid "Use Template Cache"
+msgstr "Usa Cache Template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__user_id
+msgid "User"
+msgstr "Utente"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/res_config_settings.py:0
+msgid "Version: %s"
+msgstr "Versione: %s"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__webhook_received
+msgid "Webhook Received"
+msgstr "Webhook Ricevuto"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_webhook_timeout
+msgid "Webhook Timeout"
+msgstr "Timeout Webhook"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/carbone_async_render.py:0
+msgid "Your report"
+msgstr "Il tuo report"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/controllers/report.py:0
+msgid "Your report \"%s\" is being generated in background. You will receive it via chat when ready."
+msgstr "Il tuo report \"%s\" viene generato in background. Lo riceverai via chat quando sarà pronto."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "https://api.carbone.io"
+msgstr "https://api.carbone.io"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/carbone_async_render.py:0
+msgid "is ready!"
+msgstr "è pronto!"
+
+#. module: dub_reporting_carbone
+#: model:ir.model,name:dub_reporting_carbone.model_carbone_template_list
+msgid "Carbone Server Templates"
+msgstr "Template Server Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__name
+msgid "Name"
+msgstr "Nome"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__template_id
+msgid "Template ID"
+msgstr "ID Template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__extension
+msgid "Extension"
+msgstr "Estensione"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__size
+msgid "Size (bytes)"
+msgstr "Dimensione (bytes)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__created_at
+msgid "Created"
+msgstr "Creato"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__updated_at
+msgid "Updated"
+msgstr "Aggiornato"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__category
+msgid "Category"
+msgstr "Categoria"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__tags
+msgid "Tags"
+msgstr "Tag"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__linked_report_id
+msgid "Linked Report"
+msgstr "Report Collegato"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_company__carbone_template_tag
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_res_config_settings__carbone_template_tag
+msgid "Template Tag"
+msgstr "Tag Template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_company__carbone_template_tag
+#: model:ir.model.fields,help:dub_reporting_carbone.field_res_config_settings__carbone_template_tag
+msgid "Tag to associate with templates uploaded from Odoo. Used to filter templates in the list view. Leave empty to see all templates."
+msgstr "Tag da associare ai template caricati da Odoo. Usato per filtrare i template nella lista. Lascia vuoto per vedere tutti i template."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_category
+msgid "Carbone Category"
+msgstr "Categoria Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_category
+msgid "Category for organizing templates on Carbone server (like a folder)"
+msgstr "Categoria per organizzare i template sul server Carbone (come una cartella)"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "Template Management"
+msgstr "Gestione Template"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "View and manage templates stored on the Carbone server"
+msgstr "Visualizza e gestisci i template memorizzati sul server Carbone"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.res_config_settings_view_form_carbone
+msgid "View Server Templates"
+msgstr "Visualizza Template Server"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_template_list_view_tree
+msgid "Refresh"
+msgstr "Aggiorna"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_template_list_view_tree
+msgid "Delete Orphans"
+msgstr "Elimina Orfani"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_template_list_view_tree
+msgid "Delete"
+msgstr "Elimina"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_template_list_view_tree
+msgid "Delete all templates not linked to any Odoo report?"
+msgstr "Eliminare tutti i template non collegati a nessun report Odoo?"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_template_list_view_tree
+msgid "Delete this template from Carbone server?"
+msgstr "Eliminare questo template dal server Carbone?"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Carbone API URL is not configured."
+msgstr "L'URL dell'API Carbone non è configurato."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Carbone Access Token is not configured."
+msgstr "Il Token di Accesso Carbone non è configurato."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Carbone API error: %s"
+msgstr "Errore API Carbone: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Invalid Carbone API token."
+msgstr "Token API Carbone non valido."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Carbone API returned HTTP %s"
+msgstr "L'API Carbone ha restituito HTTP %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Connection to Carbone API timed out."
+msgstr "Timeout della connessione all'API Carbone."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Could not connect to Carbone API."
+msgstr "Impossibile connettersi all'API Carbone."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "No template ID to delete."
+msgstr "Nessun ID template da eliminare."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "This template is linked to report '%s'. Delete the report or invalidate its cache first."
+msgstr "Questo template è collegato al report '%s'. Elimina prima il report o invalida la sua cache."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Carbone API is not configured."
+msgstr "L'API Carbone non è configurata."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Template Deleted"
+msgstr "Template Eliminato"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Template successfully deleted from Carbone server."
+msgstr "Template eliminato con successo dal server Carbone."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Failed to delete: %s"
+msgstr "Eliminazione fallita: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Template Not Found"
+msgstr "Template Non Trovato"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Template was already deleted from server."
+msgstr "Il template era già stato eliminato dal server."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "HTTP %s from Carbone API"
+msgstr "HTTP %s dall'API Carbone"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "No Orphan Templates"
+msgstr "Nessun Template Orfano"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "All templates are linked to Odoo reports."
+msgstr "Tutti i template sono collegati a report Odoo."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Deleted %d orphan template(s)."
+msgstr "Eliminati %d template orfani."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid " Errors: %s"
+msgstr " Errori: %s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Cleanup Complete"
+msgstr "Pulizia Completata"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Template Organization"
+msgstr "Organizzazione Template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_template_filename
+msgid "Template Filename"
+msgstr "Nome File Template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_template_filename
+msgid "Original filename of the uploaded template"
+msgstr "Nome file originale del template caricato"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Template listing is not available.\n\nYour Carbone server is running in stateless mode (without database).\nThis feature requires Carbone Cloud or Carbone On-Premise with database enabled."
+msgstr "La lista dei template non è disponibile.\n\nIl server Carbone è in modalità stateless (senza database).\nQuesta funzionalità richiede Carbone Cloud o Carbone On-Premise con database abilitato."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/wizard/carbone_template_list.py:0
+msgid "Template Tag is not configured.\n\nPlease configure a tag in Settings > Reporting Tools > Carbone.io to filter templates belonging to this Odoo instance."
+msgstr "Il Tag Template non è configurato.\n\nConfigura un tag in Impostazioni > Strumenti di Reportistica > Carbone.io per filtrare i template appartenenti a questa istanza Odoo."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_comment
+msgid "Carbone Comment"
+msgstr "Commento Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_comment
+msgid "Comment or description for the template on Carbone server"
+msgstr "Commento o descrizione per il template sul server Carbone"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__constant_id
+msgid "Template ID"
+msgstr "ID Template"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_carbone_template_list__constant_id
+msgid "Constant ID for versioning"
+msgstr "ID costante per il versioning"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__deployed_at
+msgid "Deployed"
+msgstr "Distribuito"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__expire_at
+msgid "Expires"
+msgstr "Scade"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__comment
+msgid "Comment"
+msgstr "Commento"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_template_list__origin
+msgid "Origin"
+msgstr "Origine"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__carbone_template_list__origin__api
+msgid "API"
+msgstr "API"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__carbone_template_list__origin__studio
+msgid "Studio"
+msgstr "Studio"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.carbone_template_list_view_tree
+msgid "Version ID"
+msgstr "ID Versione"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_translations
+msgid "Translations"
+msgstr "Traduzioni"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_translations
+msgid "JSON object with translations for multi-language reports. Format: {\"en-us\": {\"key\": \"value\"}, \"it-it\": {\"key\": \"valore\"}}"
+msgstr "Oggetto JSON con traduzioni per report multi-lingua. Formato: {\"en-us\": {\"key\": \"value\"}, \"it-it\": {\"key\": \"valore\"}}"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_use_partner_lang
+msgid "Use Partner Language"
+msgstr "Usa Lingua Partner"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_use_partner_lang
+msgid "Automatically use the partner's language for the report. Falls back to report language setting if partner has no language."
+msgstr "Usa automaticamente la lingua del partner per il report. Utilizza la lingua impostata sul report se il partner non ha una lingua."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Translations (i18n)"
+msgstr "Traduzioni (i18n)"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Fallback Language"
+msgstr "Lingua di Fallback"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Used when partner has no language"
+msgstr "Usata quando il partner non ha una lingua"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Use <code>{t(key)}</code> tags in templates for static text. Use <code>:t</code> formatter for dynamic values."
+msgstr "Usa i tag <code>{t(key)}</code> nei template per testo statico. Usa il formattatore <code>:t</code> per valori dinamici."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_currency_source
+msgid "Source Currency"
+msgstr "Valuta Origine"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_currency_source
+msgid "Currency of the source data. Used with :formatC() formatter for conversion."
+msgstr "Valuta dei dati di origine. Usata con il formattatore :formatC() per la conversione."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_currency_target
+msgid "Target Currency"
+msgstr "Valuta Destinazione"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_currency_target
+msgid "Target currency for conversion. If not set, uses source currency."
+msgstr "Valuta di destinazione per la conversione. Se non impostata, usa la valuta di origine."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_currency_rates
+msgid "Custom Exchange Rates"
+msgstr "Tassi di Cambio Personalizzati"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_currency_rates
+msgid "JSON object with custom exchange rates. Format: {\"EUR\": 1, \"USD\": 1.10, \"GBP\": 0.85}. If empty, Carbone uses its built-in rates."
+msgstr "Oggetto JSON con tassi di cambio personalizzati. Formato: {\"EUR\": 1, \"USD\": 1.10, \"GBP\": 0.85}. Se vuoto, Carbone usa i tassi integrati."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Currency Conversion"
+msgstr "Conversione Valuta"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Use <code>:formatC()</code> formatter in templates. Example: <code>{d.price:formatC()}</code>"
+msgstr "Usa il formattatore <code>:formatC()</code> nei template. Esempio: <code>{d.price:formatC()}</code>"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_watermark
+msgid "PDF Watermark"
+msgstr "Filigrana PDF"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_watermark
+msgid "Text to display as watermark on PDF output. Only works with PDF format."
+msgstr "Testo da visualizzare come filigrana sul PDF. Funziona solo con formato PDF."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_encrypt
+msgid "Encrypt PDF"
+msgstr "Cripta PDF"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_encrypt
+msgid "Enable PDF encryption with password protection."
+msgstr "Abilita la crittografia PDF con protezione tramite password."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_open_password
+msgid "Open Password"
+msgstr "Password Apertura"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_open_password
+msgid "Password required to open and view the PDF."
+msgstr "Password richiesta per aprire e visualizzare il PDF."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_permission_password
+msgid "Permission Password"
+msgstr "Password Permessi"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_permission_password
+msgid "Password required to change permissions, edit, or print the PDF."
+msgstr "Password richiesta per modificare i permessi, editare o stampare il PDF."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_version
+msgid "PDF Version"
+msgstr "Versione PDF"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_version
+msgid "PDF version/standard to use. Select PDF/A for archival compliance."
+msgstr "Versione/standard PDF da usare. Seleziona PDF/A per conformità archivistica."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_version__0
+msgid "PDF 1.4 (Default)"
+msgstr "PDF 1.4 (Predefinito)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_version__15
+msgid "PDF/A-1b (Archival)"
+msgstr "PDF/A-1b (Archivistico)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_version__17
+msgid "PDF/A-2b (Archival)"
+msgstr "PDF/A-2b (Archivistico)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_version__26
+msgid "PDF/A-3b (Archival)"
+msgstr "PDF/A-3b (Archivistico)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_quality
+msgid "PDF Quality"
+msgstr "Qualità PDF"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_quality
+msgid "Image quality for PDF output (1-100). Higher = better quality, larger file."
+msgstr "Qualità immagini per output PDF (1-100). Maggiore = qualità migliore, file più grande."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_max_resolution
+msgid "Max Image Resolution"
+msgstr "Risoluzione Max Immagini"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_pdf_max_resolution
+msgid "Maximum resolution for images in PDF. Lower = smaller file size."
+msgstr "Risoluzione massima per le immagini nel PDF. Inferiore = file più piccolo."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_max_resolution__75
+msgid "75 DPI (Screen)"
+msgstr "75 DPI (Schermo)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_max_resolution__150
+msgid "150 DPI (Medium)"
+msgstr "150 DPI (Medio)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_max_resolution__300
+msgid "300 DPI (Print)"
+msgstr "300 DPI (Stampa)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_pdf_max_resolution__600
+msgid "600 DPI (High Quality)"
+msgstr "600 DPI (Alta Qualità)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_csv_separator
+msgid "Field Separator"
+msgstr "Separatore di Campo"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_csv_separator
+msgid "Character used to separate fields in CSV output. Default: comma (,)"
+msgstr "Carattere usato per separare i campi nell'output CSV. Predefinito: virgola (,)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_csv_delimiter
+msgid "Text Delimiter"
+msgstr "Delimitatore Testo"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_csv_delimiter
+msgid "Character used to enclose text fields. Default: double quote (\")"
+msgstr "Carattere usato per racchiudere i campi di testo. Predefinito: doppi apici (\")"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_csv_charset
+msgid "Character Set"
+msgstr "Set di Caratteri"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_csv_charset
+msgid "Character encoding for CSV output."
+msgstr "Codifica caratteri per l'output CSV."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_csv_charset__0
+msgid "System default"
+msgstr "Predefinito di sistema"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_csv_charset__76
+msgid "UTF-8"
+msgstr "UTF-8"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_csv_charset__1
+msgid "Windows-1252"
+msgstr "Windows-1252"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_image_width
+msgid "Image Width"
+msgstr "Larghezza Immagine"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_image_width
+msgid "Output image width in pixels. Leave empty for original size."
+msgstr "Larghezza immagine in pixel. Lascia vuoto per dimensione originale."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_image_height
+msgid "Image Height"
+msgstr "Altezza Immagine"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_image_height
+msgid "Output image height in pixels. Leave empty for original size."
+msgstr "Altezza immagine in pixel. Lascia vuoto per dimensione originale."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_image_quality
+msgid "Image Quality (JPG)"
+msgstr "Qualità Immagine (JPG)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_image_quality
+msgid "JPG quality (1-100). Higher values = better quality, larger file."
+msgstr "Qualità JPG (1-100). Valori maggiori = qualità migliore, file più grande."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_image_compression
+msgid "Compression (PNG)"
+msgstr "Compressione (PNG)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_image_compression
+msgid "PNG compression level (0-9). Higher values = smaller file, slower."
+msgstr "Livello compressione PNG (0-9). Valori maggiori = file più piccolo, più lento."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__csv
+msgid "CSV"
+msgstr "CSV"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__jpg
+msgid "Image (JPG)"
+msgstr "Immagine (JPG)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_report_type__png
+msgid "Image (PNG)"
+msgstr "Immagine (PNG)"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "PDF Options"
+msgstr "Opzioni PDF"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "CSV Options"
+msgstr "Opzioni CSV"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Image Options (JPG)"
+msgstr "Opzioni Immagine (JPG)"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Image Options (PNG)"
+msgstr "Opzioni Immagine (PNG)"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Configure how CSV data is formatted. Default: comma separator, double-quote delimiter, UTF-8."
+msgstr "Configura come vengono formattati i dati CSV. Predefinito: separatore virgola, delimitatore doppi apici, UTF-8."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "JPG quality: 1-100 (higher = better quality, larger file). Leave dimensions empty for original size."
+msgstr "Qualità JPG: 1-100 (maggiore = qualità migliore, file più grande). Lascia le dimensioni vuote per la dimensione originale."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "PNG compression: 0-9 (higher = smaller file, slower). Leave dimensions empty for original size."
+msgstr "Compressione PNG: 0-9 (maggiore = file più piccolo, più lento). Lascia le dimensioni vuote per la dimensione originale."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Width in pixels"
+msgstr "Larghezza in pixel"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Height in pixels"
+msgstr "Altezza in pixel"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Cannot convert %(ext)s template to %(format)s format.\n\nTemplates with extension .%(ext_lower)s can only be converted to: %(allowed)s\n\nTip: To export as CSV, use a spreadsheet template (XLSX or ODS)."
+msgstr "Impossibile convertire il template %(ext)s nel formato %(format)s.\n\nI template con estensione .%(ext_lower)s possono essere convertiti solo in: %(allowed)s\n\nSuggerimento: Per esportare in CSV, usa un template foglio di calcolo (XLSX o ODS)."
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "The converter '%(converter)s' is not available on the Carbone server.\n\nPlease go to the report settings (Carbone Options tab) and either:\n- Select a different converter (LibreOffice is usually available)\n- Leave the converter field empty to use the server default\n\nTechnical details: %(error)s"
+msgstr "Il convertitore '%(converter)s' non è disponibile sul server Carbone.\n\nVai nelle impostazioni del report (tab Opzioni Carbone) e:\n- Seleziona un convertitore diverso (LibreOffice è solitamente disponibile)\n- Lascia il campo convertitore vuoto per usare il default del server\n\nDettagli tecnici: %(error)s"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Chromium converter only works with HTML templates.\n\nYour template is .%(ext)s - please use LibreOffice or OnlyOffice instead, or leave the converter field empty."
+msgstr "Il convertitore Chromium funziona solo con template HTML.\n\nIl tuo template è .%(ext)s - usa LibreOffice o OnlyOffice, oppure lascia il campo convertitore vuoto."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_use_html_template
+msgid "Use HTML Template"
+msgstr "Usa Template HTML"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_use_html_template
+msgid "Use the HTML template below instead of uploading a file. Requires Chromium converter for PDF output."
+msgstr "Usa il template HTML qui sotto invece di caricare un file. Richiede il convertitore Chromium per output PDF."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_html_template
+msgid "HTML Template"
+msgstr "Template HTML"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_html_template
+msgid "HTML template with Carbone placeholders like {d.name}, {d.email}. Use standard HTML/CSS for formatting. Will be converted to PDF using Chromium."
+msgstr "Template HTML con placeholder Carbone come {d.name}, {d.email}. Usa HTML/CSS standard per la formattazione. Verrà convertito in PDF usando Chromium."
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "HTML templates are converted to PDF using"
+msgstr "I template HTML vengono convertiti in PDF usando"
+
+#. module: dub_reporting_carbone
+#: model_terms:ir.ui.view,arch_db:dub_reporting_carbone.ir_actions_report_view_form_carbone
+msgid "Write your HTML template below using Carbone placeholders:"
+msgstr "Scrivi il tuo template HTML qui sotto usando i placeholder Carbone:"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/ir_actions_report.py:0
+msgid "Carbone template is not configured for report '%s'. Please upload a template file or enable HTML template."
+msgstr "Il template Carbone non è configurato per il report '%s'. Carica un file template o abilita il template HTML."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_batch_output
+msgid "Batch Output"
+msgstr "Output Batch"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_batch_output
+msgid "When printing multiple records:\n- Merged PDF: All reports combined into a single PDF file\n- ZIP Archive: Each report as a separate file in a ZIP archive"
+msgstr "Quando si stampano più record:\n- PDF Unificato: Tutti i report combinati in un unico file PDF\n- Archivio ZIP: Ogni report come file separato in un archivio ZIP"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_batch_output__pdf
+msgid "Merged PDF (single file)"
+msgstr "PDF Unificato (file singolo)"
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields.selection,name:dub_reporting_carbone.selection__ir_actions_report__carbone_batch_output__zip
+msgid "ZIP Archive (separate files)"
+msgstr "Archivio ZIP (file separati)"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/carbone_async_render.py:0
+msgid "Report generation failed"
+msgstr "Generazione report fallita"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/carbone_async_render.py:0
+msgid "Error:"
+msgstr "Errore:"
+
+#. module: dub_reporting_carbone
+#. odoo-python
+#: code:addons/dub_reporting_carbone/models/carbone_async_render.py:0
+msgid "Report Error: %s"
+msgstr "Errore Report: %s"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_title
+msgid "Partner Report"
+msgstr "Report Partner"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_name_label
+msgid "Name"
+msgstr "Nome"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_phone_label
+msgid "Phone"
+msgstr "Telefono"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_lang_label
+msgid "Language"
+msgstr "Lingua"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_price_label
+msgid "Price"
+msgstr "Prezzo"

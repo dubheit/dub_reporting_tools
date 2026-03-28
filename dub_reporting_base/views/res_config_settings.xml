@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.reporting.base</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="50"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Create Reporting Tools app in Settings sidebar -->
+            <xpath expr="//form" position="inside">
+                <app data-string="Reporting Tools" string="Reporting Tools" name="reporting_tools" groups="base.group_system" logo="/dub_reporting_base/static/description/icon.png">
+                    <block title="External Reporting Engines" name="reporting_engines" id="reporting_tools_settings">
+                        <setting string="External Reporting Engines"
+                                 help="Configure external reporting engines for advanced document generation">
+                            <div class="content-group mt16">
+                                <div class="text-muted">
+                                    This section contains settings for external reporting engines.
+                                    Install specific reporting engine modules (e.g., Carbone, BIRT)
+                                    to see their configuration options here.
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action to open Reporting Tools settings -->
+    <record id="action_reporting_tools_config" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">main</field>
+        <field name="context">{'module': 'reporting_tools', 'bin_size': False}</field>
+    </record>
+</odoo>

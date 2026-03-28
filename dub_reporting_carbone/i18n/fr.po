@@ -1,0 +1,46 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dub_reporting_carbone
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-28 00:00+0000\n"
+"PO-Revision-Date: 2026-03-28 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_title
+msgid "Partner Report"
+msgstr "Rapport Partenaire"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_name_label
+msgid "Name"
+msgstr "Nom"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_email_label
+msgid "Email"
+msgstr "Courriel"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_phone_label
+msgid "Phone"
+msgstr "Téléphone"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_lang_label
+msgid "Language"
+msgstr "Langue"
+
+#. module: dub_reporting_carbone
+#: model:carbone.translation,value:dub_reporting_carbone.demo_trans_price_label
+msgid "Price"
+msgstr "Prix"

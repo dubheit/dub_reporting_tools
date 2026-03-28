@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gdrive_sync_channel_system,gdrive.sync.channel system,model_gdrive_sync_channel,base.group_system,1,1,1,1
+access_gdrive_file_picker_user,gdrive.file.picker user,model_gdrive_file_picker,base.group_user,1,1,1,1
+access_gdrive_file_picker_line_user,gdrive.file.picker.line user,model_gdrive_file_picker_line,base.group_user,1,1,1,1

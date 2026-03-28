@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Invoice Simple (Carbone example) -->
+    <record id="report_invoice_simple_carbone" model="ir.actions.report">
+        <field name="name">Invoice Simple (Carbone Demo)</field>
+        <field name="model">account.move</field>
+        <field name="report_type">carbone</field>
+        <field name="carbone_report_type">pdf</field>
+        <field name="carbone_template_file"
+               type="base64"
+               file="dub_reporting_carbone_demo/reports/templates/invoice_simple.docx"/>
+        <field name="report_name">carbone_demo_invoice_simple</field>
+        <field name="report_file">carbone_demo_invoice_simple</field>
+        <field name="print_report_name">'Invoice - %s' % (object.name or 'Draft')</field>
+        <field name="carbone_json_data">{
+    "id": object.id,
+    "date": object.invoice_date.strftime('%Y-%m-%dT%H:%M:%S') if object.invoice_date else None,
+    "color": "#714B67",
+    "colorLight": "#F3EDF2",
+    "company": {
+        "name": object.company_id.name or '',
+        "address": object.company_id.street or '',
+        "postalCode": object.company_id.zip or '',
+        "city": object.company_id.city or '',
+        "logo": ('data:image/png;base64,' + object.company_id.logo.decode()) if object.company_id.logo else '',
+    },
+    "customer": {
+        "name": object.partner_id.name or '',
+        "address": object.partner_id.street or '',
+        "postalCode": object.partner_id.zip or '',
+        "city": object.partner_id.city or '',
+    },
+    "products": [{
+        "name": l.product_id.name or l.name or '',
+        "priceUnit": l.price_unit,
+        "quantity": l.quantity,
+        "priceTotal": l.price_subtotal,
+        "barcode_ean13": l.product_id.barcode or '',
+        "image": ('data:image/png;base64,' + l.product_id.image_128.decode()) if l.product_id.image_128 else '',
+    } for l in object.invoice_line_ids if not l.display_type],
+}
+        </field>
+        <field name="carbone_use_partner_lang">True</field>
+        <field name="carbone_lang">en-us</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Translation lines for Invoice Simple -->
+    <record id="trans_invoice_title" model="carbone.translation">
+        <field name="report_id" ref="report_invoice_simple_carbone"/>
+        <field name="key">invoice_title</field>
+        <field name="value">Invoice</field>
+    </record>
+    <record id="trans_date_label" model="carbone.translation">
+        <field name="report_id" ref="report_invoice_simple_carbone"/>
+        <field name="key">date_label</field>
+        <field name="value">Date</field>
+    </record>
+    <record id="trans_product_label" model="carbone.translation">
+        <field name="report_id" ref="report_invoice_simple_carbone"/>
+        <field name="key">product_label</field>
+        <field name="value">Product</field>
+    </record>
+    <record id="trans_quantity_label" model="carbone.translation">
+        <field name="report_id" ref="report_invoice_simple_carbone"/>
+        <field name="key">quantity_label</field>
+        <field name="value">Quantity</field>
+    </record>
+    <record id="trans_price_label" model="carbone.translation">
+        <field name="report_id" ref="report_invoice_simple_carbone"/>
+        <field name="key">price_label</field>
+        <field name="value">Unit Price</field>
+    </record>
+    <record id="trans_total_label" model="carbone.translation">
+        <field name="report_id" ref="report_invoice_simple_carbone"/>
+        <field name="key">total_label</field>
+        <field name="value">Total</field>
+    </record>
+
+    <!-- Quote with Datasheet (Carbone example) -->
+    <record id="report_quote_datasheet_carbone" model="ir.actions.report">
+        <field name="name">Quote with Datasheet (Carbone Demo)</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">carbone</field>
+        <field name="carbone_report_type">pdf</field>
+        <field name="carbone_template_file"
+               type="base64"
+               file="dub_reporting_carbone_demo/reports/templates/quote_datasheet.docx"/>
+        <field name="report_name">carbone_demo_quote_datasheet</field>
+        <field name="report_file">carbone_demo_quote_datasheet</field>
+        <field name="print_report_name">'Quote - %s' % (object.name or 'Draft')</field>
+        <field name="carbone_json_data">{
+    "quoteId": object.id,
+    "products": [{
+        "name": l.product_id.name or l.name or '',
+        "datasheet": '',
+        "picture": ('data:image/png;base64,' + l.product_id.image_128.decode()) if l.product_id.image_128 else '',
+        "characteristics": [
+            {"att": "Qty", "val": str(int(l.product_uom_qty))},
+            {"att": "UoM", "val": l.product_uom.name or ''},
+        ],
+        "quantity": l.product_uom_qty,
+        "price": l.price_unit,
+    } for l in object.order_line if not l.display_type],
+    "totalHT": object.amount_untaxed,
+    "totalTax": object.amount_tax,
+    "totalTTC": object.amount_total,
+}
+        </field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

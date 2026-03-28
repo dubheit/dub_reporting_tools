@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ilovepdf_documents_wizard_view_form" model="ir.ui.view">
+        <field name="name">ilovepdf.documents.wizard.form</field>
+        <field name="model">ilovepdf.documents.wizard</field>
+        <field name="arch" type="xml">
+            <form string="ILovePDF Processing">
+                <group>
+                    <group>
+                        <field name="document_ids" widget="many2many_tags" readonly="1"/>
+                        <field name="tool"/>
+                        <field name="tool_description" invisible="not tool"/>
+                    </group>
+                </group>
+
+                <!-- Compress options -->
+                <group invisible="tool != 'compress'" string="Compression Options">
+                    <field name="compression_level"/>
+                </group>
+
+                <!-- Rotate options -->
+                <group invisible="tool != 'rotate'" string="Rotation Options">
+                    <field name="rotation_angle"/>
+                </group>
+
+                <!-- Watermark options -->
+                <group invisible="tool != 'watermark'" string="Watermark Options">
+                    <field name="watermark_text"/>
+                    <field name="watermark_position"/>
+                </group>
+
+                <!-- Protect options -->
+                <group invisible="tool != 'protect'" string="Protection Options">
+                    <field name="password" password="True"/>
+                </group>
+
+                <!-- Page number options -->
+                <group invisible="tool != 'pagenumber'" string="Page Number Options">
+                    <field name="page_number_position"/>
+                </group>
+
+                <footer>
+                    <button name="action_process" string="Process" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action window for wizard (used by server action) -->
+    <record id="ilovepdf_documents_wizard_action_window" model="ir.actions.act_window">
+        <field name="name">Process with ILovePDF</field>
+        <field name="res_model">ilovepdf.documents.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

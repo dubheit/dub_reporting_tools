@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_actions_report_view_form_carbone" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.carbone</field>
+        <field name="model">ir.actions.report</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.act_report_xml_view" />
+        <field name="arch" type="xml">
+            <!-- Carbone Studio button -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_in_studio"
+                    type="object"
+                    icon="fa-pencil"
+                    class="oe_stat_button"
+                    invisible="report_type != 'carbone' or not carbone_template_file">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Carbone Studio</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Output Format -->
+            <field name="report_type" position="after">
+                <field name="carbone_report_type"
+                    invisible="report_type != 'carbone'"/>
+            </field>
+
+            <!-- Template Source Selection and File -->
+            <field name="report_name" position="before">
+                <field name="carbone_template_source" widget="radio"
+                    options="{'horizontal': true}"
+                    invisible="report_type != 'carbone'"/>
+                <field name="carbone_use_html_template" invisible="1"/>
+                <field name="carbone_template_filename" invisible="1"/>
+                <field name="carbone_template_file"
+                    filename="carbone_template_filename"
+                    invisible="report_type != 'carbone' or carbone_use_html_template or carbone_template_source != 'upload'"/>
+                <!-- Note: Google Drive template UI is added by dub_reporting_carbone_gdrive bridge module -->
+            </field>
+
+            <!-- Notebook Pages -->
+            <xpath expr="//notebook" position="inside">
+                <!-- JSON Data Page -->
+                <page
+                    name="carbone_json_data"
+                    string="Carbone Data"
+                    invisible="report_type != 'carbone'">
+                    <group>
+                        <field name="carbone_json_data"
+                            widget="code"
+                            nolabel="1"/>
+                    </group>
+                </page>
+
+                <!-- HTML Template Page -->
+                <page
+                    name="carbone_html_template"
+                    string="Carbone HTML"
+                    invisible="report_type != 'carbone'">
+                    <group>
+                        <group>
+                            <field name="carbone_use_html_template"/>
+                        </group>
+                    </group>
+                    <group invisible="not carbone_use_html_template">
+                        <p class="text-muted mb-2">
+                            Write your HTML template below using Carbone placeholders:
+                            <code>{d.name}</code>, <code>{d.email}</code>, <code>{d.items[i].price}</code>
+                        </p>
+                        <field name="carbone_html_template"
+                            widget="code"
+                            nolabel="1"
+                            placeholder="&lt;html&gt;&#10;&lt;head&gt;&lt;style&gt;body { font-family: Arial; }&lt;/style&gt;&lt;/head&gt;&#10;&lt;body&gt;&#10;  &lt;h1&gt;{d.name}&lt;/h1&gt;&#10;  &lt;p&gt;Email: {d.email}&lt;/p&gt;&#10;&lt;/body&gt;&#10;&lt;/html&gt;"/>
+                    </group>
+                </page>
+
+                <!-- Carbone Options Page -->
+                <page
+                    name="carbone_options"
+                    string="Carbone Options"
+                    invisible="report_type != 'carbone'">
+                    <group string="Rendering Options">
+                        <group>
+                            <field name="carbone_rendering_mode"/>
+                            <field name="carbone_webhook_timeout"
+                                invisible="carbone_rendering_mode != 'async'"/>
+                            <field name="carbone_batch_output"/>
+                        </group>
+                        <group>
+                            <field name="carbone_converter"/>
+                            <field name="carbone_timezone"/>
+                        </group>
+                    </group>
+
+                    <group string="Translations (i18n)">
+                        <group>
+                            <field name="carbone_use_partner_lang"/>
+                            <label for="carbone_lang" string="Fallback Language"/>
+                            <field name="carbone_lang" nolabel="1"
+                                placeholder="Used when partner has no language"/>
+                        </group>
+                        <group>
+                            <p class="text-muted">
+                                Use <code>{t(key)}</code> tags in templates for static text.
+                                Use <code>:t</code> formatter for dynamic values.
+                            </p>
+                        </group>
+                        <field name="carbone_translation_ids">
+                            <list editable="bottom">
+                                <field name="key"/>
+                                <field name="value"/>
+                            </list>
+                        </field>
+                        <separator string="JSON Override (optional)"/>
+                        <p class="text-muted">
+                            Use the lines above for translations managed via Odoo.
+                            The JSON field below is used as fallback only if no lines are configured.
+                        </p>
+                        <field name="carbone_translations"
+                            placeholder='{"en-us": {"hello": "Hello"}, "it-it": {"hello": "Ciao"}}'/>
+                    </group>
+
+                    <group string="Currency Conversion">
+                        <group>
+                            <field name="carbone_currency_source"
+                                placeholder="e.g., EUR"/>
+                            <field name="carbone_currency_target"
+                                placeholder="e.g., USD"/>
+                        </group>
+                        <group>
+                            <p class="text-muted">
+                                Use <code>:formatC()</code> formatter in templates.
+                                Example: <code>{d.price:formatC()}</code>
+                            </p>
+                        </group>
+                        <field name="carbone_currency_rates"
+                            placeholder='{"EUR": 1, "USD": 1.10, "GBP": 0.85}'/>
+                    </group>
+
+                    <group string="PDF Options"
+                        invisible="carbone_report_type != 'pdf'">
+                        <group>
+                            <field name="carbone_pdf_watermark"
+                                placeholder="e.g., DRAFT, CONFIDENTIAL"/>
+                            <field name="carbone_pdf_encrypt"/>
+                            <field name="carbone_pdf_open_password"
+                                password="True"
+                                invisible="not carbone_pdf_encrypt"/>
+                            <field name="carbone_pdf_permission_password"
+                                password="True"
+                                invisible="not carbone_pdf_encrypt"/>
+                        </group>
+                        <group>
+                            <field name="carbone_pdf_version"/>
+                            <field name="carbone_pdf_quality"/>
+                            <field name="carbone_pdf_max_resolution"/>
+                        </group>
+                    </group>
+
+                    <group string="CSV Options"
+                        invisible="carbone_report_type != 'csv'">
+                        <group>
+                            <field name="carbone_csv_separator"/>
+                            <field name="carbone_csv_delimiter"/>
+                            <field name="carbone_csv_charset"/>
+                        </group>
+                        <group>
+                            <p class="text-muted">
+                                Configure how CSV data is formatted.
+                                Default: comma separator, double-quote delimiter, UTF-8.
+                            </p>
+                        </group>
+                    </group>
+
+                    <group string="Image Options (JPG)"
+                        invisible="carbone_report_type != 'jpg'">
+                        <group>
+                            <field name="carbone_image_width" placeholder="Width in pixels"/>
+                            <field name="carbone_image_height" placeholder="Height in pixels"/>
+                            <field name="carbone_image_quality"/>
+                        </group>
+                        <group>
+                            <p class="text-muted">
+                                JPG quality: 1-100 (higher = better quality, larger file).
+                                Leave dimensions empty for original size.
+                            </p>
+                        </group>
+                    </group>
+
+                    <group string="Image Options (PNG)"
+                        invisible="carbone_report_type != 'png'">
+                        <group>
+                            <field name="carbone_image_width" placeholder="Width in pixels"/>
+                            <field name="carbone_image_height" placeholder="Height in pixels"/>
+                            <field name="carbone_image_compression"/>
+                        </group>
+                        <group>
+                            <p class="text-muted">
+                                PNG compression: 0-9 (higher = smaller file, slower).
+                                Leave dimensions empty for original size.
+                            </p>
+                        </group>
+                    </group>
+
+                    <group string="Template Organization">
+                        <group>
+                            <field name="carbone_category" placeholder="e.g., invoices, reports"/>
+                            <field name="carbone_comment" placeholder="Template description or notes"/>
+                        </group>
+                    </group>
+
+                    <group string="Template Cache">
+                        <group>
+                            <field name="carbone_use_template_cache"/>
+                            <field name="carbone_template_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <button name="action_invalidate_template_cache"
+                                string="Invalidate Cache"
+                                type="object"
+                                class="btn-secondary"
+                                icon="fa-refresh"
+                                invisible="not carbone_template_id"/>
+                        </group>
+                    </group>
+
+                    <group string="Advanced Data">
+                        <field name="carbone_complement_data"/>
+                        <field name="carbone_enum_mappings"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_carbone_async_render_user,carbone.async.render user,model_carbone_async_render,base.group_user,1,0,0,0
+access_carbone_async_render_system,carbone.async.render system,model_carbone_async_render,base.group_system,1,1,1,1
+access_carbone_studio_wizard,carbone.studio.wizard user,model_carbone_studio_wizard,base.group_user,1,1,1,1
+access_carbone_translation_user,carbone.translation user,model_carbone_translation,base.group_user,1,0,0,0
+access_carbone_translation_system,carbone.translation system,model_carbone_translation,base.group_system,1,1,1,1
+access_carbone_template_list,carbone.template.list user,model_carbone_template_list,base.group_system,1,1,1,1

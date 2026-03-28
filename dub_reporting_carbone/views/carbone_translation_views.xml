@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_carbone_translation_tree" model="ir.ui.view">
+        <field name="name">carbone.translation.list</field>
+        <field name="model">carbone.translation</field>
+        <field name="arch" type="xml">
+            <list string="Translations" editable="bottom">
+                <field name="key"/>
+                <field name="value"/>
+            </list>
+        </field>
+    </record>
+</odoo>

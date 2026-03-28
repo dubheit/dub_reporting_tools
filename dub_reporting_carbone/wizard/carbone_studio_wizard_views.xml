@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="carbone_studio_wizard_view_form" model="ir.ui.view">
+        <field name="name">carbone.studio.wizard.form</field>
+        <field name="model">carbone.studio.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Open Carbone Studio">
+                <group>
+                    <field name="report_id" invisible="1"/>
+                    <field name="model_name" invisible="1"/>
+                    <field name="record_id"
+                        string="Sample Record"
+                        placeholder="Select a record for preview data..."/>
+                </group>
+                <footer>
+                    <button name="action_open_studio"
+                        string="Open Studio"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-pencil"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_carbone_studio_wizard" model="ir.actions.act_window">
+        <field name="name">Open in Carbone Studio</field>
+        <field name="res_model">carbone.studio.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

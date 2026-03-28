@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend attachment form view to add chatter -->
+    <record id="view_attachment_form_inherit_ilovepdf" model="ir.ui.view">
+        <field name="name">ir.attachment.form.inherit.ilovepdf</field>
+        <field name="model">ir.attachment</field>
+        <field name="inherit_id" ref="base.view_attachment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <chatter/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add SharePoint tab to report form -->
+    <record id="ir_actions_report_view_form_sharepoint" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.sharepoint</field>
+        <field name="model">ir.actions.report</field>
+        <field name="inherit_id" ref="base.act_report_xml_view"/>
+        <field name="priority">51</field>
+        <field name="arch" type="xml">
+
+            <!-- Add SharePoint page in notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page name="sharepoint" string="SharePoint">
+                    <group>
+                        <!-- When no file selected -->
+                        <group colspan="2" invisible="sharepoint_item_id">
+                            <div class="alert alert-info" role="alert">
+                                <i class="fa fa-info-circle me-2"/>
+                                Link this report to a SharePoint/OneDrive template for automatic synchronization.
+                            </div>
+                            <button name="action_select_sharepoint_file"
+                                    string="Select from SharePoint"
+                                    type="object"
+                                    icon="fa-windows"
+                                    class="btn-primary"/>
+                        </group>
+
+                        <!-- When file is selected -->
+                        <group invisible="not sharepoint_item_id">
+                            <field name="sharepoint_drive_id" invisible="1"/>
+                            <field name="sharepoint_item_id" invisible="1"/>
+                            <field name="sharepoint_file_name" readonly="1"/>
+                            <field name="sharepoint_mime_type" readonly="1"/>
+                            <field name="sharepoint_attachment_id" readonly="1"/>
+                        </group>
+                        <group invisible="not sharepoint_item_id">
+                            <field name="sharepoint_sync_status" widget="badge"
+                                   decoration-success="sharepoint_sync_status == 'synced'"
+                                   decoration-warning="sharepoint_sync_status == 'outdated'"
+                                   decoration-info="sharepoint_sync_status == 'not_synced'"
+                                   decoration-danger="sharepoint_sync_status == 'error'"/>
+                            <field name="sharepoint_last_sync" readonly="1"/>
+                            <field name="sharepoint_auto_sync"/>
+                        </group>
+
+                        <!-- Action buttons -->
+                        <group colspan="2" invisible="not sharepoint_item_id">
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button name="action_sync_from_sharepoint"
+                                        string="Sync from SharePoint"
+                                        type="object"
+                                        icon="fa-download"
+                                        class="btn-secondary"
+                                        title="Download latest version from SharePoint"/>
+                                <button name="action_save_to_sharepoint"
+                                        string="Save to SharePoint"
+                                        type="object"
+                                        icon="fa-upload"
+                                        class="btn-secondary"
+                                        title="Upload current template to SharePoint"/>
+                                <button name="action_open_sharepoint_file"
+                                        string="Open in SharePoint"
+                                        type="object"
+                                        icon="fa-external-link"
+                                        class="btn-link"/>
+                                <button name="action_select_sharepoint_file"
+                                        string="Change File"
+                                        type="object"
+                                        icon="fa-refresh"
+                                        class="btn-link"/>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

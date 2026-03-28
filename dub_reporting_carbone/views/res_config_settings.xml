@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_carbone" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.carbone</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="dub_reporting_base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Carbone block inside Reporting Tools app -->
+            <xpath expr="//app[@name='reporting_tools']" position="inside">
+                <block title="Carbone.io" name="carbone_settings_block">
+                    <div class="mb-3">
+                        <img src="/dub_reporting_carbone/static/img/carbone.png" alt="Carbone.io" style="max-height: 40px;"/>
+                    </div>
+                    <setting string="API Configuration" id="carbone_api_settings">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="carbone_api_url" string="API URL" class="col-3 o_light_label"/>
+                                <field name="carbone_api_url" placeholder="https://api.carbone.io"/>
+                            </div>
+                            <div class="row">
+                                <label for="carbone_access_token" string="Access Token" class="col-3 o_light_label"/>
+                                <field name="carbone_access_token" password="True" placeholder="Get yours at https://account.carbone.io"/>
+                            </div>
+                            <div class="row mt-2">
+                                <span class="col-3 o_light_label">Status</span>
+                                <field name="carbone_api_status" class="col-6" nolabel="1"/>
+                                <button name="action_test_carbone_connection" type="object"
+                                        string="Test Connection" class="btn-link" icon="fa-refresh"/>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <setting string="Default Options" id="carbone_defaults" help="Default values for new Carbone reports">
+                        <div class="content-group mt16">
+                            <div class="row">
+                                <label for="carbone_default_converter" string="Converter" class="col-3 o_light_label"/>
+                                <field name="carbone_default_converter"/>
+                            </div>
+                            <div class="row">
+                                <label for="carbone_default_timezone" string="Timezone" class="col-3 o_light_label"/>
+                                <field name="carbone_default_timezone"/>
+                            </div>
+                            <div class="row">
+                                <label for="carbone_default_lang" string="Language" class="col-3 o_light_label"/>
+                                <field name="carbone_default_lang"/>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <setting string="Carbone Studio" id="carbone_studio"
+                             help="Live template editing with Carbone Studio. Requires a valid Carbone Enterprise Edition license from CarboneIO SAS.">
+                        <field name="carbone_studio_enabled"/>
+                        <div invisible="not carbone_studio_enabled" class="content-group mt16">
+                            <div class="row">
+                                <label for="carbone_studio_js_url" string="Studio JS URL" class="col-3 o_light_label"/>
+                                <field name="carbone_studio_js_url" placeholder="https://bin.carbone.io/studio/..."/>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <setting string="Template Management" id="carbone_templates"
+                             help="View and manage templates stored on the Carbone server">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="carbone_template_tag" string="Template Tag" class="col-3 o_light_label"/>
+                                <field name="carbone_template_tag" placeholder="odoo"/>
+                            </div>
+                            <div class="mt8">
+                                <button name="action_view_server_templates"
+                                    type="object"
+                                    string="View Server Templates"
+                                    class="btn-secondary"
+                                    icon="fa-cloud"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

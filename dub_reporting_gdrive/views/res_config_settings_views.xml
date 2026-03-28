@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_gdrive" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.gdrive</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="dub_reporting_base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='reporting_tools']" position="inside">
+
+                <block title="Google Drive Templates" name="gdrive_settings_block">
+                    <div class="mb-3">
+                        <img src="/dub_reporting_gdrive/static/img/gdrive.png" alt="Google Drive" style="max-height: 40px;"/>
+                    </div>
+                    <setting string="Authentication Method" help="Choose how to authenticate with Google Drive">
+                        <field name="gdrive_auth_method" widget="radio"/>
+                    </setting>
+
+                    <!-- Service Account Configuration -->
+                    <setting string="Service Account Credentials"
+                             invisible="gdrive_auth_method != 'service_account'"
+                             help="Use a Service Account for server-to-server authentication">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="gdrive_service_account_file" class="col-lg-3 o_light_label"/>
+                                <field name="gdrive_service_account_file"
+                                       filename="gdrive_service_account_filename"
+                                       class="col-lg-6"/>
+                                <field name="gdrive_service_account_filename" invisible="1"/>
+                            </div>
+                            <div class="row mt8 text-muted" invisible="gdrive_service_account_email">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9">
+                                    <i class="fa fa-info-circle"/> Upload the JSON file from Google Cloud Console (IAM &amp; Admin → Service Accounts → Keys → Add Key → JSON)
+                                </div>
+                            </div>
+                            <div class="row mt8" invisible="not gdrive_service_account_email">
+                                <span class="col-lg-3 o_form_label">Share files with:</span>
+                                <div class="col-lg-9">
+                                    <code><field name="gdrive_service_account_email" readonly="1" class="oe_inline"/></code>
+                                    <span class="text-muted ms-2">(copy this email and share your Drive files/folders with it)</span>
+                                </div>
+                            </div>
+                            <div class="row mt8" invisible="not gdrive_service_account_project">
+                                <span class="col-lg-3 o_form_label">Project:</span>
+                                <field name="gdrive_service_account_project" readonly="1" class="col-lg-9"/>
+                            </div>
+                            <div class="row mt16">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9">
+                                    <button name="action_test_gdrive_connection"
+                                            type="object"
+                                            string="Test Connection"
+                                            class="btn-secondary"
+                                            icon="fa-plug"/>
+                                </div>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- OAuth2 Configuration -->
+                    <setting string="OAuth2 Client Credentials"
+                             invisible="gdrive_auth_method != 'oauth2'"
+                             help="Each user connects their own Google account">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="gdrive_client_id" class="col-lg-3 o_light_label"/>
+                                <field name="gdrive_client_id" class="col-lg-6"/>
+                            </div>
+                            <div class="row">
+                                <label for="gdrive_client_secret" class="col-lg-3 o_light_label"/>
+                                <field name="gdrive_client_secret" class="col-lg-6" password="True"/>
+                            </div>
+                            <div class="row mt8">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9 text-muted">
+                                    <p class="mb-0">
+                                        <i class="fa fa-info-circle"/> Users will connect their own Google accounts to access their Drive files.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mt16">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9">
+                                    <button name="action_connect_gdrive"
+                                            type="object"
+                                            string="Connect My Google Account"
+                                            class="btn-primary"
+                                            icon="fa-google"/>
+                                </div>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- Upload Folder Configuration -->
+                    <setting string="Upload Folder"
+                             help="Folder where modified templates will be saved">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="gdrive_upload_folder_id" class="col-lg-3 o_light_label"/>
+                                <field name="gdrive_upload_folder_id" class="col-lg-6"
+                                       placeholder="e.g., 1ABC123xyz..."/>
+                            </div>
+                            <div class="row mt8" invisible="not gdrive_upload_folder_name">
+                                <span class="col-lg-3 o_form_label">Folder Name:</span>
+                                <field name="gdrive_upload_folder_name" readonly="1" class="col-lg-9"/>
+                            </div>
+                            <div class="row mt8 text-muted">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9">
+                                    <i class="fa fa-info-circle"/> Create a folder on Google Drive, share it with the Service Account email, then paste the folder ID here.
+                                    <br/>
+                                    <small>The folder ID is in the URL: drive.google.com/drive/folders/<strong>[FOLDER_ID]</strong></small>
+                                </div>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- Auto-Sync / Webhooks -->
+                    <setting string="Automatic Synchronization"
+                             help="Automatically sync templates when files change on Google Drive">
+                        <field name="gdrive_webhook_enabled"/>
+                        <div invisible="not gdrive_webhook_enabled" class="mt8 text-muted">
+                            <i class="fa fa-info-circle"/>
+                            Templates with "Auto-Sync" enabled will update automatically when the source file changes on Google Drive.
+                            <br/>
+                            <strong>Note:</strong> This requires a publicly accessible HTTPS URL.
+                        </div>
+                    </setting>
+
+                </block>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

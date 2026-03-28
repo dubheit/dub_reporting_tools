@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend Carbone view for SharePoint source option -->
+    <record id="ir_actions_report_view_form_carbone_sharepoint" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.carbone.sharepoint</field>
+        <field name="model">ir.actions.report</field>
+        <field name="inherit_id" ref="dub_reporting_carbone.ir_actions_report_view_form_carbone"/>
+        <field name="arch" type="xml">
+
+            <!-- Add compact SharePoint status after carbone_template_file field -->
+            <xpath expr="//field[@name='carbone_template_file']" position="after">
+                <div invisible="report_type != 'carbone' or carbone_template_source != 'sharepoint'" class="mb-2">
+                    <field name="sharepoint_attachment_id" invisible="1"/>
+                    <!-- Status badge -->
+                    <span invisible="not sharepoint_attachment_id" class="badge text-bg-info me-2">
+                        <i class="fa fa-windows me-1" title="SharePoint"/>
+                        <field name="sharepoint_file_name" class="oe_inline" readonly="1"/>
+                    </span>
+                    <span invisible="sharepoint_attachment_id" class="badge text-bg-warning me-2">
+                        <i class="fa fa-exclamation-triangle me-1"/> No file selected
+                    </span>
+                    <!-- Quick actions -->
+                    <button name="action_select_sharepoint_file"
+                            type="object"
+                            string="Select"
+                            class="btn-primary btn-sm"
+                            icon="fa-windows"
+                            invisible="sharepoint_attachment_id"/>
+                    <button name="action_sync_from_sharepoint"
+                            type="object"
+                            string="Sync"
+                            class="btn-secondary btn-sm"
+                            icon="fa-download"
+                            title="Download latest from SharePoint"
+                            invisible="not sharepoint_attachment_id"/>
+                    <span class="text-muted ms-2" invisible="not sharepoint_attachment_id">
+                        See SharePoint tab for more options
+                    </span>
+                </div>
+            </xpath>
+
+            <!-- Extend Studio button visibility for SharePoint templates -->
+            <xpath expr="//button[@name='action_open_in_studio']" position="attributes">
+                <attribute name="invisible">report_type != 'carbone' or (not carbone_template_file and not sharepoint_attachment_id)</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

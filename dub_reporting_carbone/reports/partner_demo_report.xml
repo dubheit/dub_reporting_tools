@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="report_partner_demo" model="ir.actions.report">
+        <field name="name">Partner Demo Report</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">carbone</field>
+        <field name="carbone_report_type">pdf</field>
+        <field name="carbone_template_file" type="base64" file="dub_reporting_carbone/reports/templates/partner_demo_report.odt"/>
+        <field name="report_name">partner_demo_report</field>
+        <field name="report_file">partner_demo_report</field>
+        <field name="print_report_name">'Partner Demo - %s' % (object.name or 'Draft')</field>
+        <field name="carbone_json_data">{
+    "name": object.name or ''
+}
+        </field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

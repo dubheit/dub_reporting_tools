@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="dub_reporting_carbone.CarboneStudioAction">
+        <div class="o_carbone_studio_container" style="width: 100%; height: 100vh; position: relative;">
+            <div class="o_carbone_studio_header" style="background: #714B67; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
+                <h4 style="margin: 0; font-weight: 500; color: white;">Carbone Studio</h4>
+                <button class="btn btn-light btn-sm" t-on-click="onClose">
+                    <i class="fa fa-times"/> Close
+                </button>
+            </div>
+            <div t-ref="studioContainer" style="width: 100%; height: calc(100vh - 60px); overflow: hidden;"/>
+        </div>
+    </t>
+</templates>

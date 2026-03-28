@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_sharepoint" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sharepoint</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="dub_reporting_base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='reporting_tools']" position="inside">
+
+                <block title="SharePoint/OneDrive Templates" name="sharepoint_settings_block">
+                    <div class="mb-3">
+                        <img src="/dub_reporting_sharepoint/static/img/sharepoint.png" alt="SharePoint" style="max-height: 40px;"/>
+                    </div>
+                    <setting string="Authentication Method" help="Choose how to authenticate with SharePoint">
+                        <field name="sharepoint_auth_method" widget="radio"/>
+                    </setting>
+
+                    <!-- Azure AD App Registration -->
+                    <setting string="Azure AD App Registration"
+                             help="Configure credentials from Azure Portal">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="sharepoint_tenant_id" class="col-lg-3 o_light_label"/>
+                                <field name="sharepoint_tenant_id" class="col-lg-6"
+                                       placeholder="e.g., xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/>
+                            </div>
+                            <div class="row">
+                                <label for="sharepoint_client_id" class="col-lg-3 o_light_label"/>
+                                <field name="sharepoint_client_id" class="col-lg-6"
+                                       placeholder="Application (client) ID"/>
+                            </div>
+                            <div class="row">
+                                <label for="sharepoint_client_secret" class="col-lg-3 o_light_label"/>
+                                <field name="sharepoint_client_secret" class="col-lg-6" password="True"/>
+                            </div>
+                            <div class="row mt8 text-muted">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9">
+                                    <i class="fa fa-info-circle"/> Create an App Registration in Azure Portal:
+                                    <br/>
+                                    <small>Azure Portal → App registrations → New registration</small>
+                                    <br/>
+                                    <small>Required API permissions: Sites.Read.All, Files.ReadWrite.All</small>
+                                </div>
+                            </div>
+                            <div class="row mt16">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9 d-flex gap-2">
+                                    <button name="action_test_sharepoint_connection"
+                                            type="object"
+                                            string="Test Connection"
+                                            class="btn-secondary"
+                                            icon="fa-plug"/>
+                                    <button name="action_connect_sharepoint"
+                                            type="object"
+                                            string="Connect My Account"
+                                            class="btn-primary"
+                                            icon="fa-windows"
+                                            invisible="sharepoint_auth_method != 'oauth2'"/>
+                                </div>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- SharePoint Site Configuration -->
+                    <setting string="SharePoint Site"
+                             help="Default SharePoint site for templates (leave empty for OneDrive)">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="sharepoint_site_id" class="col-lg-3 o_light_label"/>
+                                <field name="sharepoint_site_id" class="col-lg-6"
+                                       placeholder="e.g., contoso.sharepoint.com,guid,guid"/>
+                            </div>
+                            <div class="row mt8" invisible="not sharepoint_site_name">
+                                <span class="col-lg-3 o_form_label">Site Name:</span>
+                                <field name="sharepoint_site_name" readonly="1" class="col-lg-9"/>
+                            </div>
+                            <div class="row mt8">
+                                <label for="sharepoint_drive_id" class="col-lg-3 o_light_label"/>
+                                <field name="sharepoint_drive_id" class="col-lg-6"
+                                       placeholder="Document library ID"/>
+                            </div>
+                            <div class="row mt8" invisible="not sharepoint_drive_name">
+                                <span class="col-lg-3 o_form_label">Drive Name:</span>
+                                <field name="sharepoint_drive_name" readonly="1" class="col-lg-9"/>
+                            </div>
+                            <div class="row mt16">
+                                <div class="col-lg-3"></div>
+                                <div class="col-lg-9 d-flex gap-2">
+                                    <button name="action_list_sharepoint_sites"
+                                            type="object"
+                                            string="List Sites"
+                                            class="btn-link"
+                                            icon="fa-list"/>
+                                    <button name="action_list_sharepoint_drives"
+                                            type="object"
+                                            string="List Drives"
+                                            class="btn-link"
+                                            icon="fa-hdd-o"/>
+                                </div>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- Upload Folder Configuration -->
+                    <setting string="Upload Folder"
+                             help="Folder where modified templates will be saved">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="sharepoint_upload_folder_id" class="col-lg-3 o_light_label"/>
+                                <field name="sharepoint_upload_folder_id" class="col-lg-6"
+                                       placeholder="Folder ID (leave empty for root)"/>
+                            </div>
+                            <div class="row mt8" invisible="not sharepoint_upload_folder_name">
+                                <span class="col-lg-3 o_form_label">Folder Name:</span>
+                                <field name="sharepoint_upload_folder_name" readonly="1" class="col-lg-9"/>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- Auto-Sync / Webhooks -->
+                    <setting string="Automatic Synchronization"
+                             help="Automatically sync templates when files change on SharePoint">
+                        <field name="sharepoint_webhook_enabled"/>
+                        <div invisible="not sharepoint_webhook_enabled" class="mt8 text-muted">
+                            <i class="fa fa-info-circle"/>
+                            Templates with "Auto-Sync" enabled will update automatically when the source file changes on SharePoint.
+                            <br/>
+                            <strong>Note:</strong> This requires a publicly accessible HTTPS URL.
+                        </div>
+                    </setting>
+
+                </block>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

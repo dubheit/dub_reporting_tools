@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Demo 1: Partner Report with Translations (ODT Template) -->
+        <record id="demo_report_partner_i18n" model="ir.actions.report">
+            <field name="name">Partner Report (i18n Demo)</field>
+            <field name="model">res.partner</field>
+            <field name="report_type">carbone</field>
+            <field name="carbone_report_type">pdf</field>
+            <field name="carbone_template_file" type="base64" file="dub_reporting_carbone/demo/templates/partner_demo_report.odt"/>
+            <field name="report_name">demo_partner_i18n</field>
+            <field name="report_file">demo_partner_i18n</field>
+            <field name="print_report_name">'Partner - %s' % (object.name or 'Draft')</field>
+            <field name="carbone_json_data">{
+    "name": object.name or '',
+    "email": object.email or '',
+    "phone": object.phone or '',
+    "lang": object.lang or '',
+    "price": 1250.50
+}</field>
+            <field name="carbone_use_partner_lang">True</field>
+            <field name="carbone_lang">en-us</field>
+            <field name="carbone_currency_source" ref="base.EUR"/>
+            <field name="carbone_currency_target" ref="base.USD"/>
+            <field name="carbone_currency_rates">{"EUR": 1, "USD": 1.10}</field>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Translations for Partner Report (i18n Demo) -->
+        <record id="demo_trans_title" model="carbone.translation">
+            <field name="report_id" ref="demo_report_partner_i18n"/>
+            <field name="key">title</field>
+            <field name="value">Partner Report</field>
+        </record>
+        <record id="demo_trans_name_label" model="carbone.translation">
+            <field name="report_id" ref="demo_report_partner_i18n"/>
+            <field name="key">name_label</field>
+            <field name="value">Name</field>
+        </record>
+        <record id="demo_trans_email_label" model="carbone.translation">
+            <field name="report_id" ref="demo_report_partner_i18n"/>
+            <field name="key">email_label</field>
+            <field name="value">Email</field>
+        </record>
+        <record id="demo_trans_phone_label" model="carbone.translation">
+            <field name="report_id" ref="demo_report_partner_i18n"/>
+            <field name="key">phone_label</field>
+            <field name="value">Phone</field>
+        </record>
+        <record id="demo_trans_lang_label" model="carbone.translation">
+            <field name="report_id" ref="demo_report_partner_i18n"/>
+            <field name="key">lang_label</field>
+            <field name="value">Language</field>
+        </record>
+        <record id="demo_trans_price_label" model="carbone.translation">
+            <field name="report_id" ref="demo_report_partner_i18n"/>
+            <field name="key">price_label</field>
+            <field name="value">Price</field>
+        </record>
+
+        <!-- Demo 2: Partner Contact Card (HTML Template) -->
+        <record id="demo_report_partner_html" model="ir.actions.report">
+            <field name="name">Partner Contact Card (HTML Demo)</field>
+            <field name="model">res.partner</field>
+            <field name="report_type">carbone</field>
+            <field name="carbone_report_type">pdf</field>
+            <field name="carbone_converter">C</field>
+            <field name="report_name">demo_partner_html</field>
+            <field name="report_file">demo_partner_html</field>
+            <field name="print_report_name">'Contact Card - %s' % (object.name or 'Draft')</field>
+            <field name="carbone_use_html_template">True</field>
+            <field name="carbone_html_template"><![CDATA[
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .name {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        .company {
+            color: #666;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .info {
+            margin-top: 30px;
+        }
+        .info-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        .info-content {
+            flex: 1;
+        }
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+        }
+        .info-value {
+            font-size: 16px;
+            color: #333;
+            margin-top: 2px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="avatar">{d.initials}</div>
+            <h1 class="name">{d.name}</h1>
+            <div class="company">{d.company}</div>
+        </div>
+        <div class="info">
+            <div class="info-row">
+                <div class="info-icon">&#x2709;</div>
+                <div class="info-content">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">{d.email}</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-icon">&#x260E;</div>
+                <div class="info-content">
+                    <div class="info-label">Phone</div>
+                    <div class="info-value">{d.phone}</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-icon">&#x1F4CD;</div>
+                <div class="info-content">
+                    <div class="info-label">Address</div>
+                    <div class="info-value">{d.address}</div>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-icon">&#x1F310;</div>
+                <div class="info-content">
+                    <div class="info-label">Website</div>
+                    <div class="info-value">{d.website}</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            Generated with Carbone.io &amp; Odoo
+        </div>
+    </div>
+</body>
+</html>
+]]></field>
+            <field name="carbone_json_data">{
+    "name": object.name or '',
+    "initials": ''.join([n[0].upper() for n in (object.name or 'N A').split()[:2]]),
+    "company": object.parent_id.name if object.parent_id else (object.company_name or ''),
+    "email": object.email or 'N/A',
+    "phone": object.phone or object.mobile or 'N/A',
+    "address": ', '.join(filter(None, [object.street, object.city, object.country_id.name if object.country_id else None])) or 'N/A',
+    "website": object.website or 'N/A'
+}</field>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Demo 3: Partner Report with PDF Watermark -->
+        <record id="demo_report_partner_watermark" model="ir.actions.report">
+            <field name="name">Partner Report (Watermark Demo)</field>
+            <field name="model">res.partner</field>
+            <field name="report_type">carbone</field>
+            <field name="carbone_report_type">pdf</field>
+            <field name="carbone_template_file" type="base64" file="dub_reporting_carbone/demo/templates/partner_demo_report.odt"/>
+            <field name="report_name">demo_partner_watermark</field>
+            <field name="report_file">demo_partner_watermark</field>
+            <field name="print_report_name">'DRAFT - %s' % (object.name or 'Partner')</field>
+            <field name="carbone_json_data">{
+    "name": object.name or '',
+    "email": object.email or '',
+    "phone": object.phone or '',
+    "lang": object.lang or '',
+    "price": 999.99
+}</field>
+            <field name="carbone_pdf_watermark">DRAFT</field>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

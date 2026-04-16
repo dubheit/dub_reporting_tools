@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_birt" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.birt</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="dub_reporting_base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='reporting_tools']" position="inside">
+                <block title="Eclipse BIRT" name="birt_settings_block">
+                    <setting string="BIRT Server" id="birt_server_settings">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="birt_base_url" string="Server URL" class="col-3 o_light_label"/>
+                                <field name="birt_base_url" placeholder="http://birt:8080/birt"/>
+                            </div>
+                            <div class="row">
+                                <label for="birt_username" string="Username" class="col-3 o_light_label"/>
+                                <field name="birt_username"/>
+                            </div>
+                            <div class="row">
+                                <label for="birt_password" string="Password" class="col-3 o_light_label"/>
+                                <field name="birt_password" password="True"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting string="Odoo Internal URL" id="birt_odoo_url"
+                             help="URL used by the BIRT container to reach Odoo (Docker service name)">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="birt_odoo_internal_url" string="Internal URL" class="col-3 o_light_label"/>
+                                <field name="birt_odoo_internal_url" placeholder="http://odoo:8069"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

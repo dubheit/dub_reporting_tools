@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_actions_report_view_form_birt" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.birt</field>
+        <field name="model">ir.actions.report</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.act_report_xml_view"/>
+        <field name="arch" type="xml">
+            <!-- Output Format -->
+            <field name="report_type" position="after">
+                <field name="birt_report_type"
+                    invisible="report_type != 'birt'"/>
+            </field>
+
+            <!-- Template fields -->
+            <field name="report_name" position="before">
+                <field name="birt_template_mode" widget="radio"
+                    options="{'horizontal': true}"
+                    invisible="report_type != 'birt'"/>
+                <field name="birt_template_filename" invisible="1"/>
+                <field name="birt_template_file"
+                    filename="birt_template_filename"
+                    invisible="report_type != 'birt' or birt_template_mode != 'http'"/>
+            </field>
+
+            <!-- BIRT Options page -->
+            <xpath expr="//notebook" position="inside">
+                <page name="birt_options" string="BIRT Options"
+                      invisible="report_type != 'birt'">
+                    <group string="Template Configuration">
+                        <group>
+                            <field name="birt_format_version"/>
+                            <field name="birt_jdbc_string"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -33,9 +33,7 @@ Requirements:
     """,
     'author': 'Dubhe',
     'website': 'https://www.dubhe.it',
-    'license': 'OPL-1',
-    'price': 9.90,
-    'currency': 'EUR',
+    'license': 'LGPL-3',
     'depends': ['dub_reporting_base', 'mail'],
     'external_dependencies': {'python': ['requests']},
     'data': [

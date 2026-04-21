@@ -32,7 +32,7 @@ modules are present.
     'data': [
         'views/ir_actions_report_views.xml',
     ],
-    'license': 'OPL-1',
+    'license': 'LGPL-3',
     'installable': True,
     'application': False,
     'auto_install': True,

@@ -22,9 +22,7 @@ for specific reporting engine modules.
     """,
     'author': 'Dubhe',
     'website': 'https://www.dubhe.it',
-    'license': 'OPL-1',
-    'price': 49.90,
-    'currency': 'EUR',
+    'license': 'LGPL-3',
     'depends': ['base', 'web'],
     'data': [
         'views/res_config_settings.xml',

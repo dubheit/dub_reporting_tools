@@ -25,9 +25,7 @@ Requirements:
     """,
     'author': 'Dubhe IT',
     'website': 'https://www.dubhe.it',
-    'license': 'OPL-1',
-    'price': 19.90,
-    'currency': 'EUR',
+    'license': 'LGPL-3',
     'depends': ['dub_reporting_ilovepdf', 'documents'],
     'data': [
         'security/ir.model.access.csv',

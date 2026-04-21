@@ -44,7 +44,7 @@ Requirements
         'views/ir_actions_report_views.xml',
         'wizard/gdrive_file_picker_views.xml',
     ],
-    'license': 'OPL-1',
+    'license': 'LGPL-3',
     'installable': True,
     'application': False,
     'auto_install': False,

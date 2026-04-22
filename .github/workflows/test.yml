@@ -88,33 +88,14 @@ jobs:
           EOF
 
       - name: Install modules (with demo data)
+        env:
+          MODULES: dub_reporting_base,dub_reporting_carbone,dub_reporting_carbone_demo,dub_reporting_birt,dub_reporting_ilovepdf,dub_reporting_ilovepdf_documents,dub_reporting_gdrive,dub_reporting_sharepoint,dub_reporting_carbone_gdrive,dub_reporting_carbone_sharepoint
         run: |
-          odoo -c odoo.conf -d odoo -i \
-            dub_reporting_base,\
-            dub_reporting_carbone,\
-            dub_reporting_carbone_demo,\
-            dub_reporting_birt,\
-            dub_reporting_ilovepdf,\
-            dub_reporting_ilovepdf_documents,\
-            dub_reporting_gdrive,\
-            dub_reporting_sharepoint,\
-            dub_reporting_carbone_gdrive,\
-            dub_reporting_carbone_sharepoint \
-            --without-demo=False --stop-after-init --http-port=0
+          odoo -c odoo.conf -d odoo -i "$MODULES" --without-demo=False --stop-after-init --http-port=0
 
       - name: Run tests
         env:
           CARBONE_TEST_API_KEY: ${{ secrets.CARBONE_TEST_API_KEY }}
+          TEST_TAGS: /dub_reporting_base,/dub_reporting_carbone,/dub_reporting_carbone_demo,/dub_reporting_birt,/dub_reporting_ilovepdf,/dub_reporting_ilovepdf_documents,/dub_reporting_gdrive,/dub_reporting_sharepoint,/dub_reporting_carbone_gdrive,/dub_reporting_carbone_sharepoint
         run: |
-          odoo -c odoo.conf -d odoo --test-tags \
-            /dub_reporting_base,\
-            /dub_reporting_carbone,\
-            /dub_reporting_carbone_demo,\
-            /dub_reporting_birt,\
-            /dub_reporting_ilovepdf,\
-            /dub_reporting_ilovepdf_documents,\
-            /dub_reporting_gdrive,\
-            /dub_reporting_sharepoint,\
-            /dub_reporting_carbone_gdrive,\
-            /dub_reporting_carbone_sharepoint \
-            --stop-after-init --http-port=0
+          odoo -c odoo.conf -d odoo --test-tags "$TEST_TAGS" --stop-after-init --http-port=0

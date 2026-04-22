@@ -3,8 +3,8 @@
     'version': '19.0.1.0.0',
     'category': 'Tools',
     'summary': 'Bridge module: Use Google Drive templates with Carbone',
-    'author': 'Dubhe',
-    'website': 'https://www.dubhe.it',
+    'author': 'Dubhe Srls',
+    'website': 'https://dubhe.it',
     'description': """
 Carbone + Google Drive Integration
 ==================================

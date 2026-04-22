@@ -23,8 +23,8 @@ Requirements:
 * dub_reporting_ilovepdf module
 * Odoo Enterprise Documents module
     """,
-    'author': 'Dubhe IT',
-    'website': 'https://www.dubhe.it',
+    'author': 'Dubhe Srls',
+    'website': 'https://dubhe.it',
     'license': 'LGPL-3',
     'depends': ['dub_reporting_ilovepdf', 'documents'],
     'data': [

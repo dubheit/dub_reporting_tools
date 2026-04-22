@@ -1,95 +1,114 @@
-<section class="oe_container">
-    <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan" style="color: #875A7B;">ILovePDF for Documents</h2>
-        <h3 class="oe_slogan">Process documents directly from Odoo Documents app</h3>
-        <div class="oe_demo oe_picture oe_screenshot">
-            <img src="screenshots/documents_action.png" alt="Documents Action"/>
-        </div>
-    </div>
-</section>
+<!-- Dubhe Reporting iLovePDF for Documents — apps.odoo.com description page -->
+<!-- Brand: dark navy (#0D1B2A) / teal (#3ECFB4 / #2BA88E) -->
 
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan" style="color: #875A7B;">Seamless Integration</h2>
-        <div class="oe_span6">
-            <p class="oe_mt32">
-                <i class="fa fa-check-circle" style="color: #875A7B;"></i> <strong>Process from Documents App</strong><br/>
-                All ILovePDF operations directly in Documents
-            </p>
-            <p>
-                <i class="fa fa-check-circle" style="color: #875A7B;"></i> <strong>Available on All Folders</strong><br/>
-                Action automatically enabled on existing and new folders
-            </p>
-            <p>
-                <i class="fa fa-check-circle" style="color: #875A7B;"></i> <strong>Version Control</strong><br/>
-                Results saved as new document versions
-            </p>
-            <p>
-                <i class="fa fa-check-circle" style="color: #875A7B;"></i> <strong>Chatter Notifications</strong><br/>
-                Track all processing in document history
-            </p>
-        </div>
-        <div class="oe_span6">
-            <div class="oe_row_img oe_centered">
-                <img class="oe_picture" src="screenshots/wizard.png" alt="Wizard"/>
-            </div>
-        </div>
-    </div>
-</section>
+<style>
+  .dub-root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; color: #2C3E50; line-height: 1.55; }
+  .dub-root h2, .dub-root h3, .dub-root h4 { font-family: inherit; letter-spacing: -0.01em; }
+  .dub-section { padding: 60px 32px; margin: 0; }
+  .dub-section-dark { background: linear-gradient(135deg, #0D1B2A 0%, #1B3A4B 100%); color: #FFFFFF; }
+  .dub-section-light { background: #FFFFFF; }
+  .dub-section-soft  { background: #F7F9FA; }
+  .dub-eyebrow { display: inline-block; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #3ECFB4; font-weight: 700; margin-bottom: 14px; }
+  .dub-eyebrow-dark { color: #2BA88E; }
+  .dub-title { font-size: 40px; font-weight: 700; margin: 0 0 18px; line-height: 1.15; }
+  .dub-title-light { color: #FFFFFF; }
+  .dub-title-dark  { color: #0D1B2A; }
+  .dub-lead { font-size: 18px; max-width: 720px; margin: 0 auto; }
+  .dub-lead-light { color: rgba(255,255,255,0.82); }
+  .dub-lead-dark  { color: #475569; }
+  .dub-center { text-align: center; }
+  .dub-grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 36px; }
+  .dub-card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; flex: 1 1 280px; min-width: 260px; box-shadow: 0 1px 2px rgba(13,27,42,0.04); position: relative; overflow: hidden; }
+  .dub-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #3ECFB4; }
+  .dub-card.dub-accent-coral::before { background: #E05D44; }
+  .dub-card-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(62,207,180,0.14); color: #2BA88E; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+  .dub-card h4 { font-size: 17px; font-weight: 700; margin: 0 0 8px; color: #0D1B2A; }
+  .dub-card p { font-size: 14px; margin: 0; color: #475569; }
+  .dub-pill { display: inline-block; font-size: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(62,207,180,0.12); color: #2BA88E; font-weight: 600; margin: 4px 4px 4px 0; }
+  .dub-cta { display: inline-block; padding: 12px 28px; background: #3ECFB4; color: #0D1B2A; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 15px; margin-top: 18px; }
+  .dub-cta-secondary { background: transparent; color: #FFFFFF; border: 2px solid rgba(255,255,255,0.3); }
+  .dub-accent-line { width: 60px; height: 4px; background: #3ECFB4; border-radius: 2px; margin: 0 auto 24px; }
+  .dub-footer { background: #0D1B2A; color: rgba(255,255,255,0.7); text-align: center; padding: 40px 32px; }
+  .dub-footer a { color: #3ECFB4; text-decoration: none; font-weight: 600; }
+  .dub-badge { display: inline-block; padding: 6px 14px; background: rgba(62,207,180,0.18); color: #3ECFB4; border-radius: 999px; font-size: 13px; font-weight: 600; margin-bottom: 22px; letter-spacing: 0.03em; }
+</style>
 
-<section class="oe_container">
-    <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan" style="color: #875A7B;">All ILovePDF Operations</h2>
-        <div class="oe_span6">
-            <p>
-                <i class="fa fa-compress"></i> Compress PDF<br/>
-                <i class="fa fa-files-o"></i> Merge PDFs<br/>
-                <i class="fa fa-scissors"></i> Split PDF<br/>
-                <i class="fa fa-rotate-right"></i> Rotate Pages<br/>
-                <i class="fa fa-exchange"></i> Office to PDF<br/>
-                <i class="fa fa-image"></i> Image to PDF
-            </p>
-        </div>
-        <div class="oe_span6">
-            <p>
-                <i class="fa fa-file-image-o"></i> PDF to Image<br/>
-                <i class="fa fa-tint"></i> Watermark<br/>
-                <i class="fa fa-list-ol"></i> Page Numbers<br/>
-                <i class="fa fa-lock"></i> Protect/Unlock PDF<br/>
-                <i class="fa fa-wrench"></i> Repair PDF<br/>
-                <i class="fa fa-font"></i> OCR
-            </p>
-        </div>
-    </div>
-</section>
+<div class="dub-root">
 
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan" style="color: #875A7B;">Document History</h2>
-        <div class="oe_demo oe_picture oe_screenshot">
-            <img src="screenshots/chatter_notification.png" alt="Chatter"/>
-        </div>
-        <p class="text-center oe_mt32" style="font-size: 16px;">
-            All operations are logged in the document's chatter for complete traceability
-        </p>
+  <section class="dub-section dub-section-dark dub-center">
+    <span class="dub-badge">Bridge &middot; Odoo Enterprise Documents</span>
+    <h2 class="dub-title dub-title-light">iLovePDF for Documents</h2>
+    <p class="dub-lead dub-lead-light">
+      Bring every iLovePDF operation — merge, split, compress, OCR,
+      watermark, protect — straight into Odoo Enterprise's Documents
+      app. Process any document without leaving the workspace.
+    </p>
+    <div style="margin-top: 28px;">
+      <a href="mailto:support@dubhe.it" class="dub-cta">Contact Dubhe</a>
     </div>
-</section>
+  </section>
 
-<section class="oe_container">
-    <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan" style="color: #875A7B;">Requirements</h2>
-        <p class="text-center" style="font-size: 16px;">
-            <i class="fa fa-building"></i> Odoo Enterprise with Documents app<br/>
-            <i class="fa fa-puzzle-piece"></i> dub_reporting_ilovepdf module (included as dependency)
-        </p>
+  <section class="dub-section dub-section-light">
+    <div style="max-width: 1100px; margin: 0 auto;" class="dub-center">
+      <span class="dub-eyebrow dub-eyebrow-dark">What it does</span>
+      <h3 class="dub-title dub-title-dark" style="font-size: 30px;">Same wizard, native Documents experience</h3>
+      <div class="dub-accent-line"></div>
     </div>
-</section>
+    <div class="dub-grid" style="max-width: 1000px; margin: 0 auto;">
+      <div class="dub-card dub-accent-coral">
+        <div class="dub-card-icon" style="background: rgba(224,93,68,0.14); color: #E05D44;"><i class="fa fa-folder-open"></i></div>
+        <h4>Native action in Documents</h4>
+        <p>A <em>Process with iLovePDF</em> action appears on every folder — existing and future — via a <code>post_init_hook</code>.</p>
+      </div>
+      <div class="dub-card">
+        <div class="dub-card-icon"><i class="fa fa-history"></i></div>
+        <h4>Version-aware</h4>
+        <p>Results are saved as new document versions, so full history is preserved.</p>
+      </div>
+      <div class="dub-card">
+        <div class="dub-card-icon"><i class="fa fa-comments-o"></i></div>
+        <h4>Chatter notifications</h4>
+        <p>Every processed document logs a message on its chatter thread — who ran what, and when.</p>
+      </div>
+    </div>
+  </section>
 
-<section class="oe_container oe_dark">
-    <div class="oe_row oe_spaced">
-        <h2 class="oe_slogan" style="color: #875A7B;">Support</h2>
-        <p class="text-center" style="font-size: 16px;">
-            Need help? Contact us at <a href="mailto:support@dubhe.it">support@dubhe.it</a>
-        </p>
+  <section class="dub-section dub-section-soft">
+    <div style="max-width: 820px; margin: 0 auto;" class="dub-center">
+      <span class="dub-eyebrow dub-eyebrow-dark">Requirements</span>
+      <h3 class="dub-title dub-title-dark" style="font-size: 28px;">Enterprise Documents + the parent module</h3>
+      <div class="dub-accent-line"></div>
+      <p class="dub-lead dub-lead-dark">
+        This module wires <code>dub_reporting_ilovepdf</code> to Odoo
+        Enterprise's <code>documents</code> app. Install both and this
+        bridge lights up every Documents folder.
+      </p>
+      <div style="margin-top: 22px;">
+        <span class="dub-pill">dub_reporting_ilovepdf</span>
+        <span class="dub-pill">documents (Enterprise)</span>
+      </div>
     </div>
-</section>
+  </section>
+
+  <section class="dub-section dub-section-dark dub-center">
+    <span class="dub-eyebrow">Bring PDF superpowers to your workspace</span>
+    <h3 class="dub-title dub-title-light" style="font-size: 28px;">Thirteen operations, right inside Documents</h3>
+    <p class="dub-lead dub-lead-light">
+      Merge, split, compress, OCR, watermark, password-protect — all
+      the operations from <code>dub_reporting_ilovepdf</code>, now
+      native in the Documents app.
+    </p>
+    <div style="margin-top: 28px;">
+      <a href="mailto:support@dubhe.it" class="dub-cta">Email support@dubhe.it</a>
+    </div>
+  </section>
+
+  <section class="dub-footer">
+    <p style="margin: 0 0 6px;"><strong style="color:#FFFFFF;">Dubhe Srls</strong> &middot; Italy</p>
+    <p style="margin: 0;">
+      <a href="https://dubhe.it">dubhe.it</a> &middot;
+      <a href="mailto:support@dubhe.it">support@dubhe.it</a>
+    </p>
+  </section>
+
+</div>

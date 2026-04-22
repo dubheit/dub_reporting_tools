@@ -31,8 +31,8 @@ Requirements:
 * dub_reporting_base module
 * ILovePDF API credentials (https://developer.ilovepdf.com)
     """,
-    'author': 'Dubhe',
-    'website': 'https://www.dubhe.it',
+    'author': 'Dubhe Srls',
+    'website': 'https://dubhe.it',
     'license': 'LGPL-3',
     'depends': ['dub_reporting_base', 'mail'],
     'external_dependencies': {'python': ['requests']},

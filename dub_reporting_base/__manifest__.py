@@ -20,8 +20,8 @@ Features:
 This is a technical module that should be installed as a dependency
 for specific reporting engine modules.
     """,
-    'author': 'Dubhe',
-    'website': 'https://www.dubhe.it',
+    'author': 'Dubhe Srls',
+    'website': 'https://dubhe.it',
     'license': 'LGPL-3',
     'depends': ['base', 'web'],
     'data': [

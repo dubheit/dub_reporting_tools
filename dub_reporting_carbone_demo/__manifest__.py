@@ -3,8 +3,8 @@
     "version": "19.0.1.0.0",
     "category": "Reporting",
     "summary": "Demo Carbone reports for invoices and sales orders",
-    "author": "Dubhe",
-    "website": "https://www.dubhe.it",
+    "author": "Dubhe Srls",
+    "website": "https://dubhe.it",
     "description": """
 Carbone Demo Reports
 =====================

@@ -1,308 +1,175 @@
-# Carbone.io Reporting Module
+# Reporting Tools — Carbone
 
-Advanced document generation for Odoo 18.0 using Carbone.io API v5.
+[![License: LGPL-3](https://img.shields.io/badge/License-LGPL--3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![Odoo](https://img.shields.io/badge/Odoo-19.0-875A7B.svg)](https://www.odoo.com/)
+[![Carbone](https://img.shields.io/badge/Carbone-v5-3ECFB4.svg)](https://carbone.io/)
+[![CI](https://github.com/dubheit/dub_reporting_tools/actions/workflows/test.yml/badge.svg?branch=19.0)](https://github.com/dubheit/dub_reporting_tools/actions)
 
-## Overview
+Render pixel-perfect DOCX, XLSX, PDF, ODT and ODS reports from Odoo using
+[Carbone.io](https://carbone.io/) — the template engine that lets
+business users design reports in Word or Excel instead of XML.
 
-This module integrates [Carbone.io](https://carbone.io) reporting engine with Odoo, providing powerful document generation capabilities with support for multiple output formats and advanced features.
+---
+
+## Table of Contents
+
+- [Why Carbone](#why-carbone)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Quick start](#quick-start)
+- [Template authoring](#template-authoring)
+- [Studio integration](#studio-integration)
+- [Output formats](#output-formats)
+- [Asynchronous rendering](#asynchronous-rendering)
+- [Template storage bridges](#template-storage-bridges)
+- [Dependencies](#dependencies)
+- [Development & tests](#development--tests)
+- [Support](#support)
+- [License](#license)
+
+---
+
+## Why Carbone
+
+QWeb is powerful but asks your finance team to read HTML/XML. Carbone turns
+the relationship around: business users design templates in **Word, Excel,
+LibreOffice or Google Docs**, mark fields with `{d.field_name}` tags, and
+Carbone renders them back with real data — preserving every fonts, border
+and layout pixel.
+
+This module brings the full Carbone v5 API into Odoo: just pick "Carbone"
+as the report engine, upload your template, and your existing
+`ir.actions.report` works like before.
 
 ## Features
 
-### Core Functionality
-- **Multiple Output Formats**: PDF, DOCX, XLSX, ODT, ODS
-- **Carbone API v5**: Full support for latest Carbone features
-- **Template Caching**: Upload templates once, reuse for better performance
-- **Multi-Record Rendering**: Generate reports for multiple records in single document
-- **Enhanced Error Handling**: Detailed error messages and comprehensive logging
+- **Design in Office tools** — DOCX, XLSX, ODT, ODS templates authored in Word/Excel/LibreOffice
+- **Multiple output formats** — PDF, DOCX, XLSX, ODT, ODS (and anything else Carbone can convert to)
+- **Template caching** — Carbone hashes each template to avoid redundant uploads
+- **Asynchronous rendering** — webhooks for large reports
+- **Carbone Studio** — live in-browser template editor (requires Carbone Enterprise)
+- **Translations** — localise content per language using the Carbone `i18n` engine
+- **Full v5 API support** — converter, timezone, complement, enum, currency, units, and more
+- **Enhanced logging** — every call traced with render time and payload size
 
-### Carbone v5 Features
-- **Converter Selection**: Choose between LibreOffice, OnlyOffice, or Chromium
-- **Timezone Support**: Automatic timezone conversion for dates
-- **Multi-Language**: Support for multiple language codes (en-us, fr-fr, it-it, etc.)
-- **Complement Data**: Additional data accessible via `{c.}` tags
-- **Enum Mappings**: Use `:convEnum()` formatter with custom mappings
+## Architecture
 
-### Advanced Features
-- **Asynchronous Rendering**: Webhook-based async rendering for large reports (coming soon)
-- **Carbone Studio Integration**: Live template editing (coming soon)
-- **Comprehensive Logging**: Track all report generation activities
-- **Validation**: Pre-render validation of configuration and templates
-
-## Installation
-
-### Prerequisites
-
-1. **Odoo 18.0**
-2. **dub_reporting_base** module (installed automatically)
-3. **Carbone.io Account**: Get API access token at [account.carbone.io](https://account.carbone.io)
-4. **Python Dependencies**: 
-   ```bash
-   pip install requests pytz
-   ```
-
-### Installation Steps
-
-1. Clone or copy module to Odoo addons directory
-2. Update module list in Odoo
-3. Install "Reporting Tools - Carbone" module
-4. Configure Carbone API credentials in Settings
-
-## Configuration
-
-### Basic Setup
-
-1. Navigate to **Settings > Reporting Tools > Carbone.io Configuration**
-2. Enter your configuration:
-   - **API URL**: `https://api.carbone.io` (or your on-premise URL)
-   - **Access Token**: Your API token from Carbone.io
-
-### Default Options (Optional)
-
-Configure default values for new reports:
-- **Converter**: Default rendering engine (LibreOffice/OnlyOffice/Chromium)
-- **Timezone**: Default timezone for date formatting
-- **Language**: Default language code for number/date formatting
-
-### Webhook Configuration (For Async Rendering)
-
-- **Webhook Base URL**: Your Odoo instance URL (e.g., `https://yourdomain.com`)
-- Leave empty to use `web.base.url` setting
-
-## Creating Reports
-
-### 1. Create Report Record
-
-1. Navigate to **Settings > Technical > Actions > Reports**
-2. Create new report or edit existing
-3. Set **Report Type** to "Carbone"
-
-### 2. Configure Report
-
-#### Basic Configuration
-
-- **Name**: Report display name
-- **Model**: Odoo model to report on
-- **Output Format**: Choose format (PDF, DOCX, etc.)
-- **Template File**: Upload your Carbone template
-
-#### Data Configuration
-
-In the **Data** tab, write Python code to prepare JSON data:
-
-```python
-{
-    'data': {
-        'company': object.company_id.name,
-        'date': object.date,
-        'lines': [
-            {
-                'product': line.product_id.name,
-                'quantity': line.quantity,
-                'price': line.price_unit,
-            }
-            for line in object.order_line
-        ]
-    }
-}
+```text
+┌──────────────┐        ┌──────────────────┐       ┌──────────────────┐
+│ ir.actions.  │  ──▶   │ dub_reporting_   │  ──▶  │ api.carbone.io   │
+│ report       │        │ carbone          │       │ (cloud or self-  │
+│ (type=       │        │                  │       │  hosted)         │
+│ carbone)     │  ◀──   │  - upload tmpl   │  ◀──  │                  │
+└──────────────┘ bytes  │  - render         │ PDF/  └──────────────────┘
+                        │  - translate      │ DOCX
+                        │  - cache          │
+                        └──────────────────┘
 ```
 
-#### Carbone Options (Optional)
+## Quick start
 
-In the **Carbone Options** tab:
-- **Rendering Mode**: Synchronous or Asynchronous
-- **Converter**: Override default converter
-- **Timezone**: Override default timezone
-- **Language**: Override default language
+### 1. Get a Carbone API token
 
-#### Advanced Data (Optional)
+Sign up at [carbone.io](https://carbone.io/) (free tier available) and
+copy your API token.
 
-- **Complement Data**: Additional data for `{c.}` tags
-  ```python
-  {
-      'footer_text': 'Confidential Document',
-      'page_numbers': True
-  }
-  ```
+### 2. Configure Odoo
 
-- **Enum Mappings**: JSON mappings for `:convEnum()`
-  ```json
-  {
-      "status": {
-          "draft": "Draft",
-          "confirmed": "Confirmed",
-          "done": "Completed"
-      }
-  }
-  ```
+**Settings → Technical → Reporting → Carbone**:
 
-### 3. Template Creation
+| Field | Purpose |
+|---|---|
+| API URL | `https://api.carbone.io` (cloud) or your self-hosted endpoint |
+| API Token | Personal access token from Carbone |
+| API Version | `5` (default) |
+| Async Threshold | Reports longer than N records use webhooks |
 
-Create your document template using:
-- Microsoft Word (DOCX)
-- Microsoft Excel (XLSX)
-- LibreOffice Writer (ODT)
-- LibreOffice Calc (ODS)
+### 3. Create a Carbone report
 
-#### Template Tags
+Go to **Technical → Actions → Reports**, set:
 
-Use Carbone tags in your template:
+- **Report Type**: Carbone
+- **Template**: upload your `.docx` / `.xlsx` / `.odt` / `.ods`
+- **Output**: pick the target format (PDF is the most common)
 
-- **Simple field**: `{d.company}`
-- **Formatted number**: `{d.price:formatN(2)}`
-- **Formatted date**: `{d.date:formatD(DD/MM/YYYY)}`
-- **Loop**: `{d.lines[i].product}`
-- **Conditional**: `{d.total:ifEQ(0):show(.hidden)}`
-- **Complement data**: `{c.footer_text}`
-- **Enum conversion**: `{d.status:convEnum(status)}`
+### 4. Use it
 
-See [Carbone Documentation](https://carbone.io/documentation.html) for full tag reference.
+Attach the report to any form (invoice, sale order, partner, …) like a
+regular Odoo report. Users click Print — Carbone does the rest.
 
-## Template Caching
+## Template authoring
 
-### How It Works
+Carbone tags are intuitive. In a Word document you write:
 
-When **Use Template Cache** is enabled (default):
-1. Template is uploaded to Carbone on first render
-2. Template ID is stored in `carbone_template_id` field
-3. Subsequent renders reuse cached template (faster)
+```text
+Hello {d.partner_id.name},
 
-### When to Invalidate Cache
+Your invoice {d.name} for {d.amount_total:formatC(EUR)} is due
+on {d.invoice_date_due:formatD(DD/MM/YYYY)}.
 
-Invalidate cache when:
-- Template file has been modified
-- Template is corrupted
-- You want to force re-upload
-
-Click **Invalidate Cache** button on report form.
-
-## Usage
-
-### Printing Reports
-
-1. **From Record View**: Click Print button, select your Carbone report
-2. **From List View**: Select records, Actions > Print, select report
-3. **Programmatically**:
-   ```python
-   report = self.env.ref('module.report_xml_id')
-   pdf_content, format = report._render_carbone(
-       'report.name',
-       '1,2,3',  # record IDs
-       {}
-   )
-   ```
-
-### Multi-Record Reports
-
-The module automatically handles multiple records:
-- Single record: renders with single data object
-- Multiple records: renders with array of data objects
-
-Your template can access record array with:
-```
-{d.records[i].field_name}
+{d.invoice_line_ids[i].name}      {d.invoice_line_ids[i].price_subtotal}
+{d.invoice_line_ids[i+1].name}    {d.invoice_line_ids[i+1].price_subtotal}
 ```
 
-## Troubleshooting
+Full Carbone syntax reference: [carbone.io/documentation](https://carbone.io/documentation.html).
 
-### Common Issues
+## Studio integration
 
-#### "Carbone API URL is not configured"
-- Go to Settings > Reporting Tools
-- Configure API URL and Access Token
+If you have a **Carbone Enterprise** licence, the module embeds **Carbone
+Studio** — a live, browser-based template editor. Click *Edit in Studio*
+from any Carbone report and your template opens in the Studio UI with
+Odoo data bindings preloaded.
 
-#### "Template upload timeout"
-- Check network connection
-- Verify Carbone API URL is correct
-- Try uploading smaller template
+## Output formats
 
-#### "Report rendering timeout"
-- Report takes >60s to generate
-- Consider using asynchronous mode (when available)
-- Optimize template complexity
+| Input template | Output options |
+|---|---|
+| `.docx` | DOCX, PDF, ODT |
+| `.xlsx` | XLSX, PDF, ODS |
+| `.odt` | ODT, DOCX, PDF |
+| `.ods` | ODS, XLSX, PDF |
+| `.html` | HTML, PDF |
 
-#### "Invalid JSON data"
-- Check Python syntax in Data tab
-- Ensure 'object' variable is used correctly
-- Validate JSON structure
+## Asynchronous rendering
 
-### Enable Debug Logging
+Reports above the configured threshold are rendered asynchronously:
 
-Add to Odoo config file:
-```ini
-[options]
-log_handler = odoo.addons.dub_reporting_carbone:DEBUG
+1. Odoo submits the request and receives a `render_id`.
+2. Carbone processes in the background and hits the webhook.
+3. Odoo downloads the result and attaches it to the user's session.
+
+This keeps Odoo responsive on large reports and avoids HTTP timeouts.
+
+## Template storage bridges
+
+Two optional bridge modules let you source Carbone templates from cloud
+drives:
+
+- [`dub_reporting_carbone_gdrive`](../dub_reporting_carbone_gdrive) — Google Drive
+- [`dub_reporting_carbone_sharepoint`](../dub_reporting_carbone_sharepoint) — SharePoint / OneDrive
+
+Each auto-installs when both Carbone and the corresponding storage module
+are present.
+
+## Dependencies
+
+- [`dub_reporting_base`](../dub_reporting_base)
+- Python: `requests`
+- External service: Carbone.io API (cloud or self-hosted)
+
+## Development & tests
+
+```bash
+odoo -c odoo.conf -d test_db --test-tags /dub_reporting_carbone \
+     --stop-after-init --http-port=0
 ```
-
-View logs for detailed rendering information.
-
-## API Reference
-
-### Model: `ir.actions.report`
-
-#### Fields
-
-- `carbone_template_file`: Binary template file
-- `carbone_report_type`: Output format selection
-- `carbone_json_data`: Python code for data preparation
-- `carbone_converter`: Converter engine selection
-- `carbone_timezone`: Timezone for date formatting
-- `carbone_lang`: Language code for formatting
-- `carbone_complement_data`: Additional data
-- `carbone_enum_mappings`: Enum mappings JSON
-- `carbone_template_id`: Cached template ID
-- `carbone_use_template_cache`: Enable template caching
-- `carbone_rendering_mode`: Sync/async mode
-- `carbone_webhook_timeout`: Async timeout
-
-#### Methods
-
-- `_render_carbone(report_ref, docids, data)`: Main render method
-- `_validate_carbone_config()`: Validate configuration
-- `_upload_template()`: Upload template to Carbone
-- `_prepare_render_payload(recordset)`: Prepare render data
-- `action_invalidate_template_cache()`: Clear cached template
-
-## Performance Tips
-
-1. **Enable Template Caching**: Significant speedup for repeated renders
-2. **Optimize JSON Data**: Only include needed fields
-3. **Simplify Templates**: Complex templates take longer to render
-4. **Use Appropriate Converter**: LibreOffice is fastest, Chromium for CSS
-5. **Batch Records**: Render multiple records in one request when possible
-
-## Security
-
-- API tokens stored in database (consider encryption in production)
-- Token field has `password=True` attribute (hidden in UI)
-- Validation prevents rendering without proper configuration
-- All API calls logged for audit trail
-
-## Changelog
-
-### Version 2.0.0
-- Full Carbone API v5 support
-- Template caching mechanism
-- Enhanced error handling and logging
-- Added converter, timezone, language options
-- Support for complement data and enum mappings
-- PEP8 compliant code with docstrings
-- Comprehensive README documentation
-
-### Version 1.0.5
-- Initial release with basic Carbone support
 
 ## Support
 
-- **Issues**: Report on module repository
-- **Carbone Docs**: [carbone.io/documentation](https://carbone.io/documentation.html)
-- **Carbone Support**: [carbone.io/support](https://carbone.io/support.html)
+- **Website:** [dubhe.it](https://dubhe.it)
+- **Email:** [support@dubhe.it](mailto:support@dubhe.it)
+- **Issues:** [github.com/dubheit/dub_reporting_tools/issues](https://github.com/dubheit/dub_reporting_tools/issues)
 
 ## License
 
-OPL-1 (Odoo Proprietary License)
-
-## Credits
-
-- **Original Author**: Davide Corio
-- **Refactoring & v5 Support**: Dubhe IT
-- **Carbone.io**: [Carbone.io Team](https://carbone.io)
+LGPL-3. Copyright © 2025 Dubhe Srls.

@@ -3,8 +3,8 @@
     'version': '19.0.1.0.0',
     'category': 'Tools',
     'summary': 'Sync templates from Google Drive to Odoo',
-    'author': 'Dubhe',
-    'website': 'https://www.dubhe.it',
+    'author': 'Dubhe Srls',
+    'website': 'https://dubhe.it',
     'description': """
 Google Drive Integration for Report Templates
 ==============================================

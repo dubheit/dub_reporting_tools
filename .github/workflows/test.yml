@@ -31,10 +31,20 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          path: dub_reporting_tools
+
+      - name: Checkout Odoo Enterprise
+        uses: actions/checkout@v5
+        with:
+          repository: odoo/enterprise
+          ref: ${{ github.ref_name }}
+          path: enterprise
+          token: ${{ secrets.GH_PAT }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
@@ -46,8 +56,14 @@ jobs:
       - name: Install Python dependencies
         run: |
           sudo pip3 install wheel
-          sudo pip3 install --ignore-installed requests>=2.25.0
-          sudo pip3 install pdfminer.six
+          sudo pip3 install --ignore-installed \
+            requests>=2.25.0 \
+            pdfminer.six \
+            lxml \
+            google-api-python-client \
+            google-auth \
+            google-auth-oauthlib \
+            msal
 
       - name: Install Odoo
         run: |
@@ -63,7 +79,7 @@ jobs:
         run: |
           cat > odoo.conf << EOF
           [options]
-          addons_path = /usr/lib/python3/dist-packages/odoo/addons,${{ github.workspace }}
+          addons_path = /usr/lib/python3/dist-packages/odoo/addons,${{ github.workspace }}/enterprise,${{ github.workspace }}/dub_reporting_tools
           db_host = localhost
           db_port = 5432
           db_name = odoo
@@ -73,10 +89,32 @@ jobs:
 
       - name: Install modules (with demo data)
         run: |
-          odoo -c odoo.conf -d odoo -i dub_reporting_base,dub_reporting_carbone,dub_reporting_carbone_demo --without-demo=False --stop-after-init --http-port=0
+          odoo -c odoo.conf -d odoo -i \
+            dub_reporting_base,\
+            dub_reporting_carbone,\
+            dub_reporting_carbone_demo,\
+            dub_reporting_birt,\
+            dub_reporting_ilovepdf,\
+            dub_reporting_ilovepdf_documents,\
+            dub_reporting_gdrive,\
+            dub_reporting_sharepoint,\
+            dub_reporting_carbone_gdrive,\
+            dub_reporting_carbone_sharepoint \
+            --without-demo=False --stop-after-init --http-port=0
 
       - name: Run tests
         env:
           CARBONE_TEST_API_KEY: ${{ secrets.CARBONE_TEST_API_KEY }}
         run: |
-          odoo -c odoo.conf -d odoo --test-tags /dub_reporting_carbone,/dub_reporting_carbone_demo --stop-after-init --http-port=0
+          odoo -c odoo.conf -d odoo --test-tags \
+            /dub_reporting_base,\
+            /dub_reporting_carbone,\
+            /dub_reporting_carbone_demo,\
+            /dub_reporting_birt,\
+            /dub_reporting_ilovepdf,\
+            /dub_reporting_ilovepdf_documents,\
+            /dub_reporting_gdrive,\
+            /dub_reporting_sharepoint,\
+            /dub_reporting_carbone_gdrive,\
+            /dub_reporting_carbone_sharepoint \
+            --stop-after-init --http-port=0

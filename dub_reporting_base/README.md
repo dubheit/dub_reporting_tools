@@ -1,88 +1,148 @@
-# Reporting Base Module
+# Reporting Base
 
-Base module for integrating external reporting engines with Odoo 18.0.
+[![License: LGPL-3](https://img.shields.io/badge/License-LGPL--3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![Odoo](https://img.shields.io/badge/Odoo-18.0-875A7B.svg)](https://www.odoo.com/)
+[![CI](https://github.com/dubheit/dub_reporting_tools/actions/workflows/test.yml/badge.svg?branch=18.0)](https://github.com/dubheit/dub_reporting_tools/actions)
 
-## Overview
+The foundation module for the **Dubhe Reporting Tools** suite — a plugin
+architecture that lets Odoo delegate report rendering to external engines
+like Carbone, BIRT, iLovePDF and future additions.
 
-This module provides common functionality for integrating external reporting engines (Carbone, BIRT, Jasper, etc.) with Odoo. It establishes a standardized architecture for reporting modules.
+---
+
+## Table of Contents
+
+- [Why this module](#why-this-module)
+- [How it fits in](#how-it-fits-in)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Configuration](#configuration)
+- [Extending the framework](#extending-the-framework)
+- [Dependencies](#dependencies)
+- [Development & tests](#development--tests)
+- [Support](#support)
+- [License](#license)
+
+---
+
+## Why this module
+
+Odoo's native QWeb reports are great for simple layouts, but break down when
+you need pixel-perfect Word/Excel templates, enterprise-grade PDF processing,
+or advanced data-driven reporting engines.
+
+`dub_reporting_base` introduces a **clean plugin interface** that lets any
+number of external reporting engines coexist inside the same Odoo instance
+without stepping on each other's toes. Install the engines you need — skip
+the ones you don't.
+
+## How it fits in
+
+```text
+                 ┌──────────────────────────────────────────────┐
+                 │                    ODOO                       │
+                 │                                              │
+                 │     ir.actions.report   ←── user picks one   │
+                 │           │                                  │
+                 │           ▼                                  │
+                 │   ┌──────────────────┐                       │
+                 │   │ dub_reporting_   │  dispatch by engine   │
+                 │   │ base             │──────┬────────────┐   │
+                 │   └──────────────────┘      │            │   │
+                 │           │                 ▼            ▼   │
+                 │           ▼         ┌──────────┐  ┌──────────┐
+                 │   ┌──────────────┐  │ carbone  │  │ birt     │
+                 │   │ qweb-pdf,    │  └──────────┘  └──────────┘
+                 │   │ qweb-html    │  ┌──────────┐  ┌──────────┐
+                 │   │ (Odoo core)  │  │ ilovepdf │  │  …       │
+                 │   └──────────────┘  └──────────┘  └──────────┘
+                 └──────────────────────────────────────────────┘
+```
+
+Each specific engine module (`dub_reporting_carbone`, `dub_reporting_birt`,
+`dub_reporting_ilovepdf`, ...) extends the base to register its own engine
+type on `ir.actions.report.report_type`.
 
 ## Features
 
-- **Abstract Methods**: Common interface for reporting engines
-- **Utilities**: Validation, logging, error handling, and data preparation
-- **Base Controller**: Standardized HTTP routing and response handling
-- **JavaScript Framework**: Common UI utilities for report actions
-- **Settings Section**: Dedicated "Reporting Tools" section in General Settings
+- **Engine routing** — extensible `_render()` dispatcher on `ir.actions.report`
+- **Common utilities** — template validation, MIME detection, error wrapping, structured logging
+- **Backend JavaScript framework** — shared report-action handler for all engines
+- **Settings page** — unified `Settings → Technical → Reporting` section where each engine plugs its own config panel
+- **Pre-init hook** — adds engine-neutral schema columns safely on install
+- **No external runtime dependency** — just `base` and `web`
 
 ## Architecture
 
-### Models
+The module extends four Odoo objects:
 
-#### `ir.actions.report` (inherited)
+| Object | Extension |
+|---|---|
+| `ir.actions.report` | Registers extension points for new engine types and dispatches rendering |
+| `res.company` | Holds per-company defaults that sub-modules can extend |
+| `res.config.settings` | Provides the "Reporting" section where engines plug their panels |
+| `web.assets_backend` | Loads a shared JS helper used by all engines |
 
-Provides common methods:
-- `_render_report_engine()`: Abstract method for engine routing
-- `_validate_report_config()`: Validate report configuration
-- `_prepare_report_data()`: Prepare data for rendering
-- `_handle_render_error()`: Standardized error handling
-- `_log_report_request()`: Log report generation requests
+Engine modules only need to:
 
-#### `res.config.settings` (inherited)
+1. Add their engine key to `report_type` selection.
+2. Implement `_render_<engine>(res_ids, data)` on `ir.actions.report`.
+3. Register their UI and settings as usual.
 
-Placeholder for engine-specific configuration fields.
+## Configuration
 
-### Controllers
+There is nothing to configure for this base module — it is a dependency.
+The **Settings → Technical → Reporting** section will appear only once an
+engine module is installed.
 
-#### `BaseReportController`
+## Extending the framework
 
-Provides:
-- `_prepare_error_response()`: Standardized error responses
-- `_prepare_success_response()`: Standardized success responses with content
-- `_validate_report_params()`: Parameter validation
+Minimal skeleton for a new engine `dub_reporting_foo`:
 
-### JavaScript
+```python
+# models/ir_actions_report.py
+from odoo import api, fields, models
 
-#### `report_action.js`
+class IrActionsReport(models.Model):
+    _inherit = "ir.actions.report"
 
-Utilities:
-- `blockUI()`: Block UI during report generation
-- `unblockUI()`: Unblock UI after completion
-- `handleDownloadError()`: Handle download errors with notifications
-- `downloadReport()`: Download report using standard utilities
+    report_type = fields.Selection(
+        selection_add=[("foo", "Foo Engine")],
+        ondelete={"foo": "cascade"},
+    )
 
-## Usage
+    def _render_foo(self, res_ids, data=None):
+        # Produce (bytes, mime_type) tuple
+        return self._foo_produce(res_ids, data), "application/pdf"
+```
 
-This module is a technical dependency for specific reporting engine modules. It should not be used directly.
-
-### For Developers
-
-To create a new reporting engine module:
-
-1. Add `dub_reporting_base` as a dependency
-2. Inherit `ir.actions.report` and implement engine-specific rendering
-3. Add configuration fields to `res.config.settings`
-4. Inject settings into the "Reporting Tools" section using XPath:
-   ```xml
-   <xpath expr="//block[@id='reporting_tools_settings']" position="inside">
-       <setting string="Your Engine">...</setting>
-   </xpath>
-   ```
-5. Create controller extending `BaseReportController`
-6. Register JavaScript handler using `reportActionRegistry`
-
-## Installation
-
-Install as a dependency of specific reporting engine modules.
+Add it to `depends: ["dub_reporting_base"]` and you're done.
 
 ## Dependencies
 
-- `base`
-- `web`
+- `base` — Odoo core
+- `web` — for the JS client framework
+
+No external Python or system dependencies.
+
+## Development & tests
+
+```bash
+odoo -c odoo.conf -d test_db --test-tags /dub_reporting_base \
+     --stop-after-init --http-port=0
+```
+
+CI runs on every push via GitHub Actions against PostgreSQL 16 and
+Python 3.12.
+
+## Support
+
+- **Website:** [dubhe.it](https://dubhe.it)
+- **Email:** [support@dubhe.it](mailto:support@dubhe.it)
+- **Issues:** [github.com/dubheit/dub_reporting_tools/issues](https://github.com/dubheit/dub_reporting_tools/issues)
 
 ## License
 
-LGPL-3
+LGPL-3. See [`LICENSE`](./LICENSE) for the full text.
 
-## Author
-
-Dubhe IT (https://www.dubhe.it)
+Copyright © 2025 Dubhe Srls.

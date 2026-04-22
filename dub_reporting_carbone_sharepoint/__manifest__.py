@@ -3,8 +3,8 @@
     'version': '18.0.1.0.0',
     'category': 'Tools',
     'summary': 'Bridge module: Use SharePoint templates with Carbone',
-    'author': 'Dubhe',
-    'website': 'https://www.dubhe.it',
+    'author': 'Dubhe Srls',
+    'website': 'https://dubhe.it',
     'description': """
 Carbone + SharePoint Integration
 ================================

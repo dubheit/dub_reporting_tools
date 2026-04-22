@@ -3,8 +3,8 @@
     "version": "18.0.4.0.0",
     "category": "Tools",
     "summary": "Carbone.io reporting engine integration with Studio",
-    "author": "Dubhe",
-    "website": "https://www.dubhe.it",
+    "author": "Dubhe Srls",
+    "website": "https://dubhe.it",
     "description": """
 Carbone.io Reporting Engine
 ============================

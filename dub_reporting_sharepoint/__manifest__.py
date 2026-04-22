@@ -3,8 +3,8 @@
     'version': '18.0.1.0.0',
     'category': 'Tools',
     'summary': 'Sync templates from SharePoint/OneDrive to Odoo',
-    'author': 'Dubhe',
-    'website': 'https://www.dubhe.it',
+    'author': 'Dubhe Srls',
+    'website': 'https://dubhe.it',
     'description': """
 SharePoint/OneDrive Integration for Report Templates
 =====================================================

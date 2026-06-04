@@ -33,6 +33,18 @@
                             <field name="birt_jdbc_string"/>
                         </group>
                     </group>
+                    <group string="Database Connection"
+                           help="Overrides the company-level connection for this report only. Sent to BIRT as report parameters; leave empty to use the company default or the BIRT server configuration.">
+                        <group>
+                            <field name="birt_db_host" placeholder="db"/>
+                            <field name="birt_db_port" placeholder="5432"/>
+                            <field name="birt_db_name"/>
+                        </group>
+                        <group>
+                            <field name="birt_db_user"/>
+                            <field name="birt_db_password" password="True"/>
+                        </group>
+                    </group>
                 </page>
             </xpath>
         </field>

@@ -20,3 +20,23 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.birt_odoo_internal_url',
         readonly=False,
     )
+    birt_db_host = fields.Char(
+        related='company_id.birt_db_host',
+        readonly=False,
+    )
+    birt_db_port = fields.Char(
+        related='company_id.birt_db_port',
+        readonly=False,
+    )
+    birt_db_name = fields.Char(
+        related='company_id.birt_db_name',
+        readonly=False,
+    )
+    birt_db_user = fields.Char(
+        related='company_id.birt_db_user',
+        readonly=False,
+    )
+    birt_db_password = fields.Char(
+        related='company_id.birt_db_password',
+        readonly=False,
+    )

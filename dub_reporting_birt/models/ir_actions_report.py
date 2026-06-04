@@ -46,6 +46,18 @@ class IrActionsReport(models.Model):
              "Filesystem: The template must exist on BIRT server's "
              "filesystem (reports folder).",
     )
+    birt_db_host = fields.Char(
+        string="DB Host",
+        help="PostgreSQL host as seen from the BIRT server. Overrides the "
+             "company-level value for this report only. Sent to BIRT as "
+             "report parameter at render time; the template must use "
+             "property bindings reading the db_* parameters. Leave empty "
+             "to use the company default.",
+    )
+    birt_db_port = fields.Char(string="DB Port")
+    birt_db_name = fields.Char(string="DB Name")
+    birt_db_user = fields.Char(string="DB User")
+    birt_db_password = fields.Char(string="DB Password")
 
     def _check_birt_config(self):
         """Validate BIRT report configuration before rendering."""
@@ -73,6 +85,24 @@ class IrActionsReport(models.Model):
         self.ensure_one()
         base = self.env.company.birt_odoo_internal_url or 'http://odoo:8069'
         return urljoin(base, '/report/birt/template/' + self.report_name)
+
+    def _get_birt_db_params(self):
+        """Build the DB connection parameters sent to BIRT at render time.
+
+        Fallback chain per field: report value, then company value. Only
+        non-empty values are sent: when a parameter is missing the template
+        property bindings fall back to the BIRT server's own JVM system
+        properties (-DDB_HOST etc.).
+        """
+        self.ensure_one()
+        company = self.env.company
+        params = {}
+        for field in ('db_host', 'db_port', 'db_name', 'db_user',
+                      'db_password'):
+            value = self['birt_' + field] or company['birt_' + field]
+            if value:
+                params[field] = value
+        return params
 
     def _render_birt(self, report_ref, docids, data=None):
         """Render a BIRT report.
@@ -102,6 +132,12 @@ class IrActionsReport(models.Model):
         elif docids:
             params['ids'] = str(docids)
 
+        # DB connection forwarded as report parameters (report -> company
+        # fallback). Templates with property bindings on the db_* params
+        # use them; unset values fall back to the BIRT server JVM
+        # system properties.
+        params.update(report._get_birt_db_params())
+
         output_format = report.birt_report_type or 'pdf'
         _logger.info(
             "BIRT render: report=%s format=%s mode=%s",
@@ -116,7 +152,9 @@ class IrActionsReport(models.Model):
         params['__format'] = output_format
 
         try:
-            resp = requests.get(url, params=params, timeout=120)
+            # POST keeps the DB credentials out of the query string
+            # (and therefore out of Tomcat/proxy access logs).
+            resp = requests.post(url, data=params, timeout=120)
             resp.raise_for_status()
         except requests.RequestException as e:
             msg = getattr(e.response, 'text', 'No details') if hasattr(e, 'response') else str(e)

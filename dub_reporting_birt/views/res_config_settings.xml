@@ -32,6 +32,31 @@
                             </div>
                         </div>
                     </setting>
+                    <setting string="Database Connection" id="birt_db_connection"
+                             help="PostgreSQL connection sent to BIRT at render time (as seen from the BIRT server). Leave empty to use the BIRT server's own configuration. Each report can override these values.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="birt_db_host" string="Host" class="col-3 o_light_label"/>
+                                <field name="birt_db_host" placeholder="db"/>
+                            </div>
+                            <div class="row">
+                                <label for="birt_db_port" string="Port" class="col-3 o_light_label"/>
+                                <field name="birt_db_port" placeholder="5432"/>
+                            </div>
+                            <div class="row">
+                                <label for="birt_db_name" string="Database" class="col-3 o_light_label"/>
+                                <field name="birt_db_name"/>
+                            </div>
+                            <div class="row">
+                                <label for="birt_db_user" string="User" class="col-3 o_light_label"/>
+                                <field name="birt_db_user"/>
+                            </div>
+                            <div class="row">
+                                <label for="birt_db_password" string="Password" class="col-3 o_light_label"/>
+                                <field name="birt_db_password" password="True"/>
+                            </div>
+                        </div>
+                    </setting>
                 </block>
             </xpath>
         </field>

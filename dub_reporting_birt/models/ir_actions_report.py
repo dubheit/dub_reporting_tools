@@ -84,7 +84,13 @@ class IrActionsReport(models.Model):
         """
         self.ensure_one()
         base = self.env.company.birt_odoo_internal_url or 'http://odoo:8069'
-        return urljoin(base, '/report/birt/template/' + self.report_name)
+        url = urljoin(base, '/report/birt/template/' + self.report_name)
+        # Cache-buster: BIRT caches the downloaded design by URL, so a
+        # modified template would never be re-fetched. Appending the
+        # record write timestamp forces a fresh download after updates.
+        if self.write_date:
+            url += '?v=' + self.write_date.strftime('%Y%m%d%H%M%S')
+        return url
 
     def _get_birt_db_params(self):
         """Build the DB connection parameters sent to BIRT at render time.
@@ -127,6 +133,14 @@ class IrActionsReport(models.Model):
                 report_path += '.rptdesign'
 
         params = dict(data or {})
+        # Convention used by the calling wizards: the BIRT report
+        # parameters are nested under the 'data' key (mirroring the
+        # QWeb report API). Flatten them, otherwise requests would
+        # serialize the dict as its keys and BIRT would silently
+        # fall back to the template default parameter values.
+        nested = params.pop('data', None)
+        if isinstance(nested, dict):
+            params.update(nested)
         if isinstance(docids, (list, tuple)):
             params['ids'] = ','.join(str(i) for i in docids)
         elif docids:

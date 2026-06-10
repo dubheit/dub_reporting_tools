@@ -46,6 +46,18 @@ class IrActionsReport(models.Model):
              "Filesystem: The template must exist on BIRT server's "
              "filesystem (reports folder).",
     )
+    birt_endpoint = fields.Selection(
+        [('run', 'Viewer (/run)'), ('run2phase', 'Two-phase (/run2phase)')],
+        string="Render Endpoint",
+        default='run',
+        help="Viewer /run uses a combined run-and-render task: page "
+             "variables shown in the master page are shifted by one "
+             "page. The custom /run2phase servlet renders in two "
+             "phases (run -> report document -> render) so page-level "
+             "rolling totals in the page footer are exact. Required "
+             "for fiscal prints with per-page totals (libro giornale, "
+             "libro inventari).",
+    )
     birt_db_host = fields.Char(
         string="DB Host",
         help="PostgreSQL host as seen from the BIRT server. Overrides the "
@@ -160,7 +172,7 @@ class IrActionsReport(models.Model):
 
         url = urljoin(
             company.birt_base_url + '/',
-            'run',
+            report.birt_endpoint or 'run',
         )
         params['__report'] = report_path
         params['__format'] = output_format

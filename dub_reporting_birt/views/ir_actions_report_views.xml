@@ -17,6 +17,8 @@
                 <field name="birt_template_mode" widget="radio"
                     options="{'horizontal': true}"
                     invisible="report_type != 'birt'"/>
+                <field name="birt_endpoint" widget="radio"
+                    invisible="report_type != 'birt'"/>
                 <field name="birt_template_filename" invisible="1"/>
                 <field name="birt_template_file"
                     filename="birt_template_filename"

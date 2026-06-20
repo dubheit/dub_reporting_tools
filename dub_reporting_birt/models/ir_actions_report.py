@@ -8,6 +8,7 @@ from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
 
@@ -24,6 +25,15 @@ class IrActionsReport(models.Model):
     )
     birt_template_filename = fields.Char(
         string="Template Filename",
+    )
+    birt_json_data = fields.Text(
+        string="BIRT Data Method",
+        help="Python expression evaluated on each printed record to build "
+             "extra BIRT scalar parameters, e.g. 'object.birt_report_data()'. "
+             "It must return a flat dict {param_name: value}; values are sent "
+             "as report parameters (available in params[] anywhere, including "
+             "the master page header/footer). Repeating detail rows should "
+             "still be fetched by the template via JDBC.",
     )
     birt_report_type = fields.Selection(
         [('pdf', 'PDF')],
@@ -157,6 +167,27 @@ class IrActionsReport(models.Model):
             params['ids'] = ','.join(str(i) for i in docids)
         elif docids:
             params['ids'] = str(docids)
+
+        # Data method: evaluate birt_json_data on the (first) printed record to
+        # build extra scalar parameters. Unlike dataset rows, parameters are
+        # known before the run and are therefore readable in the master page
+        # header/footer (which a two-phase render cannot reach via dataset).
+        if report.birt_json_data and params.get('ids'):
+            ids = [int(i) for i in str(params['ids']).split(',') if i]
+            records = self.env[report.model].browse(ids) if report.model else None
+            if records:
+                try:
+                    extra = safe_eval(
+                        report.birt_json_data.replace('\n', ''),
+                        {"object": records[:1], "objects": records},
+                    )
+                except Exception as e:
+                    raise UserError(_(
+                        "Error evaluating BIRT data method for report "
+                        "'%(name)s':\n%(err)s", name=report.name, err=e)) from e
+                if isinstance(extra, dict):
+                    for key, value in extra.items():
+                        params[key] = '' if value is None else str(value)
 
         # DB connection forwarded as report parameters (report -> company
         # fallback). Templates with property bindings on the db_* params

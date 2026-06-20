@@ -1,6 +1,6 @@
 {
     "name": "Reporting Tools - BIRT",
-    "version": "18.0.2.1.0",
+    "version": "18.0.2.2.0",
     "category": "Tools",
     "summary": "Eclipse BIRT reporting engine integration",
     "author": "Dubhe Srls",
@@ -29,6 +29,11 @@ Requirements:
         "views/ir_actions_report_views.xml",
         "views/res_config_settings.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "dub_reporting_birt/static/src/js/report_action.js",
+        ],
+    },
     "pre_init_hook": "pre_init_hook",
     "license": "LGPL-3",
     "installable": True,

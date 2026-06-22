@@ -35,6 +35,16 @@ class IrActionsReport(models.Model):
              "the master page header/footer). Repeating detail rows should "
              "still be fetched by the template via JDBC.",
     )
+    birt_overlay = fields.Text(
+        string="BIRT Vector Overlay",
+        help="Optional JSON describing vertical column rules drawn as crisp "
+             "vector lines on top of the rendered PDF (every page). Lets the "
+             "body table use fully dynamic row heights while the column "
+             "separators still span the full body height. Schema: "
+             '{"x_mm": [..], "top_mm": <float>, "bottom_mm": <float>, '
+             '"line_pt": <float>, "close_line": <bool>}. Coordinates are in '
+             "millimetres from the page top-left.",
+    )
     birt_report_type = fields.Selection(
         [('pdf', 'PDF')],
         string="Output Format",
@@ -221,7 +231,70 @@ class IrActionsReport(models.Model):
                 msg=msg,
             )) from e
 
-        return resp.content, output_format
+        content = resp.content
+        if output_format == 'pdf' and report.birt_overlay:
+            content = report._apply_birt_overlay(content)
+
+        return content, output_format
+
+    def _apply_birt_overlay(self, pdf_bytes):
+        """Draw crisp vector column rules over a rendered BIRT PDF.
+
+        The body table is laid out by BIRT with dynamic row heights and no
+        borders; the column separators are drawn here as real vector lines
+        spanning the full body height on every page, so the columns reach the
+        footer regardless of how many rows there are. Coordinates come from the
+        report's ``birt_overlay`` JSON. A single overlay page is built once and
+        merged onto every page (all pages share the same body geometry)."""
+        self.ensure_one()
+        import json
+        from io import BytesIO as _BytesIO
+        try:
+            cfg = json.loads(self.birt_overlay)
+        except (ValueError, TypeError):
+            _logger.warning("Invalid birt_overlay JSON on report %s", self.report_name)
+            return pdf_bytes
+        xs = cfg.get('x_mm') or []
+        if not xs:
+            return pdf_bytes
+        try:
+            from reportlab.pdfgen import canvas
+            from reportlab.lib.pagesizes import A4
+            from PyPDF2 import PdfReader, PdfWriter
+        except ImportError:
+            _logger.warning("reportlab/PyPDF2 missing: skipping BIRT overlay")
+            return pdf_bytes
+
+        mm = 72.0 / 25.4
+        top = float(cfg.get('top_mm', 0.0))
+        bottom = float(cfg.get('bottom_mm', 0.0))
+        line_pt = float(cfg.get('line_pt', 0.5))
+        close = bool(cfg.get('close_line', False))
+
+        reader = PdfReader(_BytesIO(pdf_bytes))
+        pw = float(reader.pages[0].mediabox.width)
+        ph = float(reader.pages[0].mediabox.height)
+
+        # build the overlay once (same geometry on every page)
+        buf = _BytesIO()
+        c = canvas.Canvas(buf, pagesize=(pw, ph))
+        c.setLineWidth(line_pt)
+        for x in xs:
+            xp = x * mm
+            c.line(xp, ph - top * mm, xp, ph - bottom * mm)
+        if close and len(xs) >= 2:
+            c.line(xs[0] * mm, ph - bottom * mm, xs[-1] * mm, ph - bottom * mm)
+        c.save()
+        buf.seek(0)
+        overlay_page = PdfReader(buf).pages[0]
+
+        writer = PdfWriter()
+        for page in reader.pages:
+            page.merge_page(overlay_page)
+            writer.add_page(page)
+        out = _BytesIO()
+        writer.write(out)
+        return out.getvalue()
 
     @api.model_create_multi
     def create(self, vals_list):

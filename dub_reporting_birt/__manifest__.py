@@ -1,6 +1,6 @@
 {
     "name": "Reporting Tools - BIRT",
-    "version": "18.0.2.3.0",
+    "version": "18.0.2.4.0",
     "category": "Tools",
     "summary": "Eclipse BIRT reporting engine integration",
     "author": "Dubhe Srls",

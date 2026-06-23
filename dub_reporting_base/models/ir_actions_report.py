@@ -1,5 +1,5 @@
 import logging
-from odoo import models, api, _
+from odoo import models, api, fields, _
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -7,8 +7,83 @@ _logger = logging.getLogger(__name__)
 
 class IrActionsReport(models.Model):
     """Base report model with common functionality for external reporting engines."""
-    
+
     _inherit = 'ir.actions.report'
+
+    report_overlay = fields.Text(
+        string="PDF Column Overlay",
+        help="JSON config to draw crisp vector column rules over the rendered "
+             "PDF on every page (engine-agnostic). Lets a borderless body table "
+             "with dynamic row heights show full-height column separators down "
+             "to the footer. Format: "
+             '{"x_mm": [..], "top_mm": <float>, "bottom_mm": <float>, '
+             '"line_pt": <float>, "close_line": <bool>}',
+    )
+
+    def _apply_report_overlay(self, pdf_bytes):
+        """Draw crisp vector column rules over a rendered PDF.
+
+        Engine-agnostic: the body table is laid out with dynamic row heights and
+        no borders; the column separators are drawn here as real vector lines
+        spanning the full body height on every page, so the columns reach the
+        footer regardless of how many rows there are. Coordinates come from the
+        report's ``report_overlay`` JSON. A single overlay page is built once and
+        merged onto every page (all pages share the same body geometry)."""
+        self.ensure_one()
+        import json
+        from io import BytesIO
+        if not self.report_overlay:
+            return pdf_bytes
+        try:
+            cfg = json.loads(self.report_overlay)
+        except (ValueError, TypeError):
+            _logger.warning("Invalid report_overlay JSON on report %s", self.report_name)
+            return pdf_bytes
+        xs = cfg.get('x_mm') or []
+        if not xs:
+            return pdf_bytes
+        try:
+            from reportlab.pdfgen import canvas
+            from PyPDF2 import PdfReader, PdfWriter
+        except ImportError:
+            _logger.warning("reportlab/PyPDF2 missing: skipping report overlay")
+            return pdf_bytes
+
+        mm = 72.0 / 25.4
+        top = float(cfg.get('top_mm', 0.0))
+        bottom = float(cfg.get('bottom_mm', 0.0))
+        line_pt = float(cfg.get('line_pt', 0.5))
+        close = bool(cfg.get('close_line', False))
+
+        reader = PdfReader(BytesIO(pdf_bytes))
+        pw = float(reader.pages[0].mediabox.width)
+        ph = float(reader.pages[0].mediabox.height)
+
+        # build the overlay once (same geometry on every page)
+        buf = BytesIO()
+        c = canvas.Canvas(buf, pagesize=(pw, ph))
+        c.setLineWidth(line_pt)
+        for x in xs:
+            xp = x * mm
+            c.line(xp, ph - top * mm, xp, ph - bottom * mm)
+        if close and len(xs) >= 2:
+            c.line(xs[0] * mm, ph - bottom * mm, xs[-1] * mm, ph - bottom * mm)
+        # optional horizontal rules (e.g. the grey header frame), spanning the
+        # full column block, so the whole table frame is drawn by one engine and
+        # the corners join cleanly (no table-vs-overlay sub-pixel mismatch)
+        for hy in (cfg.get('h_mm') or []):
+            c.line(xs[0] * mm, ph - float(hy) * mm, xs[-1] * mm, ph - float(hy) * mm)
+        c.save()
+        buf.seek(0)
+        overlay_page = PdfReader(buf).pages[0]
+
+        writer = PdfWriter()
+        for page in reader.pages:
+            page.merge_page(overlay_page)
+            writer.add_page(page)
+        out = BytesIO()
+        writer.write(out)
+        return out.getvalue()
 
     @api.model
     def _render_report_engine(self, engine_type, report_ref, docids, data=None):

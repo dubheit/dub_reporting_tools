@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- 
+    <!--
         Base view for ir.actions.report
-        
-        This file serves as a placeholder for common report view modifications.
-        Specific reporting engine modules should inherit this to add their
-        custom fields and views.
+
+        Exposes the engine-agnostic PDF column overlay under "Advanced
+        Properties" so its coordinates can be tuned live from the UI
+        (Settings > Technical > Reports) without editing and redeploying the
+        report's data file.
     -->
+    <record id="act_report_xml_view_overlay" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.overlay</field>
+        <field name="model">ir.actions.report</field>
+        <field name="inherit_id" ref="base.act_report_xml_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='advanced']" position="inside">
+                <field name="report_overlay" placeholder='{"x_mm": [..], "top_mm": 0, "bottom_mm": 0, "line_pt": 0.5, "close_line": false, "h_mm": []}'/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

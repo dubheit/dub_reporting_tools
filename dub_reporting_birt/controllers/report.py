@@ -6,8 +6,7 @@ import mimetypes
 from odoo import http
 from odoo.http import content_disposition, request
 from odoo.addons.dub_reporting_base.controllers.report import BaseReportController
-from odoo.tools.safe_eval import safe_eval
-import time
+from odoo.tools.safe_eval import safe_eval, time
 
 _logger = logging.getLogger(__name__)
 
@@ -59,6 +58,28 @@ class BirtReportController(BaseReportController):
         ], limit=1)
         return report
 
+    def _birt_filename(self, report, docids, fmt):
+        """Build a meaningful download filename from the report's
+        print_report_name (evaluated on the printed record), falling back to
+        the report display name. Avoids generic names like
+        'module.report_name.pdf'."""
+        ids = [int(i) for i in (docids or []) if str(i).strip().isdigit()]
+        name = report.name or report.report_name
+        if report.print_report_name and len(ids) == 1 and report.model:
+            try:
+                record = request.env[report.model].sudo().browse(ids[0])
+                name = safe_eval(
+                    report.print_report_name,
+                    {'object': record, 'time': time},
+                )
+            except Exception:
+                _logger.warning(
+                    "BIRT print_report_name eval failed for %s",
+                    report.report_name,
+                )
+        name = (name or report.report_name).replace('/', '-').replace('\\', '-')
+        return '{}.{}'.format(name, fmt)
+
     @http.route('/report/birt/<path:report_name>', type='http', auth='user')
     def report_birt(self, report_name, docids=None, **kwargs):
         report = self._get_report_from_name(report_name)
@@ -73,13 +94,14 @@ class BirtReportController(BaseReportController):
         if isinstance(data, str):
             data = json.loads(data)
 
+        id_list = docids.split(',') if docids else []
         content, fmt = report._render_birt(
             report.report_name,
-            docids.split(',') if docids else [],
+            id_list,
             data=data,
         )
 
-        filename = '{}.{}'.format(report.report_name, fmt)
+        filename = self._birt_filename(report, id_list, fmt)
         return request.make_response(
             content,
             headers=[
@@ -117,13 +139,14 @@ class BirtReportController(BaseReportController):
                 raise UserError("Invalid BIRT report URL: " + url)
 
             fmt = report.birt_report_type or 'pdf'
+            id_list = docids.split(',') if docids else []
             content, _ = report._render_birt(
                 report.report_name,
-                docids.split(',') if docids else [],
+                id_list,
                 data=data,
             )
 
-            filename = '{}.{}'.format(report_name, fmt)
+            filename = self._birt_filename(report, id_list, fmt)
             return request.make_response(
                 content,
                 headers=[

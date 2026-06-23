@@ -1,6 +1,6 @@
 {
     "name": "Reporting Tools - Carbone",
-    "version": "18.0.4.0.0",
+    "version": "18.0.4.1.0",
     "category": "Tools",
     "summary": "Carbone.io reporting engine integration with Studio",
     "author": "Dubhe Srls",

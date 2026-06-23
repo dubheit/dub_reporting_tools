@@ -16,6 +16,27 @@ _logger = logging.getLogger(__name__)
 
 class ReportController(ReportController):
 
+    def _carbone_download_filename(self, report, docids, ext):
+        """Build a meaningful download filename from the report's
+        print_report_name (evaluated on the printed record), falling back to
+        the report display name. Avoids generic names like 'download.pdf'."""
+        ids = [int(x) for x in docids.split(",") if str(x).strip().isdigit()] \
+            if docids else []
+        name = report.name
+        if report.print_report_name and len(ids) == 1 and report.model:
+            try:
+                obj = request.env[report.model].browse(ids)
+                name = safe_eval(
+                    report.print_report_name, {"object": obj, "time": time}
+                )
+            except Exception:
+                _logger.warning(
+                    "Carbone print_report_name eval failed for %s",
+                    report.report_name,
+                )
+        name = (name or report.name).replace("/", "-").replace("\\", "-")
+        return "%s.%s" % (name, ext)
+
     @route()
     def report_routes(self, reportname, docids=None, converter=None, **data):
         if converter == "carbone":
@@ -23,7 +44,7 @@ class ReportController(ReportController):
                     "ir.actions.report"]._get_report_from_name(
                     reportname)
             result = report._render_carbone(reportname, docids, data)
-            
+
             # Check if async mode
             if result[0] == 'async':
                 # Return JSON response for async mode
@@ -46,9 +67,11 @@ class ReportController(ReportController):
             content_type = mimetypes.guess_type('report.' + ext)[0]
             if ext == 'zip':
                 content_type = 'application/zip'
+            filename = self._carbone_download_filename(report, docids, ext)
             http_headers = [
                 ("Content-Type", content_type),
                 ("Content-Length", len(data)),
+                ("Content-Disposition", content_disposition(filename)),
             ]
             return request.make_response(data, headers=http_headers)
         else:
@@ -98,21 +121,11 @@ class ReportController(ReportController):
                 if len(ids) > 1 and report.carbone_batch_output == 'zip':
                     output_ext = 'zip'
 
-                filename = "%s.%s" % (report.name, output_ext)
-
-                if docids:
-                    obj = request.env[report.model].browse(ids)
-                    if report.print_report_name and not len(obj) > 1:
-                        report_name = safe_eval(
-                            report.print_report_name, {
-                                "object": obj, "time": time}
-                        )
-                        filename = "%s.%s" % (report_name, output_ext)
-                        if not response.headers.get("Content-Disposition"):
-                            response.headers.add(
-                                "Content-Disposition", content_disposition(
-                                    filename)
-                            )
+                # Always expose a meaningful filename (not 'download.pdf')
+                filename = self._carbone_download_filename(
+                    report, docids, output_ext)
+                response.headers["Content-Disposition"] = content_disposition(
+                    filename)
                 return response
         else:
             return super().report_download(data, context=context, token=token)

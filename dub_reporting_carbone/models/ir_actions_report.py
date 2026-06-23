@@ -945,7 +945,12 @@ class IrActionsReport(models.Model):
             if len(recordset) > 1 and report.carbone_batch_output == 'zip':
                 output_format = 'zip'
 
-            return retrieve_response.content, output_format
+            content = retrieve_response.content
+            # Draw full-height vector column rules over the body when configured
+            if output_format == 'pdf' and report.report_overlay:
+                content = report._apply_report_overlay(content)
+
+            return content, output_format
 
         except ValidationError:
             # Re-raise validation errors as-is

@@ -37,12 +37,30 @@ class ReportController(ReportController):
         name = (name or report.name).replace("/", "-").replace("\\", "-")
         return "%s.%s" % (name, ext)
 
+    @staticmethod
+    def _carbone_request_context(data):
+        """Merge the context sent by the client into the current one.
+
+        The standard controller does this before rendering; without it
+        `allowed_company_ids` never reaches the report, so `self.env.company`
+        falls back to the user's default company and a multi-company database
+        reads the Carbone credentials of the wrong company.
+        """
+        context = dict(request.env.context)
+        client_context = data.get("context")
+        if client_context:
+            if isinstance(client_context, str):
+                client_context = json.loads(client_context)
+            context.update(client_context)
+        return context
+
     @route()
     def report_routes(self, reportname, docids=None, converter=None, **data):
         if converter == "carbone":
             report = request.env[
                     "ir.actions.report"]._get_report_from_name(
                     reportname)
+            report = report.with_context(self._carbone_request_context(data))
             result = report._render_carbone(reportname, docids, data)
 
             # Check if async mode
@@ -93,7 +111,9 @@ class ReportController(ReportController):
                 # Get report to check if async mode
                 report = request.env["ir.actions.report"]._get_report_from_name(
                     report_name)
-                
+                report = report.with_context(
+                    self._carbone_request_context({"context": context}))
+
                 # Check if async mode before calling report_routes
                 if report.carbone_rendering_mode == 'async':
                     # Trigger async render

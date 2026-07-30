@@ -40,7 +40,7 @@ class CarboneStudioWizard(models.TransientModel):
         if not report._has_carbone_template():
             raise UserError(_("No template file configured for this report."))
 
-        company = self.env.user.company_id
+        company = self.env.company
 
         # Get selected record or use first record if none selected
         record = None

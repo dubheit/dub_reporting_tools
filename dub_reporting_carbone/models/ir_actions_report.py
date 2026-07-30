@@ -583,7 +583,7 @@ class IrActionsReport(models.Model):
         """
         self.ensure_one()
 
-        company = self.env.user.company_id
+        company = self.env.company
 
         if not company.carbone_api_url:
             raise ValidationError(_(
@@ -624,7 +624,7 @@ class IrActionsReport(models.Model):
         Returns:
             dict: HTTP headers dictionary
         """
-        company = self.env.user.company_id
+        company = self.env.company
         headers = {
             'carbone-version': '5',
             'Accept': 'application/json',
@@ -648,7 +648,7 @@ class IrActionsReport(models.Model):
             UserError: If template upload fails
         """
         self.ensure_one()
-        company = self.env.user.company_id
+        company = self.env.company
 
         # Check if we can use cached template (but not for HTML templates which may change)
         if self.carbone_use_template_cache and self.carbone_template_id and not self.carbone_use_html_template:
@@ -875,7 +875,7 @@ class IrActionsReport(models.Model):
         Raises:
             UserError: If rendering fails
         """
-        company = self.env.user.company_id
+        company = self.env.company
         report = self._get_report(report_ref)
         
         # Check if async rendering is enabled
@@ -1026,7 +1026,7 @@ class IrActionsReport(models.Model):
                     "Please install it or contact your administrator."
                 ))
         
-        company = self.env.user.company_id
+        company = self.env.company
         merger = PdfMerger()
         
         _logger.info(f"Rendering {len(recordset)} reports individually")
@@ -1113,7 +1113,7 @@ class IrActionsReport(models.Model):
         """Render report asynchronously using Carbone webhook.
         Uses Carbone v5 webhook headers and a correlation request_id.
         """
-        company = self.env.user.company_id
+        company = self.env.company
         report = self._get_report(report_ref)
         _logger.info(f"Starting async Carbone report rendering: {report.name}")
         try:
@@ -1195,7 +1195,7 @@ class IrActionsReport(models.Model):
         if not self.carbone_template_id:
             return False
 
-        company = self.env.user.company_id
+        company = self.env.company
         if not company.carbone_api_url:
             return False
 

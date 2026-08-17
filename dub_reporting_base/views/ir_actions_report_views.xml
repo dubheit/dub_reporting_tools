@@ -14,6 +14,7 @@
         <field name="inherit_id" ref="base.act_report_xml_view"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='advanced']" position="inside">
+                <field name="report_preview"/>
                 <field name="report_overlay" placeholder='{"x_mm": [..], "top_mm": 0, "bottom_mm": 0, "line_pt": 0.5, "close_line": false, "h_mm": []}'/>
             </xpath>
         </field>

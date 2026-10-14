@@ -4,11 +4,20 @@ import logging
 import mimetypes
 
 from odoo import http
+from odoo.exceptions import UserError
 from odoo.http import content_disposition, request
 from odoo.addons.dub_reporting_base.controllers.report import BaseReportController
 from odoo.tools.safe_eval import safe_eval, time
 
 _logger = logging.getLogger(__name__)
+
+# BIRT HTML output has no page margins: lay it out as a sheet in the viewer
+VIEWER_HTML_STYLE = """<style>
+html { background: #f0f0f0; }
+body { box-sizing: border-box; max-width: 297mm; margin: 16px auto !important;
+       padding: 15mm 12mm !important; background: #fff;
+       box-shadow: 0 1px 4px rgba(0, 0, 0, .2); }
+</style>"""
 
 
 class BirtReportTemplateController(http.Controller):
@@ -86,10 +95,6 @@ class BirtReportController(BaseReportController):
         if not report:
             return request.not_found()
 
-        mimetype = mimetypes.guess_type(
-            'report.' + (report.birt_report_type or 'pdf')
-        )[0] or 'application/octet-stream'
-
         data = kwargs.get('data') or {}
         if isinstance(data, str):
             data = json.loads(data)
@@ -99,7 +104,9 @@ class BirtReportController(BaseReportController):
             report.report_name,
             id_list,
             data=data,
+            output_format='pdf',
         )
+        mimetype = mimetypes.guess_type('report.' + fmt)[0]
 
         filename = self._birt_filename(report, id_list, fmt)
         return request.make_response(
@@ -138,12 +145,12 @@ class BirtReportController(BaseReportController):
             if not report:
                 raise UserError("Invalid BIRT report URL: " + url)
 
-            fmt = report.birt_report_type or 'pdf'
             id_list = docids.split(',') if docids else []
-            content, _ = report._render_birt(
+            content, fmt = report._render_birt(
                 report.report_name,
                 id_list,
                 data=data,
+                output_format='pdf',
             )
 
             filename = self._birt_filename(report, id_list, fmt)
@@ -157,3 +164,36 @@ class BirtReportController(BaseReportController):
         except Exception:
             _logger.exception("Error in BIRT report_download")
             raise
+
+
+class BirtReportViewerController(http.Controller):
+    """Serve the content shown by the BIRT viewer client action."""
+
+    @http.route(
+        '/report/birt/viewer/<string:model>/<int:res_id>',
+        type='http',
+        auth='user',
+    )
+    def birt_viewer_content(self, model, res_id, fmt='pdf', download=None, **kwargs):
+        if fmt not in ('pdf', 'html') or model not in request.env:
+            return request.not_found()
+        Wizard = request.env[model]
+        if Wizard._abstract or not hasattr(Wizard, '_birt_viewer_render'):
+            return request.not_found()
+        wizard = Wizard.browse(res_id).exists()
+        if not wizard or wizard.create_uid != request.env.user:
+            return request.not_found()
+        wizard.check_access('read')
+        content, fmt = wizard._birt_viewer_render(fmt)
+        if fmt == 'html' and not download:
+            content = content.replace(
+                b'</head>', VIEWER_HTML_STYLE.encode() + b'</head>', 1)
+        filename = wizard._get_birt_filename(fmt)
+        disposition = 'attachment' if download else 'inline'
+        return request.make_response(
+            content,
+            headers=[
+                ('Content-Type', mimetypes.guess_type(filename)[0] or 'application/octet-stream'),
+                ('Content-Disposition', content_disposition(filename, disposition)),
+            ],
+        )

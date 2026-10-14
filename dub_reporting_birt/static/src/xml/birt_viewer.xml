@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="dub_reporting_birt.BirtViewer">
+        <div class="o_action o_birt_viewer">
+            <Layout display="{ controlPanel: {} }">
+                <t t-set-slot="control-panel-create-button">
+                    <t t-if="params">
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            t-on-click="editParameters"
+                        >Edit parameters</button>
+                        <button
+                            t-if="state.format === 'html'"
+                            type="button"
+                            class="btn btn-secondary"
+                            t-on-click="() => this.switchFormat('pdf')"
+                        >PDF</button>
+                        <button
+                            t-else=""
+                            type="button"
+                            class="btn btn-secondary"
+                            t-on-click="() => this.switchFormat('html')"
+                        >Preview</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            t-on-click="download"
+                        >Download</button>
+                    </t>
+                </t>
+                <div t-if="!params" class="o_view_nocontent">
+                    <div class="o_nocontent_help">
+                        <p>The report is no longer available: print it again.</p>
+                    </div>
+                </div>
+                <div t-else="" class="position-relative h-100">
+                    <div
+                        t-if="state.loading"
+                        class="position-absolute top-50 start-50 translate-middle"
+                    >
+                        <i class="fa fa-circle-o-notch fa-spin fa-2x text-muted" />
+                    </div>
+                    <!-- t-key: a new iframe per format, so the sandbox
+                         attribute applies to the new document -->
+                    <iframe
+                        t-key="state.format"
+                        t-att-src="iframeSrc"
+                        t-att-sandbox="state.format === 'html' ? 'allow-same-origin' : undefined"
+                        t-on-load="onIframeLoad"
+                        class="h-100 w-100 d-block border-0"
+                    />
+                </div>
+            </Layout>
+        </div>
+    </t>
+</templates>

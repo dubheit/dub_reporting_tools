@@ -1,0 +1,489 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dub_reporting_birt
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-14 13:16+0000\n"
+"PO-Revision-Date: 2026-10-14 13:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__report_type__birt
+msgid "BIRT"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_db_host
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_db_host
+msgid "BIRT DB Host"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_db_name
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_db_name
+msgid "BIRT DB Name"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_db_password
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_db_password
+msgid "BIRT DB Password"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_db_port
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_db_port
+msgid "BIRT DB Port"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_db_user
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_db_user
+msgid "BIRT DB User"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_json_data
+msgid "BIRT Data Method"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_format_version
+msgid "BIRT Format Version"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.ir_actions_report_view_form_birt
+msgid "BIRT Options"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_password
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_password
+msgid "BIRT Password"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model,name:dub_reporting_birt.model_dub_birt_report_wizard_mixin
+msgid "BIRT Report Wizard Viewer Mixin"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "BIRT Server"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_base_url
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_base_url
+msgid "BIRT Server URL"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_template_file
+msgid "BIRT Template (.rptdesign)"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_username
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_username
+msgid "BIRT Username"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_overlay
+msgid "BIRT Vector Overlay"
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-python
+#: code:addons/dub_reporting_birt/models/ir_actions_report.py:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/models/ir_actions_report.py:0
+msgid ""
+"BIRT server URL is not configured.\n"
+"Go to Settings > Reporting Tools to set the BIRT Base URL."
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-python
+#: code:addons/dub_reporting_birt/models/ir_actions_report.py:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/models/ir_actions_report.py:0
+msgid ""
+"BIRT server error (HTTP %(code)s):\n"
+"%(msg)s"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_company__birt_base_url
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_config_settings__birt_base_url
+msgid "Base URL of the BIRT viewer (e.g. http://birt:8080/birt)"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model,name:dub_reporting_birt.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: dub_reporting_birt
+#: model:ir.model,name:dub_reporting_birt.model_res_config_settings
+msgid "Config Settings"
+msgstr "Impostazioni di configurazione"
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_db_host
+msgid "DB Host"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_db_name
+msgid "DB Name"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_db_password
+msgid "DB Password"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_db_port
+msgid "DB Port"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_db_user
+msgid "DB User"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Database"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.ir_actions_report_view_form_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Database Connection"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_company__birt_db_name
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_config_settings__birt_db_name
+msgid "Database queried by BIRT reports."
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+msgid "Download"
+msgstr "Scarica"
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Eclipse BIRT"
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+msgid "Edit parameters"
+msgstr "Modifica parametri"
+
+#. module: dub_reporting_birt
+#. odoo-python
+#: code:addons/dub_reporting_birt/models/ir_actions_report.py:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/models/ir_actions_report.py:0
+msgid ""
+"Error evaluating BIRT data method for report '%(name)s':\n"
+"%(err)s"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__birt_template_mode__filesystem
+msgid "Filesystem"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_ir_actions_report__birt_report_type
+msgid ""
+"Format shown first in the on-screen viewer of wizard reports. HTML is "
+"rendered through the BIRT /preview endpoint; downloads are always PDF."
+msgstr ""
+"Formato mostrato per primo nel visualizzatore dei report da wizard. "
+"L'HTML è generato tramite l'endpoint /preview di BIRT; i download sono "
+"sempre in PDF."
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__birt_report_type__html
+msgid "HTML"
+msgstr "HTML"
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__birt_template_mode__http
+msgid "HTTP"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Host"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_ir_actions_report__birt_template_mode
+msgid ""
+"How the template is provided to the BIRT server.\n"
+"HTTP: Odoo serves the template via URL (requires URL_REPORT_PATH_POLICY=domain in BIRT web.xml).\n"
+"Filesystem: The template must exist on BIRT server's filesystem (reports folder)."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Internal URL"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_jdbc_string
+msgid "JDBC Connection String"
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-python
+#: code:addons/dub_reporting_birt/models/ir_actions_report.py:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/models/ir_actions_report.py:0
+msgid ""
+"No BIRT template uploaded for report '%s'.\n"
+"Upload a .rptdesign file or switch to filesystem mode."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_company__birt_odoo_internal_url
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_res_config_settings__birt_odoo_internal_url
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Odoo Internal URL"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_ir_actions_report__birt_overlay
+msgid ""
+"Optional JSON describing vertical column rules drawn as crisp vector lines "
+"on top of the rendered PDF (every page). Lets the body table use fully "
+"dynamic row heights while the column separators still span the full body "
+"height. Schema: {\"x_mm\": [..], \"top_mm\": <float>, \"bottom_mm\": "
+"<float>, \"line_pt\": <float>, \"close_line\": <bool>}. Coordinates are in "
+"millimetres from the page top-left."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_report_type
+msgid "Output Format"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.ir_actions_report_view_form_birt
+msgid ""
+"Overrides the company-level connection for this report only. Sent to BIRT as"
+" report parameters; leave empty to use the company default or the BIRT "
+"server configuration."
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__birt_report_type__pdf
+msgid "PDF"
+msgstr "PDF"
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Password"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Port"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid ""
+"PostgreSQL connection sent to BIRT at render time (as seen from the BIRT "
+"server). Leave empty to use the BIRT server's own configuration. Each report"
+" can override these values."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_company__birt_db_host
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_config_settings__birt_db_host
+msgid ""
+"PostgreSQL host as seen from the BIRT server (e.g. 'db' or '127.0.0.1' for "
+"an SSH tunnel). Sent to BIRT as report parameter at render time. Leave empty"
+" to use the BIRT server's own configuration (JVM system properties)."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_ir_actions_report__birt_db_host
+msgid ""
+"PostgreSQL host as seen from the BIRT server. Overrides the company-level "
+"value for this report only. Sent to BIRT as report parameter at render time;"
+" the template must use property bindings reading the db_* parameters. Leave "
+"empty to use the company default."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_company__birt_db_password
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_config_settings__birt_db_password
+msgid "PostgreSQL password for BIRT report queries."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_company__birt_db_port
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_config_settings__birt_db_port
+msgid "PostgreSQL port as seen from the BIRT server."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_company__birt_db_user
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_config_settings__birt_db_user
+msgid "PostgreSQL user for BIRT report queries."
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+msgid "Preview"
+msgstr "Anteprima"
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_ir_actions_report__birt_json_data
+msgid ""
+"Python expression evaluated on each printed record to build extra BIRT "
+"scalar parameters, e.g. 'object.birt_report_data()'. It must return a flat "
+"dict {param_name: value}; values are sent as report parameters (available in"
+" params[] anywhere, including the master page header/footer). Repeating "
+"detail rows should still be fetched by the template via JDBC."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_endpoint
+msgid "Render Endpoint"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model,name:dub_reporting_birt.model_ir_actions_report
+msgid "Report Action"
+msgstr "Azione report"
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__report_type
+msgid "Report Type"
+msgstr "Tipo report"
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Server URL"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.ir_actions_report_view_form_birt
+msgid "Template Configuration"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_template_filename
+msgid "Template Filename"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,field_description:dub_reporting_birt.field_ir_actions_report__birt_template_mode
+msgid "Template Mode"
+msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+msgid "The report is no longer available: print it again."
+msgstr "Il report non è più disponibile: rilancia la stampa."
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_ir_actions_report__report_type
+msgid ""
+"The type of the report that will be rendered, each one having its own "
+"rendering method. HTML means the report will be opened directly in your "
+"browser PDF means the report will be rendered using Wkhtmltopdf and "
+"downloaded by the user."
+msgstr ""
+"Tipo di report che verrà rappresentato, ciascuno con il suo metodo di "
+"rappresentazione. HTML significa che viene aperto direttamente nel browser. "
+"PDF significa che viene rappresentato utilizzando wkhtmltopdf e scaricato "
+"dall'utente."
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__birt_endpoint__run2phase
+msgid "Two-phase (/run2phase)"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "URL used by the BIRT container to reach Odoo (Docker service name)"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_company__birt_odoo_internal_url
+#: model:ir.model.fields,help:dub_reporting_birt.field_res_config_settings__birt_odoo_internal_url
+msgid ""
+"URL used by the BIRT container to reach Odoo (Docker service name). Used for"
+" HTTP template serving."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "User"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "Username"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__birt_endpoint__run
+msgid "Viewer (/run)"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model:ir.model.fields,help:dub_reporting_birt.field_ir_actions_report__birt_endpoint
+msgid ""
+"Viewer /run uses a combined run-and-render task: page variables shown in the"
+" master page are shifted by one page. The custom /run2phase servlet renders "
+"in two phases (run -> report document -> render) so page-level rolling "
+"totals in the page footer are exact. Required for fiscal prints with per-"
+"page totals (libro giornale, libro inventari)."
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.ir_actions_report_view_form_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "db"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "http://birt:8080/birt"
+msgstr ""
+
+#. module: dub_reporting_birt
+#: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
+msgid "http://odoo:8069"
+msgstr ""

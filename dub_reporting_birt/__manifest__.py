@@ -1,6 +1,6 @@
 {
     "name": "Reporting Tools - BIRT",
-    "version": "18.0.2.4.0",
+    "version": "18.0.2.5.0",
     "category": "Tools",
     "summary": "Eclipse BIRT reporting engine integration",
     "author": "Dubhe Srls",
@@ -15,6 +15,7 @@ Features:
 ---------
 * Upload .rptdesign templates and serve them to the BIRT engine via HTTP
 * BIRT server renders reports in PDF (or other formats)
+* On-screen viewer for wizard reports (HTML preview / PDF, edit parameters)
 * JDBC connection string and format version management
 * Supports HTTP template mode (Odoo serves templates to BIRT container)
 
@@ -32,6 +33,8 @@ Requirements:
     "assets": {
         "web.assets_backend": [
             "dub_reporting_birt/static/src/js/report_action.js",
+            "dub_reporting_birt/static/src/js/birt_viewer/birt_viewer.js",
+            "dub_reporting_birt/static/src/xml/birt_viewer.xml",
         ],
     },
     "pre_init_hook": "pre_init_hook",

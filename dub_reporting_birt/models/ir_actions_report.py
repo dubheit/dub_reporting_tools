@@ -46,9 +46,12 @@ class IrActionsReport(models.Model):
              "millimetres from the page top-left.",
     )
     birt_report_type = fields.Selection(
-        [('pdf', 'PDF')],
+        [('pdf', 'PDF'), ('html', 'HTML')],
         string="Output Format",
         default='pdf',
+        help="Format shown first in the on-screen viewer of wizard "
+             "reports. HTML is rendered through the BIRT /preview "
+             "endpoint; downloads are always PDF.",
     )
     birt_format_version = fields.Char(
         string="BIRT Format Version",
@@ -142,13 +145,14 @@ class IrActionsReport(models.Model):
                 params[field] = value
         return params
 
-    def _render_birt(self, report_ref, docids, data=None):
+    def _render_birt(self, report_ref, docids, data=None, output_format=None):
         """Render a BIRT report.
 
         Args:
             report_ref: Report reference (name or xmlid).
             docids: Comma-separated document IDs or list.
             data: Extra parameters forwarded to the BIRT engine.
+            output_format: 'pdf' or 'html'; defaults to birt_report_type.
 
         Returns:
             tuple: (content_bytes, output_format)
@@ -205,16 +209,18 @@ class IrActionsReport(models.Model):
         # system properties.
         params.update(report._get_birt_db_params())
 
-        output_format = report.birt_report_type or 'pdf'
+        output_format = output_format or report.birt_report_type or 'pdf'
         _logger.info(
             "BIRT render: report=%s format=%s mode=%s",
             report.report_name, output_format, report.birt_template_mode,
         )
 
-        url = urljoin(
-            company.birt_base_url + '/',
-            report.birt_endpoint or 'run',
-        )
+        # The viewer servlets (/run, /run2phase) answer an HTML request
+        # with the AJAX viewer shell instead of the report: /preview
+        # returns the rendered HTML itself.
+        endpoint = 'preview' if output_format == 'html' else (
+            report.birt_endpoint or 'run')
+        url = urljoin(company.birt_base_url + '/', endpoint)
         params['__report'] = report_path
         params['__format'] = output_format
 

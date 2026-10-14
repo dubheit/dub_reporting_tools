@@ -27,6 +27,26 @@
                             class="btn btn-secondary"
                             t-on-click="download"
                         >Download</button>
+                        <div t-if="state.format === 'html'" class="btn-group ms-2">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                title="Zoom out"
+                                t-on-click="() => this.setZoom(-1)"
+                            ><i class="fa fa-search-minus" /></button>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                title="Reset zoom"
+                                t-on-click="() => this.setZoom(0)"
+                            ><t t-esc="state.zoom" />%</button>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                title="Zoom in"
+                                t-on-click="() => this.setZoom(1)"
+                            ><i class="fa fa-search-plus" /></button>
+                        </div>
                     </t>
                 </t>
                 <div t-if="!params" class="o_view_nocontent">
@@ -44,6 +64,7 @@
                     <!-- t-key: a new iframe per format, so the sandbox
                          attribute applies to the new document -->
                     <iframe
+                        t-ref="iframe"
                         t-key="state.format"
                         t-att-src="iframeSrc"
                         t-att-sandbox="state.format === 'html' ? 'allow-same-origin' : undefined"

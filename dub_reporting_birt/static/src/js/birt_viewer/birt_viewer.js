@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import {Component, onWillStart, useState, useSubEnv} from "@odoo/owl";
+import {Component, onWillStart, useRef, useState, useSubEnv} from "@odoo/owl";
 import {browser} from "@web/core/browser/browser";
 import {download} from "@web/core/network/download";
 import {registry} from "@web/core/registry";
@@ -11,6 +11,7 @@ import {getDefaultConfig} from "@web/views/view";
 
 const PDFJS_VIEWER = "/web/static/lib/pdfjs/web/viewer.html";
 const STORAGE_KEY = "dub_reporting_birt.viewer";
+const ZOOM_STEPS = [50, 67, 75, 80, 90, 100, 110, 125, 150, 175, 200];
 
 /**
  * The router does not keep client action params in the URL: remember them
@@ -50,7 +51,9 @@ export class BirtViewer extends Component {
             format: this.params?.format || "pdf",
             resId: false,
             loading: true,
+            zoom: this.params?.zoom || 100,
         });
+        this.iframe = useRef("iframe");
         onWillStart(() => this.params && this.ensureWizard());
     }
 
@@ -110,6 +113,27 @@ export class BirtViewer extends Component {
 
     onIframeLoad() {
         this.state.loading = false;
+        this.applyZoom();
+    }
+
+    /**
+     * pdf.js has its own zoom: this one applies to the HTML preview only,
+     * on the iframe document (same origin, scripts stay sandboxed).
+     */
+    setZoom(direction) {
+        const current = ZOOM_STEPS.indexOf(this.state.zoom);
+        const index = direction ? current + direction : ZOOM_STEPS.indexOf(100);
+        this.state.zoom = ZOOM_STEPS[Math.max(0, Math.min(ZOOM_STEPS.length - 1, index))];
+        this.params.zoom = this.state.zoom;
+        getViewerParams(this.params);
+        this.applyZoom();
+    }
+
+    applyZoom() {
+        const body = this.state.format === "html" && this.iframe.el?.contentDocument?.body;
+        if (body) {
+            body.style.zoom = `${this.state.zoom}%`;
+        }
     }
 }
 

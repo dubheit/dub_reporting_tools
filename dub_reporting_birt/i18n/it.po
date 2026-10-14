@@ -14,6 +14,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+"Project-Id-Version: Odoo Server 18.0+e-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-14 13:23+0000\n"
+"PO-Revision-Date: 2026-10-14 13:23+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
 #. module: dub_reporting_birt
 #: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__report_type__birt
@@ -221,6 +231,9 @@ msgstr ""
 "Formato mostrato per primo nel visualizzatore dei report da wizard. "
 "L'HTML è generato tramite l'endpoint /preview di BIRT; i download sono "
 "sempre in PDF."
+"Formato mostrato per primo nel visualizzatore dei report da wizard. L'HTML è"
+" generato tramite l'endpoint /preview di BIRT; i download sono sempre in "
+"PDF."
 
 #. module: dub_reporting_birt
 #: model:ir.model.fields.selection,name:dub_reporting_birt.selection__ir_actions_report__birt_report_type__html
@@ -390,6 +403,13 @@ msgid "Report Type"
 msgstr "Tipo report"
 
 #. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+msgid "Reset zoom"
+msgstr "Ripristina zoom"
+
+#. module: dub_reporting_birt
 #: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt
 msgid "Server URL"
 msgstr ""
@@ -424,6 +444,10 @@ msgid ""
 "browser PDF means the report will be rendered using Wkhtmltopdf and "
 "downloaded by the user."
 msgstr ""
+"Tipo di report che verrà rappresentato, ciascuno con il suo metodo di "
+"rappresentazione. HTML significa che viene aperto direttamente nel browser. "
+"PDF significa che viene rappresentato utilizzando wkhtmltopdf e scaricato "
+"dall'utente."
 "Tipo di report che verrà rappresentato, ciascuno con il suo metodo di "
 "rappresentazione. HTML significa che viene aperto direttamente nel browser. "
 "PDF significa che viene rappresentato utilizzando wkhtmltopdf e scaricato "
@@ -471,6 +495,20 @@ msgid ""
 "totals in the page footer are exact. Required for fiscal prints with per-"
 "page totals (libro giornale, libro inventari)."
 msgstr ""
+
+#. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+msgid "Zoom in"
+msgstr "Ingrandisci"
+
+#. module: dub_reporting_birt
+#. odoo-javascript
+#: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+#: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
+msgid "Zoom out"
+msgstr "Riduci"
 
 #. module: dub_reporting_birt
 #: model_terms:ir.ui.view,arch_db:dub_reporting_birt.ir_actions_report_view_form_birt

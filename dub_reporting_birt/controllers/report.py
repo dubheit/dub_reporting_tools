@@ -17,6 +17,12 @@ html { background: #f0f0f0; }
 body { box-sizing: border-box; max-width: 297mm; margin: 16px auto !important;
        padding: 15mm 12mm !important; background: #fff;
        box-shadow: 0 1px 4px rgba(0, 0, 0, .2); }
+a[href^="odoo-drill:"] { color: inherit; text-decoration: none; }
+a[href^="odoo-drill:"]:hover { color: #017e84; text-decoration: underline; }
+tr[id^="h|"] { cursor: pointer; }
+tr.o_birt_folded { display: none; }
+.o_birt_fold::before { content: "\\25BE"; display: inline-block; width: 1.2em; color: #666; }
+.o_birt_fold_closed .o_birt_fold::before { content: "\\25B8"; }
 </style>"""
 
 

@@ -10,6 +10,13 @@ class BirtReportWizardMixin(models.AbstractModel):
     parameters. Inheriting wizards implement ``_get_birt_report`` and
     ``_get_birt_params`` and return ``action_birt_view()`` from their print
     button.
+
+    Drilldown: in the HTML preview a template hyperlink whose URI is
+    ``odoo-drill:?key=<key>&<name>=<value>...`` opens an Odoo action instead
+    of navigating. ``key=record&model=<model>&id=<id>`` opens a record form;
+    any other key is resolved by ``_get_birt_drilldown_action`` of the wizard.
+    Emit the URI only for HTML (``reportContext.getOutputFormat()``) so the
+    PDF carries no dead links.
     """
 
     _name = "dub.birt.report.wizard.mixin"
@@ -71,6 +78,45 @@ class BirtReportWizardMixin(models.AbstractModel):
             if key in self._fields and key not in MAGIC_COLUMNS
         }
         return self.create(values).id
+
+    def birt_drilldown(self, values):
+        """Return the action opened by a drilldown link of the HTML preview."""
+        self.ensure_one()
+        values = dict(values or {})
+        key = values.pop("key", None)
+        if key == "record":
+            return self._get_birt_drilldown_record(values)
+        return self._get_birt_drilldown_action(key, values) or False
+
+    def _get_birt_drilldown_action(self, key, values):
+        """Return the action for a report specific drilldown ``key``.
+
+        ``values`` are the query parameters of the link, as strings.
+        """
+        return False
+
+    def _get_birt_drilldown_record(self, values):
+        model = values.get("model")
+        if not model or model not in self.env:
+            return False
+        record = self.env[model].browse(self._birt_drilldown_int(values, "id"))
+        if not record.exists():
+            return False
+        record.check_access("read")
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": model,
+            "res_id": record.id,
+            "views": [(False, "form")],
+            "target": "current",
+        }
+
+    @api.model
+    def _birt_drilldown_int(self, values, name):
+        try:
+            return int(values.get(name) or 0)
+        except ValueError:
+            return 0
 
     def action_birt_reopen(self, fmt=None):
         self.ensure_one()

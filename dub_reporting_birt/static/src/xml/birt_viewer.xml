@@ -7,7 +7,7 @@
                     <t t-if="params">
                         <button
                             type="button"
-                            class="btn btn-primary"
+                            class="btn btn-primary text-nowrap"
                             t-on-click="editParameters"
                         >Edit parameters</button>
                         <button
@@ -27,7 +27,11 @@
                             class="btn btn-secondary"
                             t-on-click="download"
                         >Download</button>
-                        <div t-if="state.format === 'html'" class="btn-group ms-2">
+                    </t>
+                </t>
+                <t t-set-slot="control-panel-navigation-additional">
+                    <t t-if="params">
+                        <div t-if="state.format === 'html'" class="btn-group">
                             <button
                                 type="button"
                                 class="btn btn-secondary"
@@ -47,6 +51,20 @@
                                 t-on-click="() => this.setZoom(1)"
                             ><i class="fa fa-search-plus" /></button>
                         </div>
+                        <button
+                            t-if="state.format === 'html' and state.foldable and state.folded"
+                            type="button"
+                            class="btn btn-secondary"
+                            title="Expand all"
+                            t-on-click="() => this.foldAll(false)"
+                        ><i class="fa fa-plus-square-o" /></button>
+                        <button
+                            t-elif="state.format === 'html' and state.foldable"
+                            type="button"
+                            class="btn btn-secondary"
+                            title="Collapse all"
+                            t-on-click="() => this.foldAll(true)"
+                        ><i class="fa fa-minus-square-o" /></button>
                     </t>
                 </t>
                 <div t-if="!params" class="o_view_nocontent">

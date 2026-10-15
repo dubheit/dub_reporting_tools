@@ -223,6 +223,11 @@ class IrActionsReport(models.Model):
         url = urljoin(company.birt_base_url + '/', endpoint)
         params['__report'] = report_path
         params['__format'] = output_format
+        # Also as a report parameter: /run2phase generates the document
+        # before the output format is known, so reportContext.
+        # getOutputFormat() cannot tell HTML from PDF there (drilldown
+        # links must only be emitted for the HTML preview).
+        params['odoo_output_format'] = output_format
 
         try:
             # POST keeps the DB credentials out of the query string

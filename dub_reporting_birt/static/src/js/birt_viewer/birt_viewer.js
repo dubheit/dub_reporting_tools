@@ -52,7 +52,12 @@ export class BirtViewer extends Component {
             resId: false,
             loading: true,
             zoom: this.params?.zoom || 100,
+            foldable: false,
+            // number of folded groups: drives the expand / collapse button
+            folded: 0,
         });
+        this.foldRows = [];
+        this.folded = new Set();
         this.iframe = useRef("iframe");
         onWillStart(() => this.params && this.ensureWizard());
     }
@@ -114,6 +119,97 @@ export class BirtViewer extends Component {
     onIframeLoad() {
         this.state.loading = false;
         this.applyZoom();
+        // pdf.js: static document, no drilldown nor folding
+        const doc = this.state.format === "html" ? this.iframe.el?.contentDocument : null;
+        doc?.addEventListener("click", (ev) => this.onReportClick(ev));
+        this.setupFolding(doc);
+    }
+
+    onReportClick(ev) {
+        const link = ev.target.closest?.('a[href^="odoo-drill:"]');
+        if (link) {
+            ev.preventDefault();
+            return this.drilldown(link);
+        }
+        const header = ev.target.closest?.('tr[id^="h|"]');
+        if (header) {
+            this.toggleFold(header.id.slice(2));
+        }
+    }
+
+    /**
+     * Template hyperlinks "odoo-drill:?key=...&..." open an Odoo action
+     * (see dub.birt.report.wizard.mixin.birt_drilldown).
+     */
+    async drilldown(link) {
+        const query = link.getAttribute("href").split("?")[1] || "";
+        const values = Object.fromEntries(new URLSearchParams(query));
+        await this.ensureWizard();
+        const action = await this.orm.call(this.params.model, "birt_drilldown", [
+            [this.state.resId],
+            values,
+        ]);
+        if (action) {
+            await this.actionService.doAction(action);
+        }
+    }
+
+    /**
+     * Groups the template marks with row bookmarks (rendered as the row id):
+     * "h|<keys>|" group header, "t|<keys>|" group footer, "d|<keys>|<n>"
+     * detail, <keys> being the group keys from the outer group in, joined
+     * by "|". Folding a group hides its rows but keeps its header and its
+     * footer, which carries the totals.
+     */
+    setupFolding(doc) {
+        const rows = doc ? doc.querySelectorAll('tr[id^="h|"], tr[id^="t|"], tr[id^="d|"]') : [];
+        this.foldRows = [...rows].map((el) => {
+            const parts = el.id.slice(2).split("|");
+            if (el.id[0] !== "d") {
+                parts.pop();
+            }
+            const ancestors = [];
+            for (let i = 1; i < parts.length; i++) {
+                ancestors.push(`${parts.slice(0, i).join("|")}|`);
+            }
+            return {el, ancestors};
+        });
+        for (const {el} of this.foldRows) {
+            if (el.id[0] === "h") {
+                const caret = doc.createElement("span");
+                caret.className = "o_birt_fold";
+                el.cells[0]?.prepend(caret);
+            }
+        }
+        this.folded = new Set();
+        this.state.folded = 0;
+        this.state.foldable = this.foldRows.some(({el}) => el.id[0] === "h");
+    }
+
+    toggleFold(key) {
+        if (!this.folded.delete(key)) {
+            this.folded.add(key);
+        }
+        this.applyFolding();
+    }
+
+    foldAll(fold) {
+        this.folded = new Set(
+            fold
+                ? this.foldRows.filter(({el}) => el.id[0] === "h").map(({el}) => el.id.slice(2))
+                : []
+        );
+        this.applyFolding();
+    }
+
+    applyFolding() {
+        this.state.folded = this.folded.size;
+        for (const {el, ancestors} of this.foldRows) {
+            el.classList.toggle("o_birt_folded", ancestors.some((key) => this.folded.has(key)));
+            if (el.id[0] === "h") {
+                el.classList.toggle("o_birt_fold_closed", this.folded.has(el.id.slice(2)));
+            }
+        }
     }
 
     /**

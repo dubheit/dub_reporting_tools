@@ -21,8 +21,10 @@ a[href^="odoo-drill:"] { color: inherit; text-decoration: none; }
 a[href^="odoo-drill:"]:hover { color: #017e84; text-decoration: underline; }
 tr[id^="h|"] { cursor: pointer; }
 tr.o_birt_folded { display: none; }
-/* in the left margin: no room taken in the (often narrow) first cell */
-.o_birt_fold { position: absolute; transform: translateX(-1.4em); }
+/* in the left margin, whatever the cell alignment: no room taken in the
+   (often narrow) first cell */
+tr[id^="h|"] > td:first-child { position: relative; }
+.o_birt_fold { position: absolute; left: -1.4em; top: 50%; transform: translateY(-50%); }
 .o_birt_fold::before { content: "\\25BE"; color: #666; }
 .o_birt_fold_closed .o_birt_fold::before { content: "\\25B8"; }
 </style>"""

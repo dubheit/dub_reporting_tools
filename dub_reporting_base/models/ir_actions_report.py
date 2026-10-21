@@ -20,6 +20,28 @@ class IrActionsReport(models.Model):
              '"line_pt": <float>, "close_line": <bool>}',
     )
 
+    # Odoo's default report action flow (web/core/network/download on the client) is built to
+    # force a local save via a hidden form/iframe -- by design it ignores whatever
+    # Content-Disposition the server sends, so an engine can't make its PDF open inline just by
+    # changing that header. Engines that want an "open in a new tab" option need a different
+    # client-side path entirely (skip the download() call, navigate/window.open() the report URL
+    # directly) and a per-report flag to opt in or out, since not every report should behave
+    # this way. This field is the flag; it does nothing on its own -- each engine's own action
+    # handler (static/src/js/report_action.js) has to check it and branch accordingly.
+    report_preview = fields.Boolean(
+        string="Preview",
+        default=True,
+        help="Open the report in a new browser tab instead of downloading it. Requires "
+             "explicit support in the rendering engine's client-side handler; on engines that "
+             "don't check this field it stays harmless.",
+    )
+
+    def _get_readable_fields(self):
+        # Without this, clean_action() strips the field from the action dict before it reaches
+        # the client -- same mechanism the core uses for close_on_report_download (base/models/
+        # ir_actions_report.py _get_readable_fields).
+        return super()._get_readable_fields() | {"report_preview"}
+
     def _apply_report_overlay(self, pdf_bytes):
         """Draw crisp vector column rules over a rendered PDF.
 

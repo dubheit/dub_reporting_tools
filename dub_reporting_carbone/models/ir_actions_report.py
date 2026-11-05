@@ -858,6 +858,22 @@ class IrActionsReport(models.Model):
         return payload
     
     @api.model
+    @api.model
+    def _get_carbone_record_ids(self, docids):
+        """Return the ids to render as a list of ints.
+
+        The print controller passes them as a comma-separated string, while
+        ir.actions.report._render(), which mail templates use to attach a
+        report, passes a list of ids.
+        """
+        if isinstance(docids, str):
+            return [int(d) for d in docids.split(',') if d.strip()]
+        if isinstance(docids, int):
+            return [docids]
+        if isinstance(docids, models.BaseModel):
+            return docids.ids
+        return [int(d) for d in docids or []]
+
     def _render_carbone(self, report_ref, docids, data):
         """Render report using Carbone.io API v5.
         
@@ -866,7 +882,7 @@ class IrActionsReport(models.Model):
         
         Args:
             report_ref: Report reference (name or id)
-            docids: Document IDs as comma-separated string
+            docids: Document IDs, as a comma-separated string or a list
             data: Additional data (not used currently)
             
         Returns:
@@ -883,13 +899,12 @@ class IrActionsReport(models.Model):
             return report._render_carbone_async(report_ref, docids, data)
         
         _logger.info(f"Starting Carbone report rendering: {report.name}")
-        
+        record_ids = self._get_carbone_record_ids(docids)
+
         try:
             # Validate configuration
             report._validate_carbone_config()
             
-            # Parse document IDs
-            record_ids = [int(d) for d in docids.split(',')]
             recordset = self.env[report.model].browse(record_ids)
             
             _logger.debug(f"Rendering {len(recordset)} record(s) of model {report.model}")
@@ -1123,7 +1138,7 @@ class IrActionsReport(models.Model):
         _logger.info(f"Starting async Carbone report rendering: {report.name}")
         try:
             report._validate_carbone_config()
-            record_ids = [int(d) for d in docids.split(',')]
+            record_ids = self._get_carbone_record_ids(docids)
             recordset = self.env[report.model].browse(record_ids)
             _logger.debug(f"Async rendering {len(recordset)} record(s) of model {report.model}")
 
@@ -1162,7 +1177,7 @@ class IrActionsReport(models.Model):
                 'request_id': request_id,
                 'report_id': report.id,
                 'user_id': self.env.user.id,
-                'record_ids': docids,
+                'record_ids': ','.join(map(str, record_ids)),
                 'model': report.model,
                 'state': 'pending',
             })

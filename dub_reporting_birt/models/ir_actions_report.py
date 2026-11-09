@@ -1,13 +1,14 @@
 import base64
 import logging
 from io import BytesIO
-from urllib.parse import urljoin
+from urllib.parse import urlencode, urljoin
 
 import requests
 from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.misc import hmac as odoo_hmac
 from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
@@ -109,23 +110,39 @@ class IrActionsReport(models.Model):
                 "Upload a .rptdesign file or switch to filesystem mode."
             ) % self.name)
 
+    def _get_birt_template_token(self):
+        """Signature that lets BIRT download this report's template.
+
+        The template endpoint is public, because BIRT has no Odoo session,
+        and Odoo may face the internet (Odoo.sh): without a token anyone
+        knowing a report name could read its queries. The HMAC uses the
+        database secret, so there is nothing to configure and every
+        database signs differently.
+        """
+        self.ensure_one()
+        return odoo_hmac(self.env(su=True), 'dub_reporting_birt.template',
+                         self.report_name)
+
     def _get_birt_template_url(self):
         """Build the URL from which BIRT can fetch the template via HTTP.
 
         The controller at /report/birt/template/<report_name> serves the
-        binary content of the uploaded .rptdesign file.  The URL uses the
-        internal Docker hostname ``odoo`` so that the BIRT container can
-        reach it
+        binary content of the uploaded .rptdesign file, to whoever holds
+        the token. The base is ``birt_odoo_internal_url``: the internal
+        Docker hostname ``odoo`` by default, the public URL when BIRT runs
+        elsewhere.
         """
         self.ensure_one()
         base = self.env.company.birt_odoo_internal_url or 'http://odoo:8069'
         url = urljoin(base, '/report/birt/template/' + self.report_name)
+        params = {}
         # Cache-buster: BIRT caches the downloaded design by URL, so a
         # modified template would never be re-fetched. Appending the
         # record write timestamp forces a fresh download after updates.
         if self.write_date:
-            url += '?v=' + self.write_date.strftime('%Y%m%d%H%M%S')
-        return url
+            params['v'] = self.write_date.strftime('%Y%m%d%H%M%S')
+        params['token'] = self._get_birt_template_token()
+        return url + '?' + urlencode(params)
 
     def _get_birt_db_params(self):
         """Build the DB connection parameters sent to BIRT at render time.

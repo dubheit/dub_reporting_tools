@@ -7,6 +7,7 @@ from odoo import http
 from odoo.exceptions import UserError
 from odoo.http import content_disposition, request
 from odoo.addons.dub_reporting_base.controllers.report import BaseReportController
+from odoo.tools.misc import consteq
 from odoo.tools.safe_eval import safe_eval, time
 
 _logger = logging.getLogger(__name__)
@@ -36,7 +37,8 @@ class BirtReportTemplateController(http.Controller):
     When ``birt_template_mode`` is ``http``, the BIRT engine fetches the
     template from this endpoint instead of reading it from the filesystem.
     The route is public so the BIRT container can reach it without a
-    session cookie (traffic is internal Docker network only).
+    session cookie; the token in the URL keeps the templates private when
+    Odoo is reachable from the internet (see _get_birt_template_token).
     """
 
     @http.route(
@@ -44,7 +46,7 @@ class BirtReportTemplateController(http.Controller):
         type='http',
         auth='public',
     )
-    def birt_template(self, report_name, **kwargs):
+    def birt_template(self, report_name, token=None, **kwargs):
         report = request.env['ir.actions.report'].sudo().search([
             ('report_name', '=', report_name),
         ], limit=1)
@@ -54,6 +56,9 @@ class BirtReportTemplateController(http.Controller):
                 ('report_name', '=', report_name_rpt),
             ], limit=1)
         if not report or not report.birt_template_file:
+            return request.not_found()
+        # same answer as a missing report: a wrong token reveals nothing
+        if not token or not consteq(token, report._get_birt_template_token()):
             return request.not_found()
         content = base64.b64decode(report.birt_template_file)
         return request.make_response(

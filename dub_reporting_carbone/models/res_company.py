@@ -24,6 +24,7 @@ class ResCompany(models.Model):
             ('L', 'LibreOffice'),
             ('O', 'OnlyOffice'),
             ('C', 'Chromium'),
+            ('I', 'Carbone ICE'),
         ],
         help="Default converter engine for all Carbone reports"
     )

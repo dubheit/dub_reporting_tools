@@ -176,8 +176,10 @@ class IrActionsReport(models.Model):
             ('L', 'LibreOffice'),
             ('O', 'OnlyOffice'),
             ('C', 'Chromium'),
+            ('I', 'Carbone ICE'),
         ],
-        help="Converter engine to use for rendering. If not set, uses Carbone default (LibreOffice)."
+        help="Converter engine to use for rendering. If not set, uses Carbone default (LibreOffice). "
+             "Carbone ICE converts only DOCX and ODT templates to PDF and needs Carbone 5.14 or later."
     )
     carbone_timezone = fields.Selection(
         string="Timezone",

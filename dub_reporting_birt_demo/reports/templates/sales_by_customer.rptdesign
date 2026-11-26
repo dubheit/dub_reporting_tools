@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.24" id="1">
+    <property name="author">Dubhe</property>
+    <property name="createdBy">dub_reporting_birt_demo</property>
+    <text-property name="title">Sales by Customer</text-property>
+    <property name="units">mm</property>
+    <property name="layoutPreference">auto layout</property>
+
+    <!-- Formats of the user language: Odoo sends the separators and the
+         date pattern as report parameters, so the output does not depend on
+         the locale of the BIRT server. -->
+    <method name="initialize"><![CDATA[
+function odooAmount(value) {
+    var symbols = java.text.DecimalFormatSymbols.getInstance(java.util.Locale.ROOT);
+    var text = String(new java.text.DecimalFormat("#,##0.00", symbols).format(value == null ? 0 : value));
+    var decimal = params["decimal_point"].value || ".";
+    var thousands = params["thousands_sep"].value == null ? "," : params["thousands_sep"].value;
+    return text.replace(/,/g, "\u0001").replace(/\./g, decimal).replace(/\u0001/g, thousands);
+}
+function odooDate(value) {
+    if (value == null) {
+        return "";
+    }
+    var pattern = params["date_pattern"].value || "yyyy-MM-dd";
+    return String(new java.text.SimpleDateFormat(pattern).format(new java.util.Date(value.getTime())));
+}
+]]></method>
+
+    <!-- Runtime DB connection. Priority: db_* report parameters (sent by
+         Odoo) then JVM system properties (-DDB_HOST etc. set by the
+         container entrypoint). MUST be at root level: ignored if placed
+         inside the data source. id=200 references OdooDB. -->
+    <list-property name="propertyBindings">
+        <structure>
+            <property name="name">odaURL</property>
+            <property name="id">200</property>
+            <expression name="value" type="javascript">params["db_host"].value ? "jdbc:postgresql://" + params["db_host"].value + ":" + (params["db_port"].value ? params["db_port"].value : "5432") + "/" + params["db_name"].value : "jdbc:postgresql://" + java.lang.System.getProperty("DB_HOST") + ":" + java.lang.System.getProperty("DB_PORT") + "/" + java.lang.System.getProperty("DB_NAME")</expression>
+        </structure>
+        <structure>
+            <property name="name">odaUser</property>
+            <property name="id">200</property>
+            <expression name="value" type="javascript">params["db_user"].value ? params["db_user"].value : java.lang.System.getProperty("DB_USER")</expression>
+        </structure>
+        <structure>
+            <property name="name">odaPassword</property>
+            <property name="id">200</property>
+            <expression name="value" type="javascript">params["db_password"].value ? params["db_password"].value : java.lang.System.getProperty("DB_PASSWORD")</expression>
+        </structure>
+    </list-property>
+
+    <parameters>
+        <!-- Filters (data set query) -->
+        <scalar-parameter name="company_id" id="10">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">integer</property>
+            <simple-property-list name="defaultValue"><value type="constant">1</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="datetime_from" id="11">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">2000-01-01 00:00:00</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="datetime_to" id="12">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">2100-01-01 00:00:00</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="states" id="13">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">sale</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="tz" id="14">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">UTC</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <!-- Formats of the user language -->
+        <scalar-parameter name="date_pattern" id="15">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">yyyy-MM-dd</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="decimal_point" id="16">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">.</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="thousands_sep" id="17">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">,</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <!-- Page header -->
+        <scalar-parameter name="company_name" id="18">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant"></value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="period" id="19">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant"></value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="scope" id="20">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Confirmed orders</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="currency" id="21">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant"></value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <!-- Labels, translated by Odoo -->
+        <scalar-parameter name="title" id="22">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Sales by Customer</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_period" id="23">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Period</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_date" id="24">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Date</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_order" id="25">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Order</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_salesperson" id="26">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Salesperson</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_untaxed" id="27">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Untaxed</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_total" id="28">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Total</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_grand_total" id="29">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Grand Total</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_orders" id="30">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Orders</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="lbl_page" id="31">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <simple-property-list name="defaultValue"><value type="constant">Page</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <!-- Output format, sent by Odoo: drilldown links and row bookmarks
+             only in the HTML preview, so the PDF carries no dead links -->
+        <scalar-parameter name="odoo_output_format" id="90">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="hidden">true</property>
+            <simple-property-list name="defaultValue"><value type="constant">pdf</value></simple-property-list>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <!-- Connection, sent by Odoo (see propertyBindings) -->
+        <scalar-parameter name="db_host" id="110">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="hidden">true</property>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="db_port" id="111">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="hidden">true</property>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="db_name" id="112">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="hidden">true</property>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="db_user" id="113">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="hidden">true</property>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+        <scalar-parameter name="db_password" id="114">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="hidden">true</property>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+        </scalar-parameter>
+    </parameters>
+
+    <!-- Static values: design-time fallback only, the property bindings
+         above win at runtime -->
+    <data-sources>
+        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="OdooDB" id="200">
+            <property name="odaDriverClass">org.postgresql.Driver</property>
+            <property name="odaURL">jdbc:postgresql://db:5432/odoo</property>
+            <property name="odaUser">odoo</property>
+            <encrypted-property name="odaPassword" encryptionID="base64">b2Rvbw==</encrypted-property>
+        </oda-data-source>
+    </data-sources>
+
+    <data-sets>
+        <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="Orders" id="300">
+            <property name="dataSource">OdooDB</property>
+            <list-property name="parameters">
+                <structure><property name="name">p_tz</property><property name="paramName">tz</property><property name="dataType">string</property><property name="position">1</property><property name="isInput">true</property><property name="isOutput">false</property></structure>
+                <structure><property name="name">p_company</property><property name="paramName">company_id</property><property name="dataType">integer</property><property name="position">2</property><property name="isInput">true</property><property name="isOutput">false</property></structure>
+                <structure><property name="name">p_states</property><property name="paramName">states</property><property name="dataType">string</property><property name="position">3</property><property name="isInput">true</property><property name="isOutput">false</property></structure>
+                <structure><property name="name">p_from</property><property name="paramName">datetime_from</property><property name="dataType">string</property><property name="position">4</property><property name="isInput">true</property><property name="isOutput">false</property></structure>
+                <structure><property name="name">p_to</property><property name="paramName">datetime_to</property><property name="dataType">string</property><property name="position">5</property><property name="isInput">true</property><property name="isOutput">false</property></structure>
+            </list-property>
+            <!-- One row per order, customer = commercial partner of the
+                 order partner. Amounts in the company currency: orders in
+                 another currency are converted with the rate stored on the
+                 order. The period bounds are UTC, the end excluded; the
+                 order date is shown in the user timezone. -->
+            <property name="queryText">WITH orders AS (
+    SELECT
+        so.id AS order_id,
+        so.name AS order_name,
+        CAST(timezone(CAST(? AS text), timezone('UTC', so.date_order)) AS date) AS order_date,
+        cp.id AS partner_id,
+        COALESCE(cp.name, '') AS customer_name,
+        COALESCE(sp.name, '') AS salesperson,
+        CASE WHEN so.currency_id = rc.currency_id OR COALESCE(so.currency_rate, 0) = 0
+             THEN so.amount_untaxed
+             ELSE ROUND(CAST(so.amount_untaxed / so.currency_rate AS numeric), 2)
+        END AS amount_untaxed,
+        CASE WHEN so.currency_id = rc.currency_id OR COALESCE(so.currency_rate, 0) = 0
+             THEN so.amount_total
+             ELSE ROUND(CAST(so.amount_total / so.currency_rate AS numeric), 2)
+        END AS amount_total
+    FROM sale_order so
+    JOIN res_company rc ON rc.id = so.company_id
+    JOIN res_partner p ON p.id = so.partner_id
+    JOIN res_partner cp ON cp.id = COALESCE(p.commercial_partner_id, p.id)
+    LEFT JOIN res_users u ON u.id = so.user_id
+    LEFT JOIN res_partner sp ON sp.id = u.partner_id
+    WHERE so.company_id = ?
+      AND so.state = ANY(string_to_array(CAST(? AS text), ','))
+      AND so.date_order &gt;= CAST(? AS timestamp)
+      AND so.date_order &lt; CAST(? AS timestamp)
+)
+SELECT
+    o.order_id,
+    o.order_name,
+    o.order_date,
+    o.partner_id,
+    o.customer_name,
+    o.salesperson,
+    o.amount_untaxed,
+    o.amount_total,
+    CAST(DENSE_RANK() OVER (ORDER BY lower(o.customer_name), o.partner_id) AS integer) AS customer_seq,
+    CAST(COUNT(*) OVER (PARTITION BY o.partner_id) AS integer) AS customer_order_count
+FROM orders o
+ORDER BY lower(o.customer_name), o.partner_id, o.order_date, o.order_name, o.order_id</property>
+        </oda-data-set>
+    </data-sets>
+
+    <page-setup>
+        <simple-master-page name="MP" id="2">
+            <property name="type">a4</property>
+            <property name="orientation">portrait</property>
+            <property name="topMargin">10mm</property>
+            <property name="leftMargin">12mm</property>
+            <property name="bottomMargin">8mm</property>
+            <property name="rightMargin">12mm</property>
+            <property name="headerHeight">20mm</property>
+            <property name="footerHeight">8mm</property>
+            <property name="showHeaderOnFirst">true</property>
+
+            <page-header>
+                <grid id="900">
+                    <property name="fontFamily">sans-serif</property>
+                    <property name="color">#374151</property>
+                    <property name="width">100%</property>
+                    <column id="901"><property name="width">60%</property></column>
+                    <column id="902"><property name="width">40%</property></column>
+                    <row id="910">
+                        <cell id="911">
+                            <property name="verticalAlign">bottom</property>
+                            <text-data id="912">
+                                <property name="fontSize">15pt</property>
+                                <property name="fontWeight">bold</property>
+                                <property name="color">#714B67</property>
+                                <expression name="valueExpr">params["title"].value</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                        <cell id="913">
+                            <property name="textAlign">right</property>
+                            <property name="verticalAlign">bottom</property>
+                            <text-data id="914">
+                                <property name="fontSize">10pt</property>
+                                <property name="fontWeight">bold</property>
+                                <expression name="valueExpr">params["company_name"].value || ""</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                    </row>
+                    <row id="920">
+                        <cell id="921">
+                            <property name="paddingBottom">3pt</property>
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">1.5pt</property>
+                            <property name="borderBottomColor">#714B67</property>
+                            <text-data id="922">
+                                <property name="fontSize">8pt</property>
+                                <property name="color">#6C757D</property>
+                                <expression name="valueExpr">(params["scope"].value || "") + (params["currency"].value ? "  ·  " + params["currency"].value : "")</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                        <cell id="923">
+                            <property name="textAlign">right</property>
+                            <property name="paddingBottom">3pt</property>
+                            <property name="borderBottomStyle">solid</property>
+                            <property name="borderBottomWidth">1.5pt</property>
+                            <property name="borderBottomColor">#714B67</property>
+                            <text-data id="924">
+                                <property name="fontSize">8pt</property>
+                                <expression name="valueExpr">params["period"].value ? params["lbl_period"].value + ": " + params["period"].value : ""</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                    </row>
+                </grid>
+            </page-header>
+
+            <page-footer>
+                <grid id="950">
+                    <property name="fontFamily">sans-serif</property>
+                    <property name="fontSize">7.5pt</property>
+                    <property name="color">#6C757D</property>
+                    <property name="width">100%</property>
+                    <column id="951"><property name="width">75%</property></column>
+                    <column id="952"><property name="width">19%</property></column>
+                    <column id="953"><property name="width">2%</property></column>
+                    <column id="954"><property name="width">4%</property></column>
+                    <row id="960">
+                        <cell id="961">
+                            <text-data id="962">
+                                <expression name="valueExpr">params["title"].value + (params["period"].value ? "  ·  " + params["period"].value : "")</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                        <!-- "Page N / M": the total pages is a fixed-width
+                             placeholder, keep it alone in a left-aligned
+                             cell or it leaves a gap -->
+                        <cell id="963">
+                            <property name="textAlign">right</property>
+                            <text-data id="964">
+                                <property name="display">inline</property>
+                                <expression name="valueExpr">params["lbl_page"].value + " "</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                            <auto-text id="966"><property name="display">inline</property><property name="type">page-number</property></auto-text>
+                        </cell>
+                        <cell id="967">
+                            <property name="textAlign">center</property>
+                            <label id="968"><text-property name="text">/</text-property></label>
+                        </cell>
+                        <cell id="969">
+                            <property name="textAlign">left</property>
+                            <auto-text id="970"><property name="type">total-page</property></auto-text>
+                        </cell>
+                    </row>
+                </grid>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+
+    <body>
+        <table name="SalesByCustomer" id="400">
+            <property name="dataSet">Orders</property>
+            <property name="fontFamily">sans-serif</property>
+            <property name="fontSize">8.5pt</property>
+            <property name="color">#374151</property>
+            <property name="width">100%</property>
+            <list-property name="boundDataColumns">
+                <structure><property name="name">order_id</property><expression name="expression" type="javascript">dataSetRow["order_id"]</expression><property name="dataType">integer</property></structure>
+                <structure><property name="name">order_name</property><expression name="expression" type="javascript">dataSetRow["order_name"]</expression><property name="dataType">string</property></structure>
+                <structure><property name="name">order_date</property><expression name="expression" type="javascript">dataSetRow["order_date"]</expression><property name="dataType">date</property></structure>
+                <structure><property name="name">partner_id</property><expression name="expression" type="javascript">dataSetRow["partner_id"]</expression><property name="dataType">integer</property></structure>
+                <structure><property name="name">customer_name</property><expression name="expression" type="javascript">dataSetRow["customer_name"]</expression><property name="dataType">string</property></structure>
+                <structure><property name="name">salesperson</property><expression name="expression" type="javascript">dataSetRow["salesperson"]</expression><property name="dataType">string</property></structure>
+                <structure><property name="name">amount_untaxed</property><expression name="expression" type="javascript">dataSetRow["amount_untaxed"]</expression><property name="dataType">decimal</property></structure>
+                <structure><property name="name">amount_total</property><expression name="expression" type="javascript">dataSetRow["amount_total"]</expression><property name="dataType">decimal</property></structure>
+                <structure><property name="name">customer_seq</property><expression name="expression" type="javascript">dataSetRow["customer_seq"]</expression><property name="dataType">integer</property></structure>
+                <structure><property name="name">customer_orders</property><expression name="expression" type="javascript">params["lbl_orders"].value + ": " + dataSetRow["customer_order_count"]</expression><property name="dataType">string</property></structure>
+                <structure><property name="name">grp_untaxed</property><expression name="expression" type="javascript">Total.sum(row["amount_untaxed"], null, "CustomerGroup")</expression><property name="dataType">decimal</property></structure>
+                <structure><property name="name">grp_total</property><expression name="expression" type="javascript">Total.sum(row["amount_total"], null, "CustomerGroup")</expression><property name="dataType">decimal</property></structure>
+                <structure><property name="name">tot_untaxed</property><expression name="expression" type="javascript">Total.sum(row["amount_untaxed"])</expression><property name="dataType">decimal</property></structure>
+                <structure><property name="name">tot_total</property><expression name="expression" type="javascript">Total.sum(row["amount_total"])</expression><property name="dataType">decimal</property></structure>
+                <structure><property name="name">tot_count</property><expression name="expression" type="javascript">Total.count()</expression><property name="dataType">integer</property></structure>
+            </list-property>
+
+            <!-- 186mm: A4 portrait minus the 12mm side margins -->
+            <column id="401"><property name="width">24mm</property></column>
+            <column id="402"><property name="width">30mm</property></column>
+            <column id="403"><property name="width">62mm</property></column>
+            <column id="404"><property name="width">35mm</property></column>
+            <column id="405"><property name="width">35mm</property></column>
+
+            <header>
+                <row id="410">
+                    <property name="backgroundColor">#E7E9ED</property>
+                    <property name="fontWeight">bold</property>
+                    <property name="borderBottomStyle">solid</property>
+                    <property name="borderBottomWidth">1.5pt</property>
+                    <property name="borderBottomColor">#714B67</property>
+                    <cell id="411"><property name="textAlign">left</property><property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property><text-data id="421"><expression name="valueExpr">params["lbl_date"].value</expression><property name="contentType">plain</property></text-data></cell>
+                    <cell id="412"><property name="textAlign">left</property><property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property><text-data id="422"><expression name="valueExpr">params["lbl_order"].value</expression><property name="contentType">plain</property></text-data></cell>
+                    <cell id="413"><property name="textAlign">left</property><property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property><text-data id="423"><expression name="valueExpr">params["lbl_salesperson"].value</expression><property name="contentType">plain</property></text-data></cell>
+                    <cell id="414"><property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property><property name="textAlign">right</property><text-data id="424"><expression name="valueExpr">params["lbl_untaxed"].value</expression><property name="contentType">plain</property></text-data></cell>
+                    <cell id="415"><property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property><property name="textAlign">right</property><text-data id="425"><expression name="valueExpr">params["lbl_total"].value</expression><property name="contentType">plain</property></text-data></cell>
+                </row>
+            </header>
+
+            <group id="440">
+                <property name="groupName">CustomerGroup</property>
+                <property name="interval">none</property>
+                <property name="sortDirection">asc</property>
+                <property name="repeatHeader">true</property>
+                <!-- customer_seq follows the customer names: the groups keep
+                     the alphabetical order of the query -->
+                <expression name="keyExpr" type="javascript">row["customer_seq"]</expression>
+                <header>
+                    <row id="441">
+                        <expression name="bookmark">params["odoo_output_format"].value == "html" ? "h|" + row["partner_id"] + "|" : null</expression>
+                        <property name="fontWeight">bold</property>
+                        <cell id="442">
+                            <property name="colSpan">3</property>
+                            <property name="paddingTop">7pt</property>
+                            <property name="paddingBottom">3pt</property>
+                            <property name="paddingLeft">3pt</property>
+                            <data id="443">
+                                <property name="fontSize">9.5pt</property>
+                                <property name="color">#714B67</property>
+                                <property name="resultSetColumn">customer_name</property>
+                                <list-property name="action"><structure><property name="linkType">hyperlink</property><expression name="uri" type="javascript">params["odoo_output_format"].value == "html" ? "odoo-drill:?key=record&amp;model=res.partner&amp;id=" + row["partner_id"] : null</expression><property name="targetWindow">_self</property></structure></list-property>
+                            </data>
+                        </cell>
+                        <cell id="444">
+                            <property name="colSpan">2</property>
+                            <property name="textAlign">right</property>
+                            <property name="verticalAlign">bottom</property>
+                            <property name="paddingBottom">3pt</property>
+                            <property name="paddingRight">3pt</property>
+                            <data id="445">
+                                <property name="fontSize">7.5pt</property>
+                                <property name="fontWeight">normal</property>
+                                <property name="color">#6C757D</property>
+                                <property name="resultSetColumn">customer_orders</property>
+                                <list-property name="action"><structure><property name="linkType">hyperlink</property><expression name="uri" type="javascript">params["odoo_output_format"].value == "html" ? "odoo-drill:?key=orders&amp;partner_id=" + row["partner_id"] : null</expression><property name="targetWindow">_self</property></structure></list-property>
+                            </data>
+                        </cell>
+                    </row>
+                </header>
+                <footer>
+                    <row id="450">
+                        <expression name="bookmark">params["odoo_output_format"].value == "html" ? "t|" + row["partner_id"] + "|" : null</expression>
+                        <property name="backgroundColor">#F2EDF1</property>
+                        <property name="fontWeight">bold</property>
+                        <cell id="451">
+                            <property name="colSpan">3</property>
+                            <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">1pt</property>
+                            <property name="borderTopColor">#714B67</property>
+                            <text-data id="454">
+                                <expression name="valueExpr">params["lbl_total"].value + " " + row["customer_name"]</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                        <cell id="452">
+                            <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                            <property name="textAlign">right</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">1pt</property>
+                            <property name="borderTopColor">#714B67</property>
+                            <text-data id="455">
+                                <list-property name="highlightRules">
+                                    <structure>
+                                        <property name="operator">lt</property>
+                                        <property name="color">#D44C59</property>
+                                        <expression name="testExpr" type="javascript">row["grp_untaxed"]</expression>
+                                        <expression name="value1" type="javascript">0</expression>
+                                    </structure>
+                                </list-property>
+                                <expression name="valueExpr">odooAmount(row["grp_untaxed"])</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                        <cell id="453">
+                            <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                            <property name="textAlign">right</property>
+                            <property name="borderTopStyle">solid</property>
+                            <property name="borderTopWidth">1pt</property>
+                            <property name="borderTopColor">#714B67</property>
+                            <text-data id="456">
+                                <list-property name="highlightRules">
+                                    <structure>
+                                        <property name="operator">lt</property>
+                                        <property name="color">#D44C59</property>
+                                        <expression name="testExpr" type="javascript">row["grp_total"]</expression>
+                                        <expression name="value1" type="javascript">0</expression>
+                                    </structure>
+                                </list-property>
+                                <expression name="valueExpr">odooAmount(row["grp_total"])</expression>
+                                <property name="contentType">plain</property>
+                            </text-data>
+                        </cell>
+                    </row>
+                </footer>
+            </group>
+
+            <detail>
+                <row id="460">
+                    <expression name="bookmark">params["odoo_output_format"].value == "html" ? "d|" + row["partner_id"] + "|" + row.__rownum : null</expression>
+                    <list-property name="highlightRules">
+                        <structure>
+                            <property name="operator">eq</property>
+                            <property name="backgroundColor">#F8F9FA</property>
+                            <expression name="testExpr" type="javascript">row.__rownum % 2</expression>
+                            <expression name="value1" type="javascript">1</expression>
+                        </structure>
+                    </list-property>
+                    <cell id="461">
+                        <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                        <text-data id="471">
+                            <expression name="valueExpr">odooDate(row["order_date"])</expression>
+                            <property name="contentType">plain</property>
+                        </text-data>
+                    </cell>
+                    <cell id="462">
+                        <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                        <data id="472">
+                            <property name="resultSetColumn">order_name</property>
+                            <list-property name="action"><structure><property name="linkType">hyperlink</property><expression name="uri" type="javascript">params["odoo_output_format"].value == "html" ? "odoo-drill:?key=record&amp;model=sale.order&amp;id=" + row["order_id"] : null</expression><property name="targetWindow">_self</property></structure></list-property>
+                        </data>
+                    </cell>
+                    <cell id="463">
+                        <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                        <data id="473"><property name="resultSetColumn">salesperson</property></data>
+                    </cell>
+                    <cell id="464">
+                        <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                        <property name="textAlign">right</property>
+                        <text-data id="474">
+                            <list-property name="highlightRules">
+                                <structure>
+                                    <property name="operator">lt</property>
+                                    <property name="color">#D44C59</property>
+                                    <expression name="testExpr" type="javascript">row["amount_untaxed"]</expression>
+                                    <expression name="value1" type="javascript">0</expression>
+                                </structure>
+                            </list-property>
+                            <expression name="valueExpr">odooAmount(row["amount_untaxed"])</expression>
+                            <property name="contentType">plain</property>
+                        </text-data>
+                    </cell>
+                    <cell id="465">
+                        <property name="paddingTop">3pt</property><property name="paddingBottom">3pt</property><property name="paddingLeft">3pt</property><property name="paddingRight">3pt</property>
+                        <property name="textAlign">right</property>
+                        <text-data id="475">
+                            <list-property name="highlightRules">
+                                <structure>
+                                    <property name="operator">lt</property>
+                                    <property name="color">#D44C59</property>
+                                    <expression name="testExpr" type="javascript">row["amount_total"]</expression>
+                                    <expression name="value1" type="javascript">0</expression>
+                                </structure>
+                            </list-property>
+                            <expression name="valueExpr">odooAmount(row["amount_total"])</expression>
+                            <property name="contentType">plain</property>
+                        </text-data>
+                    </cell>
+                </row>
+            </detail>
+
+            <footer>
+                <row id="480">
+                    <cell id="481"><property name="colSpan">5</property><property name="height">4mm</property></cell>
+                </row>
+                <row id="490">
+                    <property name="backgroundColor">#F2EDF1</property>
+                    <property name="fontSize">9.5pt</property>
+                    <property name="fontWeight">bold</property>
+                    <cell id="491">
+                        <property name="colSpan">3</property>
+                        <property name="paddingTop">4pt</property><property name="paddingBottom">4pt</property><property name="paddingLeft">4pt</property><property name="paddingRight">4pt</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">2pt</property>
+                        <property name="borderTopColor">#714B67</property>
+                        <text-data id="494">
+                            <expression name="valueExpr">params["lbl_grand_total"].value + "  (" + params["lbl_orders"].value + ": " + row["tot_count"] + ")"</expression>
+                            <property name="contentType">plain</property>
+                        </text-data>
+                    </cell>
+                    <cell id="492">
+                        <property name="paddingTop">4pt</property><property name="paddingBottom">4pt</property><property name="paddingLeft">4pt</property><property name="paddingRight">4pt</property>
+                        <property name="textAlign">right</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">2pt</property>
+                        <property name="borderTopColor">#714B67</property>
+                        <text-data id="495">
+                            <list-property name="highlightRules">
+                                <structure>
+                                    <property name="operator">lt</property>
+                                    <property name="color">#D44C59</property>
+                                    <expression name="testExpr" type="javascript">row["tot_untaxed"]</expression>
+                                    <expression name="value1" type="javascript">0</expression>
+                                </structure>
+                            </list-property>
+                            <expression name="valueExpr">odooAmount(row["tot_untaxed"])</expression>
+                            <property name="contentType">plain</property>
+                        </text-data>
+                    </cell>
+                    <cell id="493">
+                        <property name="paddingTop">4pt</property><property name="paddingBottom">4pt</property><property name="paddingLeft">4pt</property><property name="paddingRight">4pt</property>
+                        <property name="textAlign">right</property>
+                        <property name="borderTopStyle">solid</property>
+                        <property name="borderTopWidth">2pt</property>
+                        <property name="borderTopColor">#714B67</property>
+                        <text-data id="496">
+                            <list-property name="highlightRules">
+                                <structure>
+                                    <property name="operator">lt</property>
+                                    <property name="color">#D44C59</property>
+                                    <expression name="testExpr" type="javascript">row["tot_total"]</expression>
+                                    <expression name="value1" type="javascript">0</expression>
+                                </structure>
+                            </list-property>
+                            <expression name="valueExpr">odooAmount(row["tot_total"])</expression>
+                            <property name="contentType">plain</property>
+                        </text-data>
+                    </cell>
+                </row>
+            </footer>
+        </table>
+    </body>
+</report>

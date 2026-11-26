@@ -1,6 +1,13 @@
 /** @odoo-module **/
 
-import {Component, onWillStart, useRef, useState, useSubEnv} from "@odoo/owl";
+import {
+    Component,
+    onWillStart,
+    useExternalListener,
+    useRef,
+    useState,
+    useSubEnv,
+} from "@odoo/owl";
 import {browser} from "@web/core/browser/browser";
 import {download} from "@web/core/network/download";
 import {registry} from "@web/core/registry";
@@ -12,6 +19,10 @@ import {getDefaultConfig} from "@web/views/view";
 const PDFJS_VIEWER = "/web/static/lib/pdfjs/web/viewer.html";
 const STORAGE_KEY = "dub_reporting_birt.viewer";
 const ZOOM_STEPS = [50, 67, 75, 80, 90, 100, 110, 125, 150, 175, 200];
+// The fit to width leaves room around the sheet like the form views:
+// at most as wide as a form sheet, with its side padding
+const FIT_MAX_WIDTH = 1534;
+const FIT_PADDING = 16;
 
 /**
  * The router does not keep client action params in the URL: remember them
@@ -51,7 +62,9 @@ export class BirtViewer extends Component {
             format: this.params?.format || "pdf",
             resId: false,
             loading: true,
-            zoom: this.params?.zoom || 100,
+            // HTML preview zoom in %, null to fit the viewer width
+            zoom: this.params?.zoom || null,
+            fitZoom: 100,
             foldable: false,
             // number of folded groups: drives the expand / collapse button
             folded: 0,
@@ -59,6 +72,7 @@ export class BirtViewer extends Component {
         this.foldRows = [];
         this.folded = new Set();
         this.iframe = useRef("iframe");
+        useExternalListener(window, "resize", () => this.applyZoom());
         onWillStart(() => this.params && this.ensureWizard());
     }
 
@@ -69,7 +83,7 @@ export class BirtViewer extends Component {
     get iframeSrc() {
         const url = `${this.contentUrl}?fmt=${this.state.format}`;
         if (this.state.format === "pdf") {
-            return `${PDFJS_VIEWER}?file=${encodeURIComponent(url)}`;
+            return `${PDFJS_VIEWER}?file=${encodeURIComponent(url)}#zoom=page-width`;
         }
         return url;
     }
@@ -213,23 +227,54 @@ export class BirtViewer extends Component {
     }
 
     /**
-     * pdf.js has its own zoom: this one applies to the HTML preview only,
-     * on the iframe document (same origin, scripts stay sandboxed).
+     * pdf.js has its own zoom and opens at the page width: this one applies
+     * to the HTML preview only, on the iframe document (same origin, scripts
+     * stay sandboxed). The preview fits the viewer width until a button
+     * moves the zoom by one step; the middle button goes back to the fit.
      */
     setZoom(direction) {
-        const current = ZOOM_STEPS.indexOf(this.state.zoom);
-        const index = direction ? current + direction : ZOOM_STEPS.indexOf(100);
-        this.state.zoom = ZOOM_STEPS[Math.max(0, Math.min(ZOOM_STEPS.length - 1, index))];
-        this.params.zoom = this.state.zoom;
+        let zoom = null;
+        if (direction) {
+            const current = this.state.zoom || this.state.fitZoom;
+            const steps = direction > 0 ? ZOOM_STEPS : [...ZOOM_STEPS].reverse();
+            zoom = steps.find((step) => (step - current) * direction > 0) ?? steps.at(-1);
+        }
+        this.state.zoom = zoom;
+        this.params.zoom = zoom;
         getViewerParams(this.params);
         this.applyZoom();
     }
 
     applyZoom() {
-        const body = this.state.format === "html" && this.iframe.el?.contentDocument?.body;
-        if (body) {
-            body.style.zoom = `${this.state.zoom}%`;
+        const doc = this.state.format === "html" && this.iframe.el?.contentDocument;
+        if (!doc?.body) {
+            return;
         }
+        if (!this.state.zoom) {
+            this.state.fitZoom = this.computeFitZoom(doc);
+        }
+        doc.body.style.zoom = `${this.state.zoom || this.state.fitZoom}%`;
+    }
+
+    /**
+     * Zoom making the report sheet as wide as a form sheet would be in the
+     * viewer, within the zoom steps. The report tables are 100% wide around
+     * columns sized in mm: laid out at its max-content width, the body gives
+     * the natural sheet width.
+     */
+    computeFitZoom(doc) {
+        const body = doc.body;
+        body.style.zoom = "";
+        body.style.width = "max-content";
+        const content = body.getBoundingClientRect().width;
+        body.style.width = "";
+        if (!content) {
+            return 100;
+        }
+        const width =
+            Math.min(doc.documentElement.clientWidth, FIT_MAX_WIDTH) - 2 * FIT_PADDING;
+        const zoom = Math.floor((width / content) * 100);
+        return Math.max(ZOOM_STEPS[0], Math.min(ZOOM_STEPS.at(-1), zoom));
     }
 }
 

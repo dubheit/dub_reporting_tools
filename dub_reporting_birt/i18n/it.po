@@ -407,8 +407,8 @@ msgstr "Tipo report"
 #. odoo-javascript
 #: code:addons/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
 #: code:addons/dubheit/dub_reporting_tools/dub_reporting_birt/static/src/xml/birt_viewer.xml:0
-msgid "Reset zoom"
-msgstr "Ripristina zoom"
+msgid "Fit to width"
+msgstr "Adatta alla larghezza"
 
 #. module: dub_reporting_birt
 #: model_terms:ir.ui.view,arch_db:dub_reporting_birt.res_config_settings_view_form_birt

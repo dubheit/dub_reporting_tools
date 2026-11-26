@@ -41,9 +41,9 @@
                             <button
                                 type="button"
                                 class="btn btn-secondary"
-                                title="Reset zoom"
+                                title="Fit to width"
                                 t-on-click="() => this.setZoom(0)"
-                            ><t t-esc="state.zoom" />%</button>
+                            ><t t-esc="state.zoom || state.fitZoom" />%</button>
                             <button
                                 type="button"
                                 class="btn btn-secondary"

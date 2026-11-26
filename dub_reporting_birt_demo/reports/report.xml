@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Sales by Customer: wizard report shown in the BIRT viewer.
+         The template is loaded from the module file at every install and
+         update, so the database always holds the version of the module. -->
+    <record id="action_report_sales_by_customer" model="ir.actions.report">
+        <field name="name">Sales by Customer (BIRT)</field>
+        <field name="model">dub.birt.demo.sale.customer.wizard</field>
+        <field name="report_type">birt</field>
+        <field name="report_name">dub_reporting_birt_demo.sales_by_customer</field>
+        <field name="birt_report_type">html</field>
+        <field name="birt_template_mode">http</field>
+        <field name="birt_endpoint">run2phase</field>
+        <field name="birt_template_file"
+               type="base64"
+               file="dub_reporting_birt_demo/reports/templates/sales_by_customer.rptdesign"/>
+        <field name="birt_template_filename">sales_by_customer.rptdesign</field>
+    </record>
+
+</odoo>

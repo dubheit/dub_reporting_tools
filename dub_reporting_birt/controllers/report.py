@@ -4,12 +4,31 @@ import logging
 import mimetypes
 
 from odoo import http
+from odoo.exceptions import UserError
 from odoo.http import content_disposition, request
 from odoo.addons.dub_reporting_base.controllers.report import BaseReportController
-from odoo.tools.safe_eval import safe_eval
-import time
+from odoo.tools.misc import consteq
+from odoo.tools.safe_eval import safe_eval, time
 
 _logger = logging.getLogger(__name__)
+
+# BIRT HTML output has no page margins: lay it out as a sheet in the viewer
+VIEWER_HTML_STYLE = """<style>
+html { background: #f0f0f0; }
+body { box-sizing: border-box; max-width: 297mm; margin: 16px auto !important;
+       padding: 15mm 12mm !important; background: #fff;
+       box-shadow: 0 1px 4px rgba(0, 0, 0, .2); }
+a[href^="odoo-drill:"] { color: inherit; text-decoration: none; }
+a[href^="odoo-drill:"]:hover { color: #017e84; text-decoration: underline; }
+tr[id^="h|"] { cursor: pointer; }
+tr.o_birt_folded { display: none; }
+/* in the left margin, whatever the cell alignment: no room taken in the
+   (often narrow) first cell */
+tr[id^="h|"] > td:first-child { position: relative; }
+.o_birt_fold { position: absolute; left: -1.4em; top: 50%; transform: translateY(-50%); }
+.o_birt_fold::before { content: "\\25BE"; color: #666; }
+.o_birt_fold_closed .o_birt_fold::before { content: "\\25B8"; }
+</style>"""
 
 
 class BirtReportTemplateController(http.Controller):
@@ -18,7 +37,8 @@ class BirtReportTemplateController(http.Controller):
     When ``birt_template_mode`` is ``http``, the BIRT engine fetches the
     template from this endpoint instead of reading it from the filesystem.
     The route is public so the BIRT container can reach it without a
-    session cookie (traffic is internal Docker network only).
+    session cookie; the token in the URL keeps the templates private when
+    Odoo is reachable from the internet (see _get_birt_template_token).
     """
 
     @http.route(
@@ -26,7 +46,7 @@ class BirtReportTemplateController(http.Controller):
         type='http',
         auth='public',
     )
-    def birt_template(self, report_name, **kwargs):
+    def birt_template(self, report_name, token=None, **kwargs):
         report = request.env['ir.actions.report'].sudo().search([
             ('report_name', '=', report_name),
         ], limit=1)
@@ -36,6 +56,9 @@ class BirtReportTemplateController(http.Controller):
                 ('report_name', '=', report_name_rpt),
             ], limit=1)
         if not report or not report.birt_template_file:
+            return request.not_found()
+        # same answer as a missing report: a wrong token reveals nothing
+        if not token or not consteq(token, report._get_birt_template_token()):
             return request.not_found()
         content = base64.b64decode(report.birt_template_file)
         return request.make_response(
@@ -59,27 +82,48 @@ class BirtReportController(BaseReportController):
         ], limit=1)
         return report
 
+    def _birt_filename(self, report, docids, fmt):
+        """Build a meaningful download filename from the report's
+        print_report_name (evaluated on the printed record), falling back to
+        the report display name. Avoids generic names like
+        'module.report_name.pdf'."""
+        ids = [int(i) for i in (docids or []) if str(i).strip().isdigit()]
+        name = report.name or report.report_name
+        if report.print_report_name and len(ids) == 1 and report.model:
+            try:
+                record = request.env[report.model].sudo().browse(ids[0])
+                name = safe_eval(
+                    report.print_report_name,
+                    {'object': record, 'time': time},
+                )
+            except Exception:
+                _logger.warning(
+                    "BIRT print_report_name eval failed for %s",
+                    report.report_name,
+                )
+        name = (name or report.report_name).replace('/', '-').replace('\\', '-')
+        return '{}.{}'.format(name, fmt)
+
     @http.route('/report/birt/<path:report_name>', type='http', auth='user')
     def report_birt(self, report_name, docids=None, **kwargs):
         report = self._get_report_from_name(report_name)
         if not report:
             return request.not_found()
 
-        mimetype = mimetypes.guess_type(
-            'report.' + (report.birt_report_type or 'pdf')
-        )[0] or 'application/octet-stream'
-
         data = kwargs.get('data') or {}
         if isinstance(data, str):
             data = json.loads(data)
 
+        id_list = docids.split(',') if docids else []
         content, fmt = report._render_birt(
             report.report_name,
-            docids.split(',') if docids else [],
+            id_list,
             data=data,
+            output_format='pdf',
         )
+        mimetype = mimetypes.guess_type('report.' + fmt)[0]
 
-        filename = '{}.{}'.format(report.report_name, fmt)
+        filename = self._birt_filename(report, id_list, fmt)
         return request.make_response(
             content,
             headers=[
@@ -116,14 +160,15 @@ class BirtReportController(BaseReportController):
             if not report:
                 raise UserError("Invalid BIRT report URL: " + url)
 
-            fmt = report.birt_report_type or 'pdf'
-            content, _ = report._render_birt(
+            id_list = docids.split(',') if docids else []
+            content, fmt = report._render_birt(
                 report.report_name,
-                docids.split(',') if docids else [],
+                id_list,
                 data=data,
+                output_format='pdf',
             )
 
-            filename = '{}.{}'.format(report_name, fmt)
+            filename = self._birt_filename(report, id_list, fmt)
             return request.make_response(
                 content,
                 headers=[
@@ -134,3 +179,36 @@ class BirtReportController(BaseReportController):
         except Exception:
             _logger.exception("Error in BIRT report_download")
             raise
+
+
+class BirtReportViewerController(http.Controller):
+    """Serve the content shown by the BIRT viewer client action."""
+
+    @http.route(
+        '/report/birt/viewer/<string:model>/<int:res_id>',
+        type='http',
+        auth='user',
+    )
+    def birt_viewer_content(self, model, res_id, fmt='pdf', download=None, **kwargs):
+        if fmt not in ('pdf', 'html') or model not in request.env:
+            return request.not_found()
+        Wizard = request.env[model]
+        if Wizard._abstract or not hasattr(Wizard, '_birt_viewer_render'):
+            return request.not_found()
+        wizard = Wizard.browse(res_id).exists()
+        if not wizard or wizard.create_uid != request.env.user:
+            return request.not_found()
+        wizard.check_access('read')
+        content, fmt = wizard._birt_viewer_render(fmt)
+        if fmt == 'html' and not download:
+            content = content.replace(
+                b'</head>', VIEWER_HTML_STYLE.encode() + b'</head>', 1)
+        filename = wizard._get_birt_filename(fmt)
+        disposition = 'attachment' if download else 'inline'
+        return request.make_response(
+            content,
+            headers=[
+                ('Content-Type', mimetypes.guess_type(filename)[0] or 'application/octet-stream'),
+                ('Content-Disposition', content_disposition(filename, disposition)),
+            ],
+        )

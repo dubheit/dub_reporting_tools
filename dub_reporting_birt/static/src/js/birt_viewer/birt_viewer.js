@@ -250,30 +250,45 @@ export class BirtViewer extends Component {
         if (!doc?.body) {
             return;
         }
+        const sheetWidth = this.fitSheet(doc.body);
         if (!this.state.zoom) {
-            this.state.fitZoom = this.computeFitZoom(doc);
+            this.state.fitZoom = this.computeFitZoom(doc, sheetWidth);
         }
         doc.body.style.zoom = `${this.state.zoom || this.state.fitZoom}%`;
     }
 
     /**
-     * Zoom making the report sheet as wide as a form sheet would be in the
-     * viewer, within the zoom steps. The report tables are 100% wide around
-     * columns sized in mm: laid out at its max-content width, the body gives
-     * the natural sheet width.
+     * Narrow the sheet of a new document to the natural width of the report
+     * and return it. The report tables are 100% wide around columns sized
+     * in mm: laid out at its max-content width, the body gives the natural
+     * width. Without it a portrait report stretches up to the landscape
+     * sheet of the preview style and fills the viewer, leaving no margin.
      */
-    computeFitZoom(doc) {
-        const body = doc.body;
-        body.style.zoom = "";
-        body.style.width = "max-content";
-        const content = body.getBoundingClientRect().width;
-        body.style.width = "";
-        if (!content) {
+    fitSheet(body) {
+        if (!body.dataset.sheetWidth) {
+            body.style.zoom = "";
+            body.style.width = "max-content";
+            const width = body.getBoundingClientRect().width;
+            body.style.width = "";
+            if (width) {
+                body.style.maxWidth = `${width}px`;
+            }
+            body.dataset.sheetWidth = width;
+        }
+        return Number(body.dataset.sheetWidth);
+    }
+
+    /**
+     * Zoom making the report sheet as wide as a form sheet would be in the
+     * viewer, within the zoom steps.
+     */
+    computeFitZoom(doc, sheetWidth) {
+        if (!sheetWidth) {
             return 100;
         }
         const width =
             Math.min(doc.documentElement.clientWidth, FIT_MAX_WIDTH) - 2 * FIT_PADDING;
-        const zoom = Math.floor((width / content) * 100);
+        const zoom = Math.floor((width / sheetWidth) * 100);
         return Math.max(ZOOM_STEPS[0], Math.min(ZOOM_STEPS.at(-1), zoom));
     }
 }

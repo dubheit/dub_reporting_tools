@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sales_by_customer_wizard_form" model="ir.ui.view">
+        <field name="name">dub.birt.demo.sale.customer.wizard.form</field>
+        <field name="model">dub.birt.demo.sale.customer.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sales by Customer">
+                <group>
+                    <group>
+                        <field name="company_id"
+                               groups="base.group_multi_company"
+                               options="{'no_create': True}"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="include_quotations"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_birt_view" type="object"
+                            string="Print" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Cancel" special="cancel"
+                            class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sales_by_customer_wizard" model="ir.actions.act_window">
+        <field name="name">Sales by Customer (BIRT)</field>
+        <field name="res_model">dub.birt.demo.sale.customer.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sales_by_customer_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sales_by_customer_birt"
+              name="Sales by Customer (BIRT)"
+              parent="sale.menu_sale_report"
+              action="action_sales_by_customer_wizard"
+              sequence="50"/>
+
+</odoo>

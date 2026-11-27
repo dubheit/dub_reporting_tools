@@ -2,6 +2,7 @@
 
 import {_t} from "@web/core/l10n/translation";
 import {markup} from "@odoo/owl";
+import {escape} from "@web/core/utils/strings";
 import {registry} from "@web/core/registry";
 
 function notifyPrinterIssue(env, action, printerName) {
@@ -15,7 +16,7 @@ function notifyPrinterIssue(env, action, printerName) {
     };
     const notificationRemove = env.services.notification.add(
         markup(
-            `<p>${terms.the_report} <strong>${action.name}</strong> ${terms.couldnt_be_printed}</p>`
+            `<p>${terms.the_report} <strong>${escape(action.name)}</strong> ${terms.couldnt_be_printed}</p>`
         ),
         {
             title: `${terms.issue_on} ${printerName}`,
@@ -51,52 +52,69 @@ function notifyPrinterIssue(env, action, printerName) {
  */
 async function carbonePrintHandler(action, options, env) {
     const ctx = action.context || {};
+    if (ctx.force_print_to_client) {
+        return false;
+    }
     const activeIds = ctx.active_ids || [];
     if (action.report_type !== "carbone" || !action.id || !activeIds.length) {
         return false;
     }
     const orm = env.services.orm;
-    let printAction;
+    env.services.ui.block();
     try {
-        printAction = await orm.call(
-            "ir.actions.report",
-            "print_action_for_report_name",
-            [action.report_name],
-            {context: {force_print_to_client: ctx.force_print_to_client}}
-        );
-    } catch {
-        // Cannot tell where to print: let the download handlers take over.
-        return false;
-    }
-    if (!printAction || printAction.action !== "server") {
-        return false;
-    }
-    if (printAction.printer_exception) {
+        let printAction;
+        try {
+            printAction = await orm.call(
+                "ir.actions.report",
+                "print_action_for_report_name",
+                [action.report_name],
+                {context: {force_print_to_client: ctx.force_print_to_client}}
+            );
+        } catch (error) {
+            // Cannot tell where to print: let the download handlers take over.
+            console.warn("Carbone print: cannot resolve the print action", error);
+            return false;
+        }
+        if (!printAction || printAction.action !== "server") {
+            return false;
+        }
+        if (printAction.printer_exception) {
+            notifyPrinterIssue(env, action, printAction.printer_name);
+            return true;
+        }
+        let result = false;
+        try {
+            result = await orm.call(
+                "ir.actions.report",
+                "print_document_client_action",
+                [action.id, activeIds, action.data]
+            );
+        } catch (error) {
+            console.warn("Carbone print: the print request failed", error);
+            result = false;
+        }
+        if (result && result.download) {
+            // Not printable (format, mode, no records): download as usual.
+            if (result.message) {
+                env.services.notification.add(result.message, {type: "warning"});
+            }
+            return false;
+        }
+        if (result) {
+            env.services.notification.add(_t("Successfully sent to printer!"), {
+                type: "success",
+            });
+            return true;
+        }
+        // Same notifications as the CUPS report handler of the printing addon.
+        env.services.notification.add(_t("Could not sent to printer!"), {
+            type: "danger",
+        });
         notifyPrinterIssue(env, action, printAction.printer_name);
         return true;
+    } finally {
+        env.services.ui.unblock();
     }
-    let result = false;
-    try {
-        result = await orm.call(
-            "ir.actions.report",
-            "print_document_client_action",
-            [action.id, activeIds, action.data]
-        );
-    } catch {
-        result = false;
-    }
-    if (result) {
-        env.services.notification.add(_t("Successfully sent to printer!"), {
-            type: "success",
-        });
-        return true;
-    }
-    // Same notifications as the CUPS report handler of the printing addon.
-    env.services.notification.add(_t("Could not sent to printer!"), {
-        type: "danger",
-    });
-    notifyPrinterIssue(env, action, printAction.printer_name);
-    return true;
 }
 
 registry

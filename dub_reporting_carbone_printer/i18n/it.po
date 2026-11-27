@@ -1,0 +1,93 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dub_reporting_carbone_printer
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20260926\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-27 16:27+0000\n"
+"PO-Revision-Date: 2026-11-27 16:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dub_reporting_carbone_printer
+#. odoo-python
+#: code:addons/dub_reporting_carbone_printer/models/ir_actions_report.py:0
+msgid ""
+"Asynchronous Carbone reports cannot be sent to a printer (report %(name)s)."
+msgstr "I report Carbone asincroni non possono essere inviati a una stampante (report %(name)s)."
+
+#. module: dub_reporting_carbone_printer
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone_printer/static/src/js/carbone_print_handler.esm.js:0
+msgid "Could not sent to printer!"
+msgstr "Impossibile inviare alla stampante!"
+
+#. module: dub_reporting_carbone_printer
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone_printer/static/src/js/carbone_print_handler.esm.js:0
+msgid "Issue on"
+msgstr "Problema su"
+
+#. module: dub_reporting_carbone_printer
+#. odoo-python
+#: code:addons/dub_reporting_carbone_printer/models/ir_actions_report.py:0
+msgid "No printer configured to print this report."
+msgstr "Nessuna stampante configurata per stampare questo report."
+
+#. module: dub_reporting_carbone_printer
+#. odoo-python
+#: code:addons/dub_reporting_carbone_printer/models/ir_actions_report.py:0
+msgid "Nothing to print: no records selected."
+msgstr "Niente da stampare: nessun record selezionato."
+
+#. module: dub_reporting_carbone_printer
+#. odoo-python
+#: code:addons/dub_reporting_carbone_printer/models/ir_actions_report.py:0
+msgid ""
+"Only PDF Carbone reports can be sent to a printer (report %(name)s produces "
+"%(format)s)."
+msgstr "Solo i report Carbone in PDF possono essere inviati a una stampante (il report %(name)s produce %(format)s)."
+
+#. module: dub_reporting_carbone_printer
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone_printer/static/src/js/carbone_print_handler.esm.js:0
+msgid "Print"
+msgstr "Stampa"
+
+#. module: dub_reporting_carbone_printer
+#. odoo-python
+#: code:addons/dub_reporting_carbone_printer/models/ir_actions_report.py:0
+msgid ""
+"Report %(name)s produces a ZIP for several records and cannot be sent to a "
+"printer."
+msgstr "Il report %(name)s produce uno ZIP per più record e non può essere inviato a una stampante."
+
+#. module: dub_reporting_carbone_printer
+#: model:ir.model,name:dub_reporting_carbone_printer.model_ir_actions_report
+msgid "Report Action"
+msgstr "Azione report"
+
+#. module: dub_reporting_carbone_printer
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone_printer/static/src/js/carbone_print_handler.esm.js:0
+msgid "Successfully sent to printer!"
+msgstr "Inviato correttamente alla stampante!"
+
+#. module: dub_reporting_carbone_printer
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone_printer/static/src/js/carbone_print_handler.esm.js:0
+msgid "The report"
+msgstr "Il report"
+
+#. module: dub_reporting_carbone_printer
+#. odoo-javascript
+#: code:addons/dub_reporting_carbone_printer/static/src/js/carbone_print_handler.esm.js:0
+msgid "couldn't be printed. Click on the button below to download it"
+msgstr "non può essere stampato. Fare clic sul pulsante sottostante per scaricarlo"

@@ -35,11 +35,18 @@ jobs:
         with:
           path: dub_reporting_tools
 
+      - name: Checkout OCA report-print-send
+        uses: actions/checkout@v5
+        with:
+          repository: OCA/report-print-send
+          ref: ${{ github.base_ref || github.ref_name }}
+          path: report-print-send
+
       - name: Checkout Odoo Enterprise
         uses: actions/checkout@v5
         with:
           repository: odoo/enterprise
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.base_ref || github.ref_name }}
           path: enterprise
           token: ${{ secrets.GH_PAT }}
 
@@ -51,7 +58,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libldap2-dev libsasl2-dev
+          sudo apt-get install -y libldap2-dev libsasl2-dev libcups2-dev python3-dev
 
       - name: Install Python dependencies
         run: |
@@ -63,11 +70,12 @@ jobs:
             google-api-python-client \
             google-auth \
             google-auth-oauthlib \
-            msal
+            msal \
+            pycups
 
       - name: Install Odoo
         run: |
-          wget -q -O odoo.deb https://nightly.odoo.com/${{ github.ref_name }}/nightly/deb/odoo_${{ github.ref_name }}.latest_all.deb
+          wget -q -O odoo.deb https://nightly.odoo.com/${{ github.base_ref || github.ref_name }}/nightly/deb/odoo_${{ github.base_ref || github.ref_name }}.latest_all.deb
           sudo apt install -y ./odoo.deb
 
       - name: Install wkhtmltopdf
@@ -79,7 +87,7 @@ jobs:
         run: |
           cat > odoo.conf << EOF
           [options]
-          addons_path = /usr/lib/python3/dist-packages/odoo/addons,${{ github.workspace }}/enterprise,${{ github.workspace }}/dub_reporting_tools
+          addons_path = /usr/lib/python3/dist-packages/odoo/addons,${{ github.workspace }}/enterprise,${{ github.workspace }}/dub_reporting_tools,${{ github.workspace }}/report-print-send
           db_host = localhost
           db_port = 5432
           db_name = odoo
@@ -89,13 +97,13 @@ jobs:
 
       - name: Install modules (with demo data)
         env:
-          MODULES: dub_reporting_base,dub_reporting_carbone,dub_reporting_carbone_demo,dub_reporting_birt,dub_reporting_birt_demo,dub_reporting_ilovepdf,dub_reporting_ilovepdf_documents,dub_reporting_gdrive,dub_reporting_sharepoint,dub_reporting_carbone_gdrive,dub_reporting_carbone_sharepoint
+          MODULES: dub_reporting_base,dub_reporting_carbone,dub_reporting_carbone_demo,dub_reporting_birt,dub_reporting_birt_demo,dub_reporting_ilovepdf,dub_reporting_ilovepdf_documents,dub_reporting_gdrive,dub_reporting_sharepoint,dub_reporting_carbone_gdrive,dub_reporting_carbone_sharepoint,dub_reporting_carbone_printer
         run: |
           odoo -c odoo.conf -d odoo -i "$MODULES" --without-demo=False --stop-after-init --http-port=0
 
       - name: Run tests
         env:
           CARBONE_TEST_API_KEY: ${{ secrets.CARBONE_TEST_API_KEY }}
-          TEST_TAGS: /dub_reporting_base,/dub_reporting_carbone,/dub_reporting_carbone_demo,/dub_reporting_birt,/dub_reporting_birt_demo,/dub_reporting_ilovepdf,/dub_reporting_ilovepdf_documents,/dub_reporting_gdrive,/dub_reporting_sharepoint,/dub_reporting_carbone_gdrive,/dub_reporting_carbone_sharepoint
+          TEST_TAGS: /dub_reporting_base,/dub_reporting_carbone,/dub_reporting_carbone_demo,/dub_reporting_birt,/dub_reporting_birt_demo,/dub_reporting_ilovepdf,/dub_reporting_ilovepdf_documents,/dub_reporting_gdrive,/dub_reporting_sharepoint,/dub_reporting_carbone_gdrive,/dub_reporting_carbone_sharepoint,/dub_reporting_carbone_printer
         run: |
           odoo -c odoo.conf -d odoo --test-tags "$TEST_TAGS" --stop-after-init --http-port=0

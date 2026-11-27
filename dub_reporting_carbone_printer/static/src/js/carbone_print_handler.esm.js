@@ -50,17 +50,24 @@ function notifyPrinterIssue(env, action, printerName) {
  * handler must not close it nor call onClose.
  */
 async function carbonePrintHandler(action, options, env) {
-    const activeIds = (action.context && action.context.active_ids) || [];
+    const ctx = action.context || {};
+    const activeIds = ctx.active_ids || [];
     if (action.report_type !== "carbone" || !action.id || !activeIds.length) {
         return false;
     }
     const orm = env.services.orm;
-    const printAction = await orm.call(
-        "ir.actions.report",
-        "print_action_for_report_name",
-        [action.report_name],
-        {context: {force_print_to_client: action.context.force_print_to_client}}
-    );
+    let printAction;
+    try {
+        printAction = await orm.call(
+            "ir.actions.report",
+            "print_action_for_report_name",
+            [action.report_name],
+            {context: {force_print_to_client: ctx.force_print_to_client}}
+        );
+    } catch {
+        // Cannot tell where to print: let the download handlers take over.
+        return false;
+    }
     if (!printAction || printAction.action !== "server") {
         return false;
     }
@@ -68,17 +75,23 @@ async function carbonePrintHandler(action, options, env) {
         notifyPrinterIssue(env, action, printAction.printer_name);
         return true;
     }
-    const result = await orm.call(
-        "ir.actions.report",
-        "print_document_client_action",
-        [action.id, activeIds, action.data]
-    );
+    let result = false;
+    try {
+        result = await orm.call(
+            "ir.actions.report",
+            "print_document_client_action",
+            [action.id, activeIds, action.data]
+        );
+    } catch {
+        result = false;
+    }
     if (result) {
         env.services.notification.add(_t("Successfully sent to printer!"), {
             type: "success",
         });
         return true;
     }
+    // Same notifications as the CUPS report handler of the printing addon.
     env.services.notification.add(_t("Could not sent to printer!"), {
         type: "danger",
     });

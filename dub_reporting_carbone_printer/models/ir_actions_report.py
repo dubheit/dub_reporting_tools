@@ -1,8 +1,10 @@
-from time import time
+import logging
 
 from odoo import _, models
 from odoo.exceptions import UserError
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools.safe_eval import safe_eval, time
+
+_logger = logging.getLogger(__name__)
 
 
 class IrActionsReport(models.Model):
@@ -39,6 +41,18 @@ class IrActionsReport(models.Model):
                 )
             )
 
+    def print_document_client_action(self, record_ids, data=None):
+        if self.report_type == "carbone":
+            self.ensure_one()
+            try:
+                self._dub_check_carbone_printable(record_ids)
+            except UserError as e:
+                # The base implementation swallows every error (or prints in a
+                # thread): tell the client to download instead of a printer
+                # failure.
+                return {"download": True, "message": str(e)}
+        return super().print_document_client_action(record_ids, data=data)
+
     def print_document(self, record_ids, data=None):
         if self.report_type != "carbone":
             return super().print_document(record_ids, data=data)
@@ -50,23 +64,35 @@ class IrActionsReport(models.Model):
         printer = behaviour.pop("printer", None)
         if not printer:
             raise UserError(_("No printer configured to print this report."))
-        document, __ = self._render_carbone(
-            self.report_name, list(record_ids), data or {}
-        )
+        document, __ = self.with_context(
+            must_skip_send_to_printer=True
+        )._render_carbone(self.report_name, list(record_ids), data or {})
         # Duplicated from the base printing module on purpose: reusing it would
         # require mutating its process-wide REPORT_TYPES dict.
-        if self.print_report_name:
-            names = [
-                safe_eval(self.print_report_name, {"object": obj, "time": time})
-                for obj in self.env[self.model].browse(record_ids)
-            ]
-            title = " ".join(names)
-            if len(title) > 80:
-                title = title[:80] + "…"
-        else:
-            title = self.report_name
+        title = self._dub_carbone_print_title(record_ids)
         behaviour["title"] = title
         behaviour["res_ids"] = record_ids
         return printer.print_document(
             self, document, doc_format="carbone", **behaviour
         )
+
+    def _dub_carbone_print_title(self, record_ids):
+        """Return the print job title (same rules as the base printing module)."""
+        if self.print_report_name:
+            try:
+                names = [
+                    safe_eval(self.print_report_name, {"object": obj, "time": time})
+                    for obj in self.env[self.model].browse(record_ids)
+                ]
+            except Exception:
+                _logger.warning(
+                    "Cannot evaluate print_report_name of report %s",
+                    self.report_name,
+                    exc_info=True,
+                )
+                return self.report_name
+            title = " ".join(names)
+            if len(title) > 80:
+                title = title[:80] + "…"
+            return title
+        return self.report_name

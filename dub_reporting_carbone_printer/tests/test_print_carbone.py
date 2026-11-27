@@ -1,3 +1,4 @@
+import re
 from unittest import mock
 from unittest.mock import MagicMock
 
@@ -90,7 +91,29 @@ class TestPrintCarbone(TransactionCase):
     def test_print_carbone_title_from_print_report_name(self):
         self.report.print_report_name = "'Label %s' % object.name"
         self.report.print_document([self.partner.id])
-        self.assertEqual(self.print_mock.call_args.kwargs["title"], "Label Label Partner")
+        self.assertEqual(
+            self.print_mock.call_args.kwargs["title"], "Label Label Partner"
+        )
+
+    def test_print_carbone_title_fallback_on_bad_expression(self):
+        self.report.print_report_name = "object.missing_field.x"
+        self.report.print_document([self.partner.id])
+        self.assertEqual(
+            self.print_mock.call_args.kwargs["title"], self.report.report_name
+        )
+
+    def test_print_carbone_renders_with_skip_context(self):
+        seen = {}
+
+        def _render(rep, *args, **kwargs):
+            seen["skip"] = rep.env.context.get("must_skip_send_to_printer")
+            return b"%PDF-1.4 label", "pdf"
+
+        with mock.patch.object(
+            type(self.env["ir.actions.report"]), "_render_carbone", _render
+        ):
+            self.report.print_document([self.partner.id])
+        self.assertTrue(seen["skip"])
 
     def test_print_carbone_keeps_duplicate_ids(self):
         pid = self.partner.id
@@ -110,29 +133,44 @@ class TestPrintCarbone(TransactionCase):
 
     def test_print_carbone_not_pdf(self):
         self.report.carbone_report_type = "docx"
-        with self.assertRaises(UserError):
+        with self.assertRaisesRegex(UserError, "Test Carbone Label"):
             self.report.print_document([self.partner.id])
         self.render.assert_not_called()
+        result = self.report.print_document_client_action([self.partner.id])
+        self.assertTrue(result["download"])
+        self.assertIn("Test Carbone Label", result["message"])
+        self.print_mock.assert_not_called()
 
     def test_print_carbone_async(self):
         self.report.carbone_rendering_mode = "async"
-        with self.assertRaises(UserError):
+        with self.assertRaisesRegex(UserError, "Test Carbone Label"):
             self.report.print_document([self.partner.id])
         self.render.assert_not_called()
 
     def test_print_carbone_zip_batch(self):
         self.report.carbone_batch_output = "zip"
         other = self.env["res.partner"].create({"name": "Other"})
-        with self.assertRaises(UserError):
+        with self.assertRaisesRegex(UserError, "Test Carbone Label"):
             self.report.print_document([self.partner.id, other.id])
         self.render.assert_not_called()
         self.report.print_document([self.partner.id])
         self.print_mock.assert_called_once()
 
     def test_print_carbone_without_records(self):
-        with self.assertRaises(UserError):
-            self.report.print_document([])
+        report = self.report.with_context(lang="en_US")
+        message = "Nothing to print: no records selected."
+        with self.assertRaisesRegex(UserError, message):
+            report.print_document([])
         self.render.assert_not_called()
+        result = report.print_document_client_action([])
+        self.assertEqual(result, {"download": True, "message": message})
+        self.print_mock.assert_not_called()
+
+    def test_client_action_printable_reaches_super(self):
+        self.printer.multi_thread = False
+        result = self.report.print_document_client_action([self.partner.id])
+        self.assertNotIsInstance(result, dict)
+        self.print_mock.assert_called_once()
 
     def test_render_carbone_never_prints(self):
         self.report.write(
@@ -158,15 +196,24 @@ class TestPrintCarbone(TransactionCase):
             type(self.env["ir.actions.report"]), "_render_carbone", real
         ), mock.patch(
             CARBONE_MODULE + ".requests.post", side_effect=_mock_carbone_post
-        ), mock.patch(
+        ) as post, mock.patch(
             CARBONE_MODULE + ".requests.get", side_effect=_mock_carbone_get
-        ):
-            self.report._render_carbone(self.report.report_name, [self.partner.id], {})
+        ) as get:
+            self.report._render_carbone(
+                self.report.report_name, [self.partner.id], {}
+            )
+        post.assert_called()
+        get.assert_called()
         self.print_mock.assert_not_called()
 
     def test_other_report_types_untouched(self):
-        qweb = self.env["ir.actions.report"].search(
-            [("report_type", "=", "qweb-pdf")], limit=1
+        qweb = self.env["ir.actions.report"].create(
+            {
+                "name": "Test QWeb",
+                "model": "res.partner",
+                "report_type": "qweb-pdf",
+                "report_name": "dub_reporting_carbone_printer.test_qweb",
+            }
         )
         qweb.printing_printer_id = self.printer
         qweb = qweb.with_context(skip_printer_exception=True)

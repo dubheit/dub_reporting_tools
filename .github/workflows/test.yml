@@ -39,14 +39,14 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: OCA/report-print-send
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.base_ref || github.ref_name }}
           path: report-print-send
 
       - name: Checkout Odoo Enterprise
         uses: actions/checkout@v5
         with:
           repository: odoo/enterprise
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.base_ref || github.ref_name }}
           path: enterprise
           token: ${{ secrets.GH_PAT }}
 
@@ -75,7 +75,7 @@ jobs:
 
       - name: Install Odoo
         run: |
-          wget -q -O odoo.deb https://nightly.odoo.com/${{ github.ref_name }}/nightly/deb/odoo_${{ github.ref_name }}.latest_all.deb
+          wget -q -O odoo.deb https://nightly.odoo.com/${{ github.base_ref || github.ref_name }}/nightly/deb/odoo_${{ github.base_ref || github.ref_name }}.latest_all.deb
           sudo apt install -y ./odoo.deb
 
       - name: Install wkhtmltopdf

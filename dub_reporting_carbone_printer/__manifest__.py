@@ -11,6 +11,11 @@
         "base_report_to_printer",
     ],
     "data": [],
+    "assets": {
+        "web.assets_backend": [
+            "dub_reporting_carbone_printer/static/src/js/carbone_print_handler.esm.js",
+        ],
+    },
     "installable": True,
     "application": False,
     "auto_install": True,

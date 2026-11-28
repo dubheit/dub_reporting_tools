@@ -1373,6 +1373,11 @@ msgid "Rendering Options"
 msgstr "Opzioni di Rendering"
 
 #. module: dub_reporting_carbone
+#: model:ir.model.fields,field_description:dub_reporting_carbone.field_ir_actions_report__carbone_previous_template_id
+msgid "Replaced Template ID"
+msgstr "ID Template Sostituito"
+
+#. module: dub_reporting_carbone
 #: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_async_render__report_id
 #: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_studio_wizard__report_id
 #: model:ir.model.fields,field_description:dub_reporting_carbone.field_carbone_translation__report_id
@@ -1621,6 +1626,17 @@ msgstr "Template eliminato con successo dal server Carbone."
 msgid "Template upload timeout. Please check your connection and try again."
 msgstr ""
 "Timeout del caricamento del template. Verifica la connessione e riprova."
+
+#. module: dub_reporting_carbone
+#: model:ir.model.fields,help:dub_reporting_carbone.field_ir_actions_report__carbone_previous_template_id
+msgid ""
+"Template version replaced by a change of template or cache. Once the new "
+"version is uploaded, this one is scheduled for deletion on Carbone if no "
+"other report uses it."
+msgstr ""
+"Versione del template sostituita da una modifica del template o della "
+"cache. Caricata la nuova versione, questa viene programmata per "
+"l'eliminazione su Carbone se nessun altro report la usa."
 
 #. module: dub_reporting_carbone
 #. odoo-python

@@ -253,6 +253,14 @@ class IrActionsReport(models.Model):
         readonly=True,
         help="Carbone template ID from previous upload (for caching)"
     )
+    carbone_previous_template_id = fields.Char(
+        string='Replaced Template ID',
+        readonly=True,
+        copy=False,
+        help="Template version replaced by a change of template or cache. "
+             "Once the new version is uploaded, this one is scheduled for "
+             "deletion on Carbone if no other report uses it."
+    )
     carbone_use_template_cache = fields.Boolean(
         string='Use Template Cache',
         default=True,
@@ -653,9 +661,13 @@ class IrActionsReport(models.Model):
         company = self.env.company
 
         # Check if we can use cached template (but not for HTML templates which may change)
-        if self.carbone_use_template_cache and self.carbone_template_id and not self.carbone_use_html_template:
+        if self._carbone_template_from_cache():
             _logger.info(f"Using cached template ID: {self.carbone_template_id}")
             return self.carbone_template_id
+
+        # The version this upload replaces: the one dropped when the template or
+        # the cache changed, or the last upload of an HTML template.
+        previous_id = self.carbone_previous_template_id or self.carbone_template_id
 
         _logger.info(f"Uploading template for report: {self.name}")
 
@@ -703,10 +715,20 @@ class IrActionsReport(models.Model):
                     "Invalid response from Carbone API: missing templateId"
                 ))
 
-            # Cache template ID if caching is enabled
+            # Cache template ID if caching is enabled. Without the cache, remember
+            # the upload anyway so that the next one can retire it.
             if self.carbone_use_template_cache:
-                self.sudo().write({'carbone_template_id': template_id})
+                vals = {'carbone_template_id': template_id, 'carbone_previous_template_id': False}
+            else:
+                vals = {'carbone_previous_template_id': template_id}
+            self.sudo().with_context(carbone_skip_retire=True).write(vals)
+            if self.carbone_use_template_cache:
                 _logger.info(f"Template cached with ID: {template_id}")
+
+            # Retire the replaced version only now that the new one is on Carbone
+            # and cached, so that it no longer counts as used by this report.
+            if previous_id and previous_id != template_id:
+                self._carbone_retire_template(previous_id)
 
             return template_id
 
@@ -720,7 +742,113 @@ class IrActionsReport(models.Model):
             raise UserError(_(
                 "Failed to upload template to Carbone API.\n\nError: %s"
             ) % str(e))
-    
+
+    def _carbone_template_from_cache(self):
+        """Return True when rendering uses the cached template ID without uploading."""
+        self.ensure_one()
+        return bool(
+            self.carbone_use_template_cache
+            and self.carbone_template_id
+            and not self.carbone_use_html_template
+        )
+
+    def _carbone_retire_template(self, template_id):
+        """Schedule a template version that no report uses any more for deletion.
+
+        Carbone keeps every uploaded version until it is deleted, and the account
+        has a template quota: without this, every template change leaves the old
+        version behind. The version gets an expiry date instead of being deleted
+        at once, because a copy of this database (staging, a restored backup) may
+        still have it cached and keeps printing until then; afterwards that copy
+        uploads it again on its own (see _carbone_post_render). The grace period
+        comes from the system parameter
+        ``dub_reporting_carbone.retired_template_grace_days`` (default 7, 0 deletes
+        at once). Failures are only logged: cleanup must never block a print.
+
+        Returns:
+            bool: True if Carbone accepted the request (or no longer has the version)
+        """
+        self.ensure_one()
+        if not template_id:
+            return False
+        if self.sudo().search_count([('carbone_template_id', '=', template_id)]):
+            _logger.info(f"Carbone template {template_id} is still used by a report, kept")
+            return False
+
+        company = self.env.company
+        if not company.carbone_api_url or not company.carbone_access_token:
+            return False
+
+        param = self.env['ir.config_parameter'].sudo().get_param(
+            'dub_reporting_carbone.retired_template_grace_days', '7')
+        try:
+            grace_days = max(int(param), 0)
+        except (TypeError, ValueError):
+            grace_days = 7
+
+        url = f'{company.carbone_api_url}/template/{template_id}'
+        headers = self._prepare_carbone_headers(content_type='application/json')
+        try:
+            if grace_days:
+                expire_at = int(time.time()) + grace_days * 86400
+                response = requests.patch(url, headers=headers, json={'expireAt': expire_at}, timeout=30)
+            else:
+                response = requests.delete(url, headers=headers, timeout=30)
+        except requests.exceptions.RequestException as e:
+            _logger.warning(f"Could not retire Carbone template {template_id}: {e}")
+            return False
+
+        if response.status_code in (200, 404):
+            if grace_days:
+                _logger.info(f"Carbone template {template_id} replaced, expires in {grace_days} day(s)")
+            else:
+                _logger.info(f"Carbone template {template_id} replaced, deleted")
+            return True
+        _logger.warning(f"Could not retire Carbone template {template_id}: HTTP {response.status_code}")
+        return False
+
+    def _carbone_post_render(self, template_id, payload, headers=None):
+        """POST /render/{templateId}, uploading the template again if Carbone lost it.
+
+        A cached template ID stops working when the version is deleted or expires
+        on Carbone (manual cleanup, a retired version, test-token templates that
+        Carbone removes after 30 days): Carbone answers 404. In that case the
+        cache is cleared, the template uploaded again and the render retried once.
+
+        Returns:
+            tuple: (response, template_id actually used)
+
+        Raises:
+            requests.exceptions.HTTPError: if the render request fails
+        """
+        self.ensure_one()
+        company = self.env.company
+        if headers is None:
+            headers = self._prepare_carbone_headers(content_type='application/json')
+        from_cache = template_id == self.carbone_template_id and self._carbone_template_from_cache()
+
+        response = requests.post(
+            f'{company.carbone_api_url}/render/{template_id}',
+            headers=headers,
+            json=payload,
+            timeout=60
+        )
+        if response.status_code == 404 and from_cache:
+            _logger.warning(
+                f"Carbone template {template_id} not found for report {self.name}, uploading it again"
+            )
+            self.sudo().with_context(carbone_skip_retire=True).write({'carbone_template_id': False})
+            template_id = self._upload_template()
+            response = requests.post(
+                f'{company.carbone_api_url}/render/{template_id}',
+                headers=headers,
+                json=payload,
+                timeout=60
+            )
+
+        response.raise_for_status()
+        return response, template_id
+
     def _prepare_render_payload(self, recordset):
         """Prepare JSON payload for Carbone rendering.
         
@@ -919,16 +1047,9 @@ class IrActionsReport(models.Model):
             
             # Step 1: POST /render/{templateId} to start rendering
             _logger.debug(f"Sending render request to Carbone API")
-            
-            render_response = requests.post(
-                f'{company.carbone_api_url}/render/{template_id}',
-                headers=report._prepare_carbone_headers(content_type='application/json'),
-                json=payload,
-                timeout=60
-            )
-            
-            render_response.raise_for_status()
-            
+
+            render_response, template_id = report._carbone_post_render(template_id, payload)
+
             # Step 2: Extract renderId from response
             render_result = render_response.json()
             render_id = render_result.get('data', {}).get('renderId')
@@ -993,6 +1114,8 @@ class IrActionsReport(models.Model):
             # If batch processing is not available and we have multiple records, fallback to individual rendering
             if is_batch_error and len(recordset) > 1:
                 _logger.warning(f"Batch processing not available, falling back to individual rendering")
+                # The template may have been uploaded again by _carbone_post_render
+                template_id = report.carbone_template_id or template_id
                 return report._render_carbone_individual(recordset, template_id, record_ids)
 
             # Handle converter unavailable error with user-friendly message
@@ -1070,14 +1193,8 @@ class IrActionsReport(models.Model):
                     payload['lang'] = self.carbone_lang
                 
                 # Render single report
-                render_response = requests.post(
-                    f'{company.carbone_api_url}/render/{template_id}',
-                    headers=self._prepare_carbone_headers(content_type='application/json'),
-                    json=payload,
-                    timeout=60
-                )
-                render_response.raise_for_status()
-                
+                render_response, template_id = self._carbone_post_render(template_id, payload)
+
                 render_result = render_response.json()
                 render_id = render_result.get('data', {}).get('renderId')
                 
@@ -1130,7 +1247,6 @@ class IrActionsReport(models.Model):
         """Render report asynchronously using Carbone webhook.
         Uses Carbone v5 webhook headers and a correlation request_id.
         """
-        company = self.env.company
         report = self._get_report(report_ref)
         _logger.info(f"Starting async Carbone report rendering: {report.name}")
         try:
@@ -1158,13 +1274,7 @@ class IrActionsReport(models.Model):
             headers['carbone-webhook-header-x-odoo-request-id'] = request_id
 
             # Start async rendering
-            render_response = requests.post(
-                f"{company.carbone_api_url}/render/{template_id}",
-                headers=headers,
-                json=payload,
-                timeout=60,
-            )
-            render_response.raise_for_status()
+            render_response, template_id = report._carbone_post_render(template_id, payload, headers=headers)
 
             _logger.info("Async render started, awaiting webhook callback")
 
@@ -1261,6 +1371,16 @@ class IrActionsReport(models.Model):
             if 'carbone_template_id' not in vals:
                 vals['carbone_template_id'] = False
             _logger.info("Template source changed, invalidating cache")
+
+        # When the cache is cleared, keep the dropped version: the next upload
+        # retires it on Carbone once the new one is in place. Not when the
+        # version is already gone from Carbone (carbone_skip_retire).
+        if ('carbone_template_id' in vals and not vals['carbone_template_id']
+                and not self.env.context.get('carbone_skip_retire')):
+            for report in self:
+                if report.carbone_template_id and not report.carbone_previous_template_id:
+                    super(IrActionsReport, report).write(
+                        {'carbone_previous_template_id': report.carbone_template_id})
 
         result = super().write(vals)
 

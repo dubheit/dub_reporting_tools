@@ -1,7 +1,10 @@
+import base64
 import json
 import logging
 import os
+import time
 from unittest.mock import patch, MagicMock
+import requests
 from odoo.tests.common import TransactionCase, tagged, _super_send
 from odoo.exceptions import ValidationError
 
@@ -275,6 +278,156 @@ class TestCarboneReportMockedAPI(TransactionCase):
         self.assertTrue(result, "Multi-record report should work")
         content, format_type = result
         self.assertGreater(len(content), 0, "Multi-record content should have data")
+
+
+_MODULE_REQUESTS = 'odoo.addons.dub_reporting_carbone.models.ir_actions_report.requests'
+
+
+def _response(status_code=200, json_data=None, content=b''):
+    """Build a fake requests.Response."""
+    resp = MagicMock()
+    resp.status_code = status_code
+    resp.json.return_value = json_data or {}
+    resp.content = content
+    if status_code >= 400:
+        resp.raise_for_status.side_effect = requests.exceptions.HTTPError(response=resp)
+    else:
+        resp.raise_for_status = MagicMock()
+    return resp
+
+
+@tagged('post_install', '-at_install')
+class TestCarboneTemplateLifecycle(TransactionCase):
+    """Cached template lost on Carbone, and retirement of replaced versions."""
+
+    def setUp(self):
+        super().setUp()
+        self.partner = self.env['res.partner'].create({'name': 'Test Partner for Carbone lifecycle'})
+        self.report = self.env.ref(
+            'dub_reporting_carbone.demo_report_partner_i18n',
+            raise_if_not_found=False,
+        )
+        if not self.report:
+            self.skipTest("Partner Demo Report not found (install with demo data)")
+
+        self.env.user.company_id.sudo().write({
+            'carbone_api_url': 'https://api.carbone.io',
+            'carbone_access_token': _CARBONE_TEST_TOKEN,
+        })
+        self.report.sudo().write({
+            'carbone_use_html_template': False,
+            'carbone_use_template_cache': True,
+            'carbone_rendering_mode': 'sync',
+        })
+        self.report.sudo().write({'carbone_template_id': 'old_version'})
+        self.env.invalidate_all()
+        self.upload_id = 'new_version'
+        self.missing_ids = set()
+
+    def _post(self, url, **kwargs):
+        if url.endswith('/template'):
+            return _response(json_data={'success': True, 'data': {'templateId': self.upload_id}})
+        template_id = url.rsplit('/render/', 1)[1]
+        if template_id in self.missing_ids:
+            return _response(404, {'success': False, 'error': 'Template not found'})
+        return _response(json_data={'success': True, 'data': {'renderId': 'render_1.pdf'}})
+
+    def _get(self, url, **kwargs):
+        return _response(content=b'%PDF-1.4 mock')
+
+    def _change_template(self):
+        self.report.write({'carbone_template_file': base64.b64encode(b'new template content')})
+
+    def test_01_render_uploads_again_a_missing_template(self):
+        """A cached template that Carbone lost is uploaded again and the render retried."""
+        self.missing_ids.add('old_version')
+        with patch(f'{_MODULE_REQUESTS}.post', side_effect=self._post) as post, \
+                patch(f'{_MODULE_REQUESTS}.get', side_effect=self._get), \
+                patch(f'{_MODULE_REQUESTS}.patch') as patch_call:
+            content, report_format = self.report._render_carbone(
+                self.report.report_name, str(self.partner.id), {})
+
+        self.assertEqual(content, b'%PDF-1.4 mock')
+        self.assertEqual(report_format, 'pdf')
+        self.assertEqual(self.report.carbone_template_id, 'new_version')
+        urls = [call.args[0] for call in post.call_args_list]
+        self.assertEqual(urls, [
+            'https://api.carbone.io/render/old_version',
+            'https://api.carbone.io/template',
+            'https://api.carbone.io/render/new_version',
+        ])
+        # The lost version is gone already: nothing to retire.
+        patch_call.assert_not_called()
+        self.assertFalse(self.report.carbone_previous_template_id)
+
+    def test_02_template_change_retires_the_old_version(self):
+        """After a template change, the replaced version gets an expiry date."""
+        self._change_template()
+        self.assertFalse(self.report.carbone_template_id)
+        self.assertEqual(self.report.carbone_previous_template_id, 'old_version')
+
+        with patch(f'{_MODULE_REQUESTS}.post', side_effect=self._post), \
+                patch(f'{_MODULE_REQUESTS}.patch', return_value=_response()) as patch_call:
+            self.assertEqual(self.report._upload_template(), 'new_version')
+
+        patch_call.assert_called_once()
+        self.assertEqual(patch_call.call_args.args[0], 'https://api.carbone.io/template/old_version')
+        expire_at = patch_call.call_args.kwargs['json']['expireAt']
+        self.assertAlmostEqual(expire_at, time.time() + 7 * 86400, delta=60)
+        self.assertEqual(self.report.carbone_template_id, 'new_version')
+        self.assertFalse(self.report.carbone_previous_template_id)
+
+    def test_03_version_used_by_another_report_is_kept(self):
+        """A version still cached by another report is not retired."""
+        other = self.report.copy()
+        other.sudo().write({'carbone_template_id': 'old_version'})
+        self._change_template()
+
+        with patch(f'{_MODULE_REQUESTS}.post', side_effect=self._post), \
+                patch(f'{_MODULE_REQUESTS}.patch') as patch_call, \
+                patch(f'{_MODULE_REQUESTS}.delete') as delete_call:
+            self.report._upload_template()
+
+        patch_call.assert_not_called()
+        delete_call.assert_not_called()
+        self.assertFalse(self.report.carbone_previous_template_id)
+
+    def test_04_same_version_is_not_retired(self):
+        """When Carbone returns the same version (same content), nothing is retired."""
+        self.upload_id = 'old_version'
+        self._change_template()
+
+        with patch(f'{_MODULE_REQUESTS}.post', side_effect=self._post), \
+                patch(f'{_MODULE_REQUESTS}.patch') as patch_call:
+            self.report._upload_template()
+
+        patch_call.assert_not_called()
+        self.assertEqual(self.report.carbone_template_id, 'old_version')
+        self.assertFalse(self.report.carbone_previous_template_id)
+
+    def test_05_zero_grace_deletes_at_once(self):
+        """With a grace period of 0 days the replaced version is deleted at once."""
+        self.env['ir.config_parameter'].sudo().set_param(
+            'dub_reporting_carbone.retired_template_grace_days', '0')
+        self.report.action_invalidate_template_cache()
+
+        with patch(f'{_MODULE_REQUESTS}.post', side_effect=self._post), \
+                patch(f'{_MODULE_REQUESTS}.patch') as patch_call, \
+                patch(f'{_MODULE_REQUESTS}.delete', return_value=_response()) as delete_call:
+            self.report._upload_template()
+
+        patch_call.assert_not_called()
+        delete_call.assert_called_once()
+        self.assertEqual(delete_call.call_args.args[0], 'https://api.carbone.io/template/old_version')
+
+    def test_06_retire_failure_does_not_block_the_upload(self):
+        """A Carbone error while retiring is only logged."""
+        self._change_template()
+        with patch(f'{_MODULE_REQUESTS}.post', side_effect=self._post), \
+                patch(f'{_MODULE_REQUESTS}.patch',
+                      side_effect=requests.exceptions.ConnectionError('down')):
+            self.assertEqual(self.report._upload_template(), 'new_version')
+        self.assertEqual(self.report.carbone_template_id, 'new_version')
 
 
 @tagged('post_install', '-at_install', 'carbone_api')
